@@ -52,13 +52,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="course"
-        options={{
-          title: "Course",
-          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="practice"
         options={{
           title: "Practice",
@@ -68,10 +61,26 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="learn"
         options={{
-          title: "Settings",
-          tabBarIcon: ({ color }) => <TabBarIcon name="cog" color={color} />,
+          title: "Learn",
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="coaching"
+        options={{
+          title: "Coaching",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="graduation-cap" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="me"
+        options={{
+          title: "Me",
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
     </Tabs>

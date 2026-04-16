@@ -4,37 +4,30 @@ import { Text, View } from "@/components/Themed";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
-export default function DashboardScreen() {
+export default function MeScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
-      <Text style={styles.subtitle}>
-        Track your learning journey at a glance.
-      </Text>
+      <Text style={styles.title}>Me</Text>
+      <Text style={styles.subtitle}>Your account and personal updates.</Text>
 
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Continue session</Text>
-        <Text style={styles.cardValue}>Resume Algebra Foundations</Text>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.cardLabel}>Quick actions</Text>
-        <Text style={styles.cardValue}>
-          Start quiz, review notes, or join class
+        <Text style={styles.cardTitle}>Profile</Text>
+        <Text style={styles.cardMeta}>
+          Manage personal details and preferences.
         </Text>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Progress</Text>
-        <Text style={styles.cardValue}>12 lessons completed this week</Text>
+        <Text style={styles.cardTitle}>Notifications</Text>
+        <Text style={styles.cardMeta}>Control reminders and app alerts.</Text>
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardLabel}>Recommendations</Text>
-        <Text style={styles.cardValue}>Try Smart Practice for weak topics</Text>
+        <Text style={styles.cardTitle}>Referrals</Text>
+        <Text style={styles.cardMeta}>Invite friends and track rewards.</Text>
       </View>
     </View>
   );
@@ -63,15 +56,15 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       borderWidth: 1,
       borderColor: colors.border,
       padding: 16,
+      gap: 6,
     },
-    cardLabel: {
-      fontSize: 13,
-      color: colors.textSecondary,
-      marginBottom: 4,
-    },
-    cardValue: {
-      fontSize: 18,
+    cardTitle: {
+      fontSize: 17,
       fontWeight: "600",
       color: colors.text,
+    },
+    cardMeta: {
+      fontSize: 14,
+      color: colors.textSecondary,
     },
   });

@@ -4,18 +4,20 @@ import { Text, View } from "@/components/Themed";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
-export default function SettingsScreen() {
+export default function CoachingScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
-      <Text style={styles.subtitle}>Manage your account and preferences.</Text>
+      <Text style={styles.title}>Coaching</Text>
+      <Text style={styles.subtitle}>Manage your mentor and session flow.</Text>
 
-      <View style={styles.row}>
-        <Text style={styles.rowLabel}>Theme</Text>
-        <Text style={styles.rowValue}>System</Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Bookings</Text>
+        <Text style={styles.cardMeta}>
+          View upcoming and past coaching sessions.
+        </Text>
       </View>
     </View>
   );
@@ -38,21 +40,20 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       color: colors.textSecondary,
       marginBottom: 8,
     },
-    row: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
+    card: {
       backgroundColor: colors.surface,
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
       padding: 16,
+      gap: 6,
     },
-    rowLabel: {
-      fontSize: 16,
+    cardTitle: {
+      fontSize: 17,
+      fontWeight: "600",
       color: colors.text,
     },
-    rowValue: {
+    cardMeta: {
       fontSize: 14,
       color: colors.textSecondary,
     },
