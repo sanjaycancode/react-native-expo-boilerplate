@@ -2,9 +2,10 @@
  * Theme-aware card component for displaying content
  */
 
-import { useThemeColors } from "@/context/ThemeContext";
 import React, { useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
+
+import { useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedCardProps {
   children: React.ReactNode;

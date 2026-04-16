@@ -4,15 +4,15 @@ import { Text, View } from "@/components/Themed";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
-export default function DashboardScreen() {
+export default function CourseScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
+      <Text style={styles.title}>Course</Text>
       <Text style={styles.subtitle}>
-        Track your learning journey at a glance.
+        Browse and continue your active courses.
       </Text>
     </View>
   );
@@ -41,15 +41,15 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       borderWidth: 1,
       borderColor: colors.border,
       padding: 16,
+      gap: 6,
     },
-    cardLabel: {
-      fontSize: 13,
-      color: colors.textSecondary,
-      marginBottom: 4,
-    },
-    cardValue: {
-      fontSize: 18,
+    courseName: {
+      fontSize: 17,
       fontWeight: "600",
       color: colors.text,
+    },
+    progress: {
+      fontSize: 14,
+      color: colors.textSecondary,
     },
   });

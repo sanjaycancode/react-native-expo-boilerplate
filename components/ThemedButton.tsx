@@ -2,7 +2,6 @@
  * Theme-aware button component
  */
 
-import { useThemeColors } from "@/context/ThemeContext";
 import React, { useMemo } from "react";
 import {
   Pressable,
@@ -11,6 +10,8 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native";
+
+import { useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedButtonProps {
   title: string;

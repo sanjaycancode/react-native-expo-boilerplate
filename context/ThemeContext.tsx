@@ -2,17 +2,19 @@
  * Theme context and provider for managing app-wide theme
  */
 
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
+
+import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
+
 import {
   BorderRadius,
   Colors,
+  getNavigationTheme,
   Shadows,
   Spacing,
   Typography,
-  getNavigationTheme,
 } from "@/constants/Themes";
-import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
 
 export type ThemeMode = "light" | "dark";
 

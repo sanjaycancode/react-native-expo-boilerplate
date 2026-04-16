@@ -6,58 +6,79 @@ import { DarkTheme, DefaultTheme } from "@react-navigation/native";
 
 export const Colors = {
   light: {
-    // Primary
-    primary: "#2f95dc",
-    primaryLight: "#58a8f0",
-    primaryDark: "#1a5cb8",
+    // Primary (Lavender Identity)
+    primary: "#8B7CF6",
+    primaryLight: "#C4B5FD",
+    primaryDark: "#6D5AE6",
 
-    // Semantic
-    text: "#000",
-    textSecondary: "#666",
-    textTertiary: "#999",
-    background: "#fff",
-    backgroundAlt: "#f9f9f9",
-    border: "#e0e0e0",
+    // Background & Surfaces
+    background: "#F9F9FF",
+    surface: "#FFFFFF",
+    backgroundAlt: "#FFFFFF",
+    border: "#E5E7EB",
+    overlay: "rgba(15, 23, 42, 0.05)",
 
-    // Status
-    success: "#4caf50",
-    warning: "#ff9800",
-    error: "#f44336",
-    info: "#2196f3",
+    // Typography
+    text: "#1F2937",
+    textSecondary: "#6B7280",
+    textTertiary: "#9CA3AF",
+    textOnPrimary: "#FFFFFF",
 
-    // UI
-    tint: "#2f95dc",
-    tabIconDefault: "#ccc",
-    tabIconSelected: "#2f95dc",
-    disabled: "#ccc",
-    overlay: "rgba(0, 0, 0, 0.1)",
+    // Accent (Single Choice)
+    accent: "#60A5FA",
+
+    // Semantic Colors
+    success: "#22C55E",
+    warning: "#F59E0B",
+    error: "#EF4444",
+    info: "#3B82F6",
+
+    // UI States
+    disabled: "#D1D5DB",
+    focusRing: "#8B7CF6",
+
+    // Tab/Tint (for compatibility)
+    tint: "#8B7CF6",
+    tabIconDefault: "#D1D5DB",
+    tabIconSelected: "#8B7CF6",
   },
   dark: {
-    // Primary
-    primary: "#fff",
-    primaryLight: "#f0f0f0",
-    primaryDark: "#e0e0e0",
+    // Primary (Adjusted Lavender)
+    primary: "#A78BFA",
+    primaryLight: "#C4B5FD",
+    primaryDark: "#8B7CF6",
 
-    // Semantic
-    text: "#fff",
-    textSecondary: "#999",
-    textTertiary: "#666",
-    background: "#000",
-    backgroundAlt: "#1a1a1a",
-    border: "#333",
+    // Background & Surfaces
+    background: "#0F172A",
+    surface: "#1E293B",
+    surfaceElevated: "#273449",
+    backgroundAlt: "#1E293B",
+    border: "#334155",
+    overlay: "rgba(0, 0, 0, 0.4)",
 
-    // Status
-    success: "#81c784",
-    warning: "#ffb74d",
-    error: "#ef5350",
-    info: "#64b5f6",
+    // Typography
+    text: "#F1F5F9",
+    textSecondary: "#94A3B8",
+    textTertiary: "#64748B",
+    textOnPrimary: "#0F172A",
 
-    // UI
-    tint: "#fff",
-    tabIconDefault: "#ccc",
-    tabIconSelected: "#fff",
-    disabled: "#666",
-    overlay: "rgba(255, 255, 255, 0.1)",
+    // Accent (Same Strategy)
+    accent: "#60A5FA",
+
+    // Semantic Colors (Dark Adjusted)
+    success: "#4ADE80",
+    warning: "#FBBF24",
+    error: "#F87171",
+    info: "#60A5FA",
+
+    // UI States
+    disabled: "#475569",
+    focusRing: "#A78BFA",
+
+    // Tab/Tint (for compatibility)
+    tint: "#A78BFA",
+    tabIconDefault: "#64748B",
+    tabIconSelected: "#A78BFA",
   },
 } as const;
 

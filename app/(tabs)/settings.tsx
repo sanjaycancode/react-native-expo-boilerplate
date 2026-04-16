@@ -4,16 +4,19 @@ import { Text, View } from "@/components/Themed";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
-export default function DashboardScreen() {
+export default function SettingsScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
-      <Text style={styles.subtitle}>
-        Track your learning journey at a glance.
-      </Text>
+      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.subtitle}>Manage your account and preferences.</Text>
+
+      <View style={styles.row}>
+        <Text style={styles.rowLabel}>Theme</Text>
+        <Text style={styles.rowValue}>System</Text>
+      </View>
     </View>
   );
 }
@@ -35,21 +38,22 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       color: colors.textSecondary,
       marginBottom: 8,
     },
-    card: {
+    row: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
       backgroundColor: colors.surface,
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
       padding: 16,
     },
-    cardLabel: {
-      fontSize: 13,
-      color: colors.textSecondary,
-      marginBottom: 4,
-    },
-    cardValue: {
-      fontSize: 18,
-      fontWeight: "600",
+    rowLabel: {
+      fontSize: 16,
       color: colors.text,
+    },
+    rowValue: {
+      fontSize: 14,
+      color: colors.textSecondary,
     },
   });
