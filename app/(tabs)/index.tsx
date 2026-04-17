@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardHeroCard } from "@/components/dashboard/DashboardHeroCard";
 import { DashboardTargetProgress } from "@/components/dashboard/DashboardTargetProgress";
+import { DashboardTodayFocus } from "@/components/dashboard/DashboardTodayFocus";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -29,6 +30,26 @@ const targetProgressData = {
   examDate: "Oct 24",
 };
 
+const todayFocusData = {
+  smartSessionLabel: "Start Smart Session",
+  tasks: [
+    {
+      id: "describe-image",
+      title: "PTE Describe Image",
+      meta: "Speaking - 5 tasks left",
+      iconName: "image-outline",
+      tone: "primary",
+    },
+    {
+      id: "reorder-paragraphs",
+      title: "Reorder Paragraphs",
+      meta: "Reading - 3 tasks left",
+      iconName: "list-outline",
+      tone: "tertiary",
+    },
+  ],
+} as const;
+
 export default function DashboardScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
@@ -43,6 +64,7 @@ export default function DashboardScreen() {
       >
         <DashboardHeroCard style={styles.heroCard} {...dashboardHeroData} />
         <DashboardTargetProgress {...targetProgressData} />
+        <DashboardTodayFocus {...todayFocusData} />
 
         <ThemedCard variant="outlined">
           <ThemedText variant="caption" semantic="muted">

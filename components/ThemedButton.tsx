@@ -15,6 +15,7 @@ interface ThemedButtonProps {
   variant?: "primary" | "secondary" | "danger";
   size?: "small" | "medium" | "large";
   disabled?: boolean;
+  leftIcon?: React.ReactNode;
   style?: ViewStyle;
   textStyle?: TextStyle;
 }
@@ -25,6 +26,7 @@ export function ThemedButton({
   variant = "primary",
   size = "medium",
   disabled = false,
+  leftIcon,
   style,
   textStyle,
 }: ThemedButtonProps) {
@@ -85,6 +87,7 @@ export function ThemedButton({
         style,
       ]}
     >
+      {leftIcon}
       <ThemedText
         variant="button"
         style={[styles.text, dynamicStyles.textContent, textStyle]}
@@ -97,8 +100,10 @@ export function ThemedButton({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 8,
     alignItems: "center",
+    borderRadius: 8,
+    flexDirection: "row",
+    gap: 8,
     justifyContent: "center",
   },
   text: {
