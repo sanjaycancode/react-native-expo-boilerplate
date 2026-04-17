@@ -67,7 +67,9 @@ export function DashboardHeroCard({
           <ThemedText style={styles.secondaryButtonText}>
             {secondaryActionLabel}
           </ThemedText>
-          <Ionicons name="flash" size={18} color={colors.textOnPrimary} />
+          <View style={styles.secondaryIcon}>
+            <Ionicons name="flash" size={17} color={colors.textOnPrimary} />
+          </View>
         </Pressable>
       </View>
     </View>
@@ -139,12 +141,22 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
     },
     secondaryButton: {
       alignItems: "center",
-      backgroundColor: withOpacity(colors.textOnPrimary, 0.2),
+      backgroundColor: withOpacity(colors.textOnPrimary, 0.24),
+      borderColor: withOpacity(colors.textOnPrimary, 0.22),
       borderRadius: theme.borderRadius.full,
+      borderWidth: 1,
       flexDirection: "row",
       justifyContent: "space-between",
       minHeight: 54,
       paddingHorizontal: theme.spacing.lg,
+    },
+    secondaryIcon: {
+      alignItems: "center",
+      backgroundColor: withOpacity(colors.textOnPrimary, 0.12),
+      borderRadius: theme.borderRadius.full,
+      height: 30,
+      justifyContent: "center",
+      width: 30,
     },
     secondaryButtonText: {
       color: withOpacity(colors.textOnPrimary, 0.92),
