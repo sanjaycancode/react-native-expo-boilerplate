@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardHeroCard } from "@/components/dashboard/DashboardHeroCard";
+import { DashboardMoreTools } from "@/components/dashboard/DashboardMoreTools";
 import { DashboardPerformance } from "@/components/dashboard/DashboardPerformance";
 import { DashboardTargetProgress } from "@/components/dashboard/DashboardTargetProgress";
 import { DashboardTodayFocus } from "@/components/dashboard/DashboardTodayFocus";
@@ -105,6 +106,31 @@ const performanceData = {
   ],
 } as const;
 
+const moreToolsData = {
+  tools: [
+    {
+      title: "Teacher Feedback",
+      iconName: "chatbubble-outline",
+      tone: "accent",
+    },
+    {
+      title: "Live Classes",
+      iconName: "videocam-outline",
+      tone: "primary",
+    },
+    {
+      title: "Resources",
+      iconName: "book-outline",
+      tone: "primary",
+    },
+    {
+      title: "Preferences",
+      iconName: "settings-outline",
+      tone: "neutral",
+    },
+  ],
+} as const;
+
 export default function DashboardScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
@@ -121,6 +147,7 @@ export default function DashboardScreen() {
         <DashboardTargetProgress {...targetProgressData} />
         <DashboardTodayFocus {...todayFocusData} />
         <DashboardPerformance {...performanceData} />
+        <DashboardMoreTools {...moreToolsData} />
       </ScrollView>
     </SafeAreaView>
   );
