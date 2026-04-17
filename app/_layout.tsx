@@ -13,7 +13,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from "expo-router";
 
 export const unstable_settings = {
@@ -59,6 +59,15 @@ function RootLayoutNav() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         <Stack.Screen name="appearance" options={{ title: "Appearance" }} />
+        <Stack.Screen name="mock-test" options={{ title: "Mock Test" }} />
+        <Stack.Screen
+          name="manual-practice"
+          options={{ title: "Manual Practice" }}
+        />
+        <Stack.Screen
+          name="smart-practice"
+          options={{ title: "Smart Practice" }}
+        />
       </Stack>
     </ThemeProvider>
   );
