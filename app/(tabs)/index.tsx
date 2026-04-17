@@ -10,46 +10,40 @@ export default function DashboardScreen() {
   return (
     <ThemedView style={styles.container}>
       <View>
-        <ThemedText variant="heading2" style={styles.title}>
-          Dashboard
-        </ThemedText>
-        <ThemedText variant="body" semantic="muted" style={styles.subtitle}>
+        <ThemedText variant="heading2">Dashboard</ThemedText>
+        <ThemedText variant="body" semantic="muted">
           Track your learning journey at a glance.
         </ThemedText>
       </View>
 
       <ThemedCard>
-        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+        <ThemedText variant="caption" semantic="muted">
           Continue session
         </ThemedText>
-        <ThemedText variant="button" style={styles.cardValue}>
-          Resume Algebra Foundations
-        </ThemedText>
+        <ThemedText variant="button">Resume Algebra Foundations</ThemedText>
       </ThemedCard>
 
       <ThemedCard>
-        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+        <ThemedText variant="caption" semantic="muted">
           Quick actions
         </ThemedText>
-        <ThemedText variant="button" style={styles.cardValue}>
+        <ThemedText variant="button">
           Start quiz, review notes, or join class
         </ThemedText>
       </ThemedCard>
 
       <ThemedCard>
-        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+        <ThemedText variant="caption" semantic="muted">
           Progress
         </ThemedText>
-        <ThemedText variant="button" style={styles.cardValue}>
-          12 lessons completed this week
-        </ThemedText>
+        <ThemedText variant="button">12 lessons completed this week</ThemedText>
       </ThemedCard>
 
       <ThemedCard>
-        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+        <ThemedText variant="caption" semantic="muted">
           Recommendations
         </ThemedText>
-        <ThemedText variant="button" style={styles.cardValue}>
+        <ThemedText variant="button">
           Try Smart Practice for weak topics
         </ThemedText>
       </ThemedCard>
@@ -63,17 +57,5 @@ const createStyles = () =>
       flex: 1,
       padding: 20,
       gap: 12,
-    },
-    title: {
-      marginBottom: 2,
-    },
-    subtitle: {
-      marginBottom: 8,
-    },
-    cardLabel: {
-      marginBottom: 4,
-    },
-    cardValue: {
-      fontSize: 17,
     },
   });

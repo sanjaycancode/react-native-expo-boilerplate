@@ -1,4 +1,6 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+
+import { Link } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -15,6 +17,17 @@ export default function MeScreen() {
           Your account and personal updates.
         </ThemedText>
       </View>
+
+      <Link href="/appearance" asChild>
+        <Pressable>
+          <ThemedCard>
+            <ThemedText variant="button">Appearance</ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Change app theme and display preferences.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+      </Link>
 
       <ThemedCard>
         <ThemedText variant="button">Profile</ThemedText>
