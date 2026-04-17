@@ -55,6 +55,7 @@ export default function TabLayout() {
         name="practice"
         options={{
           title: "Practice",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
           ),
@@ -64,7 +65,9 @@ export default function TabLayout() {
         name="learn"
         options={{
           title: "Learn",
-          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color
+            
+          } />,
         }}
       />
       <Tabs.Screen
