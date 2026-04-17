@@ -1,8 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardHeroCard } from "@/components/dashboard/DashboardHeroCard";
+import { DashboardTargetProgress } from "@/components/dashboard/DashboardTargetProgress";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -14,6 +16,19 @@ const dashboardHeaderData = {
   streakCount: 6,
 };
 
+const dashboardHeroData = {
+  eyebrow: "PTE Academic",
+  title: "Build your PTE Academic score",
+  primaryActionLabel: "Take Mock Test",
+  secondaryActionLabel: "Daily Drills",
+};
+
+const targetProgressData = {
+  currentScore: 20,
+  targetScore: 79,
+  examDate: "Oct 24",
+};
+
 export default function DashboardScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
@@ -22,7 +37,13 @@ export default function DashboardScreen() {
     <SafeAreaView style={styles.safeArea}>
       <DashboardHeader {...dashboardHeaderData} />
 
-      <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+      >
+        <DashboardHeroCard style={styles.heroCard} {...dashboardHeroData} />
+        <DashboardTargetProgress {...targetProgressData} />
+
         <ThemedCard variant="outlined">
           <ThemedText variant="caption" semantic="muted">
             Continue session
@@ -56,7 +77,7 @@ export default function DashboardScreen() {
             Try Smart Practice for weak topics
           </ThemedText>
         </ThemedCard>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -68,8 +89,11 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       flex: 1,
     },
     container: {
-      flex: 1,
-      padding: 20,
       gap: 12,
+      padding: 16,
+      paddingBottom: 32,
+    },
+    heroCard: {
+      marginHorizontal: -4,
     },
   });

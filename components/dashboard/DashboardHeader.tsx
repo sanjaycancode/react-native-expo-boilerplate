@@ -34,7 +34,7 @@ export function DashboardHeader({
     <View style={styles.container}>
       <View style={styles.profileContent}>
         <View style={styles.avatar}>
-          <FontAwesome name="comment" size={22} color={colors.backgroundAlt} />
+          <FontAwesome name="comment" size={18} color={colors.backgroundAlt} />
         </View>
 
         <View style={styles.greetingContent}>
@@ -56,7 +56,7 @@ export function DashboardHeader({
       </View>
 
       <View style={styles.streakBadge}>
-        <Ionicons name="flame" size={18} color={colors.primary} />
+        <Ionicons name="flame" size={16} color={colors.primary} />
         <ThemedText variant="button" semantic="primary" style={styles.streak}>
           {streakCount}
         </ThemedText>
@@ -73,49 +73,52 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
       alignItems: "center",
       flexDirection: "row",
       justifyContent: "space-between",
-      paddingHorizontal: theme.spacing.lg,
-      paddingVertical: theme.spacing.md,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm,
     },
     profileContent: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm + 2,
     },
     avatar: {
       alignItems: "center",
       backgroundColor: colors.text,
       borderRadius: theme.borderRadius.full,
-      height: 54,
+      height: 44,
       justifyContent: "center",
-      width: 54,
+      width: 44,
     },
     greetingContent: {
-      gap: 2,
+      gap: 0,
     },
     greeting: {
       fontFamily: "LexendBold",
-      letterSpacing: 4,
-      lineHeight: 16,
+      fontSize: 10,
+      letterSpacing: 3,
+      lineHeight: 14,
       textTransform: "uppercase",
     },
     userName: {
       fontFamily: "LexendBold",
-      lineHeight: 30,
+      fontSize: 22,
+      lineHeight: 26,
     },
     streakBadge: {
       alignItems: "center",
       backgroundColor: withOpacity(colors.primaryLight, 0.28),
       borderRadius: theme.borderRadius.full,
       flexDirection: "row",
-      gap: theme.spacing.sm,
-      minWidth: 30,
+      gap: theme.spacing.xs + 2,
       justifyContent: "center",
-      paddingHorizontal: theme.spacing.lg,
-      paddingVertical: 14,
+      minWidth: 72,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm + 2,
     },
     streak: {
       fontFamily: "LexendBold",
-      lineHeight: 22,
+      fontSize: 16,
+      lineHeight: 20,
     },
   });
 };
