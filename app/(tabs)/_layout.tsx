@@ -55,6 +55,7 @@ export default function TabLayout() {
         name="practice"
         options={{
           title: "Practice",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
           ),
