@@ -2,7 +2,6 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 import { useThemeColors, useThemeMode } from "@/context/ThemeContext";
 
@@ -13,7 +12,7 @@ export default function AppearanceScreen() {
   const styles = createStyles(colors);
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <ThemedText variant="heading2">Appearance</ThemedText>
         <ThemedText variant="body" semantic="muted">
@@ -28,6 +27,7 @@ export default function AppearanceScreen() {
 
       <Pressable onPress={() => setTheme("light")}>
         <ThemedCard
+          variant="outlined"
           style={mode === "light" ? styles.optionCardSelected : undefined}
         >
           <ThemedText
@@ -44,6 +44,7 @@ export default function AppearanceScreen() {
 
       <Pressable onPress={() => setTheme("dark")}>
         <ThemedCard
+          variant="outlined"
           style={mode === "dark" ? styles.optionCardSelected : undefined}
         >
           <ThemedText
@@ -57,11 +58,11 @@ export default function AppearanceScreen() {
           </ThemedText>
         </ThemedCard>
       </Pressable>
-    </ThemedView>
+    </View>
   );
 }
 
-const createStyles = (colors) =>
+const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
   StyleSheet.create({
     container: {
       flex: 1,

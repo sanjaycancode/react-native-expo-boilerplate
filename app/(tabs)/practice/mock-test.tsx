@@ -1,18 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 export default function MockTestScreen() {
   const styles = createStyles();
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <ThemedText variant="heading2">Mock Test</ThemedText>
       <ThemedText variant="body" semantic="muted">
         Full-length timed practice tests will appear here.
       </ThemedText>
-    </ThemedView>
+    </View>
   );
 }
 

@@ -140,6 +140,12 @@ export const Typography = {
     lineHeight: 16,
     fontFamily: "Lexend",
   },
+  mono: {
+    fontSize: 14,
+    fontWeight: "400",
+    lineHeight: 20,
+    fontFamily: "SpaceMono",
+  },
   button: {
     fontSize: 16,
     fontWeight: "600",

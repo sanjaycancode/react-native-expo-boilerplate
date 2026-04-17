@@ -4,13 +4,12 @@ import { Link } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 export default function PracticeScreen() {
   const styles = createStyles();
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <ThemedText variant="heading2">Practice</ThemedText>
         <ThemedText variant="body" semantic="muted">
@@ -20,7 +19,7 @@ export default function PracticeScreen() {
 
       <Link href="/(tabs)/practice/mock-test" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Mock Test</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Simulate full exam conditions with timer.
@@ -31,7 +30,7 @@ export default function PracticeScreen() {
 
       <Link href="/(tabs)/practice/manual-practice" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Manual Practice</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Pick topics and practice at your own pace.
@@ -42,7 +41,7 @@ export default function PracticeScreen() {
 
       <Link href="/(tabs)/practice/smart-practice" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Smart Practice</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Adaptive drills based on weak areas.
@@ -50,7 +49,7 @@ export default function PracticeScreen() {
           </ThemedCard>
         </Pressable>
       </Link>
-    </ThemedView>
+    </View>
   );
 }
 

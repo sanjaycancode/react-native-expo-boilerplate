@@ -19,7 +19,7 @@ export default function LearnScreen() {
 
       <Link href="/(tabs)/learn/courses" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Courses</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Track structured programs and progress.
@@ -30,7 +30,7 @@ export default function LearnScreen() {
 
       <Link href="/(tabs)/learn/classes" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Classes</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Join live and recorded classroom sessions.

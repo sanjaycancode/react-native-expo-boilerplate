@@ -4,13 +4,12 @@ import { Link } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 export default function MeScreen() {
   const styles = createStyles();
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <ThemedText variant="heading2">Me</ThemedText>
         <ThemedText variant="body" semantic="muted">
@@ -20,7 +19,7 @@ export default function MeScreen() {
 
       <Link href="/appearance" asChild>
         <Pressable>
-          <ThemedCard>
+          <ThemedCard variant="outlined">
             <ThemedText variant="button">Appearance</ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
               Change app theme and display preferences.
@@ -29,27 +28,27 @@ export default function MeScreen() {
         </Pressable>
       </Link>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="button">Profile</ThemedText>
         <ThemedText variant="bodySmall" semantic="muted">
           Manage personal details and preferences.
         </ThemedText>
       </ThemedCard>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="button">Notifications</ThemedText>
         <ThemedText variant="bodySmall" semantic="muted">
           Control reminders and app alerts.
         </ThemedText>
       </ThemedCard>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="button">Referrals</ThemedText>
         <ThemedText variant="bodySmall" semantic="muted">
           Invite friends and track rewards.
         </ThemedText>
       </ThemedCard>
-    </ThemedView>
+    </View>
   );
 }
 

@@ -1,18 +1,17 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 export default function SmartPracticeScreen() {
   const styles = createStyles();
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <ThemedText variant="heading2">Smart Practice</ThemedText>
       <ThemedText variant="body" semantic="muted">
         Adaptive practice based on your weakest concepts.
       </ThemedText>
-    </ThemedView>
+    </View>
   );
 }
 

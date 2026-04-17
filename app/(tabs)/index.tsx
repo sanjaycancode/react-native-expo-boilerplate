@@ -2,13 +2,12 @@ import { StyleSheet, View } from "react-native";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
 
 export default function DashboardScreen() {
   const styles = createStyles();
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <View>
         <ThemedText variant="heading2">Dashboard</ThemedText>
         <ThemedText variant="body" semantic="muted">
@@ -16,14 +15,14 @@ export default function DashboardScreen() {
         </ThemedText>
       </View>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="caption" semantic="muted">
           Continue session
         </ThemedText>
         <ThemedText variant="button">Resume Algebra Foundations</ThemedText>
       </ThemedCard>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="caption" semantic="muted">
           Quick actions
         </ThemedText>
@@ -32,14 +31,14 @@ export default function DashboardScreen() {
         </ThemedText>
       </ThemedCard>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="caption" semantic="muted">
           Progress
         </ThemedText>
         <ThemedText variant="button">12 lessons completed this week</ThemedText>
       </ThemedCard>
 
-      <ThemedCard>
+      <ThemedCard variant="outlined">
         <ThemedText variant="caption" semantic="muted">
           Recommendations
         </ThemedText>
@@ -47,7 +46,7 @@ export default function DashboardScreen() {
           Try Smart Practice for weak topics
         </ThemedText>
       </ThemedCard>
-    </ThemedView>
+    </View>
   );
 }
 

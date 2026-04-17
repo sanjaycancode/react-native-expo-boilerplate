@@ -5,7 +5,7 @@
 import React, { useMemo } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 
-import { useThemeColors } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedCardProps {
   children: React.ReactNode;
@@ -18,28 +18,24 @@ export function ThemedCard({
   style,
   variant = "default",
 }: ThemedCardProps) {
+  const { theme } = useTheme();
   const colors = useThemeColors();
 
   const dynamicStyles = useMemo(
     () =>
       StyleSheet.create({
         container: {
-          backgroundColor:
-            variant === "outlined" ? colors.background : colors.backgroundAlt,
+          backgroundColor: colors.backgroundAlt,
           borderColor: colors.border,
         },
         elevated: {
-          shadowColor: colors.text,
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1,
-          shadowRadius: 4,
-          elevation: 4,
+          ...theme.shadows.medium,
         },
         outlined: {
-          borderWidth: 2,
+          borderWidth: 1,
         },
       }),
-    [colors, variant],
+    [colors, theme.shadows.medium, variant],
   );
 
   return (
@@ -61,6 +57,6 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 12,
     padding: 16,
-    borderWidth: 1,
+    borderWidth: 0,
   },
 });
