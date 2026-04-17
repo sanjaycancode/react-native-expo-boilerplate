@@ -1,70 +1,50 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Text, View } from "@/components/Themed";
-
-import { useThemeColors } from "@/context/ThemeContext";
+import { ThemedCard } from "@/components/ThemedCard";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function MeScreen() {
-  const colors = useThemeColors();
-  const styles = createStyles(colors);
+  const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Me</Text>
-      <Text style={styles.subtitle}>Your account and personal updates.</Text>
+    <ThemedView style={styles.container}>
+      <View>
+        <ThemedText variant="heading2">Me</ThemedText>
+        <ThemedText variant="body" semantic="muted">
+          Your account and personal updates.
+        </ThemedText>
+      </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Profile</Text>
-        <Text style={styles.cardMeta}>
+      <ThemedCard>
+        <ThemedText variant="button">Profile</ThemedText>
+        <ThemedText variant="bodySmall" semantic="muted">
           Manage personal details and preferences.
-        </Text>
-      </View>
+        </ThemedText>
+      </ThemedCard>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Notifications</Text>
-        <Text style={styles.cardMeta}>Control reminders and app alerts.</Text>
-      </View>
+      <ThemedCard>
+        <ThemedText variant="button">Notifications</ThemedText>
+        <ThemedText variant="bodySmall" semantic="muted">
+          Control reminders and app alerts.
+        </ThemedText>
+      </ThemedCard>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Referrals</Text>
-        <Text style={styles.cardMeta}>Invite friends and track rewards.</Text>
-      </View>
-    </View>
+      <ThemedCard>
+        <ThemedText variant="button">Referrals</ThemedText>
+        <ThemedText variant="bodySmall" semantic="muted">
+          Invite friends and track rewards.
+        </ThemedText>
+      </ThemedCard>
+    </ThemedView>
   );
 }
 
-const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
+const createStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
       gap: 12,
-    },
-    title: {
-      fontSize: 28,
-      fontWeight: "700",
-      color: colors.text,
-    },
-    subtitle: {
-      fontSize: 15,
-      color: colors.textSecondary,
-      marginBottom: 8,
-    },
-    card: {
-      backgroundColor: colors.surface,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: 16,
-      gap: 6,
-    },
-    cardTitle: {
-      fontSize: 17,
-      fontWeight: "600",
-      color: colors.text,
-    },
-    cardMeta: {
-      fontSize: 14,
-      color: colors.textSecondary,
     },
   });

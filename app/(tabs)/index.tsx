@@ -1,46 +1,63 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Text, View } from "@/components/Themed";
-
-import { useThemeColors } from "@/context/ThemeContext";
+import { ThemedCard } from "@/components/ThemedCard";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function DashboardScreen() {
-  const colors = useThemeColors();
-  const styles = createStyles(colors);
+  const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Dashboard</Text>
-      <Text style={styles.subtitle}>
-        Track your learning journey at a glance.
-      </Text>
-
-      <View style={styles.card}>
-        <Text style={styles.cardLabel}>Continue session</Text>
-        <Text style={styles.cardValue}>Resume Algebra Foundations</Text>
+    <ThemedView style={styles.container}>
+      <View>
+        <ThemedText variant="heading2" style={styles.title}>
+          Dashboard
+        </ThemedText>
+        <ThemedText variant="body" semantic="muted" style={styles.subtitle}>
+          Track your learning journey at a glance.
+        </ThemedText>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardLabel}>Quick actions</Text>
-        <Text style={styles.cardValue}>
+      <ThemedCard>
+        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+          Continue session
+        </ThemedText>
+        <ThemedText variant="button" style={styles.cardValue}>
+          Resume Algebra Foundations
+        </ThemedText>
+      </ThemedCard>
+
+      <ThemedCard>
+        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+          Quick actions
+        </ThemedText>
+        <ThemedText variant="button" style={styles.cardValue}>
           Start quiz, review notes, or join class
-        </Text>
-      </View>
+        </ThemedText>
+      </ThemedCard>
 
-      <View style={styles.card}>
-        <Text style={styles.cardLabel}>Progress</Text>
-        <Text style={styles.cardValue}>12 lessons completed this week</Text>
-      </View>
+      <ThemedCard>
+        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+          Progress
+        </ThemedText>
+        <ThemedText variant="button" style={styles.cardValue}>
+          12 lessons completed this week
+        </ThemedText>
+      </ThemedCard>
 
-      <View style={styles.card}>
-        <Text style={styles.cardLabel}>Recommendations</Text>
-        <Text style={styles.cardValue}>Try Smart Practice for weak topics</Text>
-      </View>
-    </View>
+      <ThemedCard>
+        <ThemedText variant="caption" semantic="muted" style={styles.cardLabel}>
+          Recommendations
+        </ThemedText>
+        <ThemedText variant="button" style={styles.cardValue}>
+          Try Smart Practice for weak topics
+        </ThemedText>
+      </ThemedCard>
+    </ThemedView>
   );
 }
 
-const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
+const createStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -48,30 +65,15 @@ const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
       gap: 12,
     },
     title: {
-      fontSize: 28,
-      fontWeight: "700",
-      color: colors.text,
+      marginBottom: 2,
     },
     subtitle: {
-      fontSize: 15,
-      color: colors.textSecondary,
       marginBottom: 8,
     },
-    card: {
-      backgroundColor: colors.surface,
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.border,
-      padding: 16,
-    },
     cardLabel: {
-      fontSize: 13,
-      color: colors.textSecondary,
       marginBottom: 4,
     },
     cardValue: {
-      fontSize: 18,
-      fontWeight: "600",
-      color: colors.text,
+      fontSize: 17,
     },
   });

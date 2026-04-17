@@ -3,13 +3,9 @@
  */
 
 import React, { useMemo } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextStyle,
-  ViewStyle,
-} from "react-native";
+import { Pressable, StyleSheet, TextStyle, ViewStyle } from "react-native";
+
+import { ThemedText } from "@/components/ThemedText";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
@@ -89,9 +85,12 @@ export function ThemedButton({
         style,
       ]}
     >
-      <Text style={[styles.text, dynamicStyles.textContent, textStyle]}>
+      <ThemedText
+        variant="button"
+        style={[styles.text, dynamicStyles.textContent, textStyle]}
+      >
         {title}
-      </Text>
+      </ThemedText>
     </Pressable>
   );
 }
@@ -103,8 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontFamily: "LexendSemiBold",
   },
   paddingSmall: {
     paddingVertical: 8,

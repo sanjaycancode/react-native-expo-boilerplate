@@ -1,37 +1,26 @@
 import { StyleSheet } from "react-native";
 
-import { Text, View } from "@/components/Themed";
-
-import { useThemeColors } from "@/context/ThemeContext";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function SmartPracticeScreen() {
-  const colors = useThemeColors();
-  const styles = createStyles(colors);
+  const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Smart Practice</Text>
-      <Text style={styles.subtitle}>
+    <ThemedView style={styles.container}>
+      <ThemedText variant="heading2">Smart Practice</ThemedText>
+      <ThemedText variant="body" semantic="muted">
         Adaptive practice based on your weakest concepts.
-      </Text>
-    </View>
+      </ThemedText>
+    </ThemedView>
   );
 }
 
-const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
+const createStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
       gap: 12,
-    },
-    title: {
-      fontSize: 28,
-      fontWeight: "700",
-      color: colors.text,
-    },
-    subtitle: {
-      fontSize: 15,
-      color: colors.textSecondary,
     },
   });

@@ -4,5 +4,6 @@
     "source.organizeImports": "explicit",
     "source.sortMembers": "explicit",
     "source.fixAll.eslint": "explicit"
-  }
+  },
+  "cSpell.words": ["Pressable"]
 }
