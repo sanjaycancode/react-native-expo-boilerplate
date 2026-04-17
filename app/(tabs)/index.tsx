@@ -4,10 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardHeroCard } from "@/components/dashboard/DashboardHeroCard";
+import { DashboardPerformance } from "@/components/dashboard/DashboardPerformance";
 import { DashboardTargetProgress } from "@/components/dashboard/DashboardTargetProgress";
 import { DashboardTodayFocus } from "@/components/dashboard/DashboardTodayFocus";
-import { ThemedCard } from "@/components/ThemedCard";
-import { ThemedText } from "@/components/ThemedText";
 
 import { useThemeColors } from "@/context/ThemeContext";
 
@@ -50,6 +49,62 @@ const todayFocusData = {
   ],
 } as const;
 
+const performanceData = {
+  contributionTitle: "Activity Streak",
+  contributionWeeks: [
+    { month: "Jan", days: [0, 1, 0, 2, 1, 0, 1] },
+    { days: [1, 2, 0, 3, 1, 0, 2] },
+    { days: [0, 3, 1, 2, 0, 1, 4] },
+    { days: [2, 1, 0, 4, 2, 1, 0] },
+    { days: [1, 0, 2, 1, 3, 0, 1] },
+    { days: [0, 2, 3, 1, 0, 4, 2] },
+    { days: [1, 1, 0, 2, 4, 2, 0] },
+    { days: [3, 0, 1, 1, 2, 0, 3] },
+    { month: "Feb", days: [0, 1, 4, 2, 0, 1, 2] },
+    { days: [2, 3, 1, 0, 2, 4, 1] },
+    { days: [1, 0, 2, 3, 1, 0, 4] },
+    { days: [0, 2, 1, 4, 3, 1, 0] },
+    { days: [2, 0, 3, 1, 0, 2, 4] },
+    { days: [0, 2, 3, 1, 0, 4, 2] },
+    { days: [1, 1, 0, 2, 4, 2, 0] },
+    { days: [3, 0, 1, 1, 2, 0, 3] },
+    { month: "Mar", days: [1, 4, 2, 0, 1, 2, 3] },
+    { days: [2, 3, 1, 0, 2, 4, 1] },
+    { days: [1, 0, 2, 3, 1, 0, 4] },
+    { days: [0, 2, 1, 4, 3, 1, 0] },
+    { days: [3, 1, 0, 2, 4, 1, 2] },
+    { days: [0, 2, 4, 1, 0, 3, 2] },
+    { days: [1, 3, 0, 4, 2, 1, 0] },
+    { days: [2, 0, 1, 3, 1, 4, 2] },
+  ],
+  stats: [
+    {
+      label: "Speaking",
+      score: 78,
+      change: 4,
+      trend: "up",
+    },
+    {
+      label: "Writing",
+      score: 65,
+      change: 2,
+      trend: "down",
+    },
+    {
+      label: "Reading",
+      score: 71,
+      change: 1,
+      trend: "up",
+    },
+    {
+      label: "Listening",
+      score: 82,
+      change: 5,
+      trend: "up",
+    },
+  ],
+} as const;
+
 export default function DashboardScreen() {
   const colors = useThemeColors();
   const styles = createStyles(colors);
@@ -65,40 +120,7 @@ export default function DashboardScreen() {
         <DashboardHeroCard style={styles.heroCard} {...dashboardHeroData} />
         <DashboardTargetProgress {...targetProgressData} />
         <DashboardTodayFocus {...todayFocusData} />
-
-        <ThemedCard variant="outlined">
-          <ThemedText variant="caption" semantic="muted">
-            Continue session
-          </ThemedText>
-          <ThemedText variant="button">Resume Algebra Foundations</ThemedText>
-        </ThemedCard>
-
-        <ThemedCard variant="outlined">
-          <ThemedText variant="caption" semantic="muted">
-            Quick actions
-          </ThemedText>
-          <ThemedText variant="button">
-            Start quiz, review notes, or join class
-          </ThemedText>
-        </ThemedCard>
-
-        <ThemedCard variant="outlined">
-          <ThemedText variant="caption" semantic="muted">
-            Progress
-          </ThemedText>
-          <ThemedText variant="button">
-            12 lessons completed this week
-          </ThemedText>
-        </ThemedCard>
-
-        <ThemedCard variant="outlined">
-          <ThemedText variant="caption" semantic="muted">
-            Recommendations
-          </ThemedText>
-          <ThemedText variant="button">
-            Try Smart Practice for weak topics
-          </ThemedText>
-        </ThemedCard>
+        <DashboardPerformance {...performanceData} />
       </ScrollView>
     </SafeAreaView>
   );
