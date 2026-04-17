@@ -31,6 +31,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          headerShown: false,
           title: "Dashboard",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="th-large" color={color} />
@@ -55,6 +56,7 @@ export default function TabLayout() {
         name="practice"
         options={{
           title: "Practice",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
           ),

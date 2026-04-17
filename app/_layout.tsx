@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 
@@ -30,6 +31,7 @@ export default function RootLayout() {
     LexendSemiBold: require("../assets/fonts/Lexend-SemiBold.ttf"),
     LexendBold: require("../assets/fonts/Lexend-Bold.ttf"),
     ...FontAwesome.font,
+    ...Ionicons.font,
   });
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
