@@ -1,17 +1,22 @@
 import { StyleSheet, View } from "react-native";
 
+import { Stack } from "expo-router";
+
 import { ThemedText } from "@/components/ThemedText";
 
 export default function ClassesScreen() {
   const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <ThemedText variant="heading2">Classes</ThemedText>
-      <ThemedText variant="body" semantic="muted">
-        Access live classes and replays from your mentors.
-      </ThemedText>
-    </View>
+    <>
+      <Stack.Screen options={{ title: "Classes" }} />
+      <View style={styles.container}>
+        <ThemedText variant="heading2">Classes</ThemedText>
+        <ThemedText variant="body" semantic="muted">
+          Access live classes and replays from your mentors.
+        </ThemedText>
+      </View>
+    </>
   );
 }
 
