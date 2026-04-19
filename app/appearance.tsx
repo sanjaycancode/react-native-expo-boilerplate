@@ -1,5 +1,7 @@
 import { Pressable, StyleSheet, View } from "react-native";
 
+import { Stack } from "expo-router";
+
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -12,53 +14,53 @@ export default function AppearanceScreen() {
   const styles = createStyles(colors);
 
   return (
-    <View style={styles.container}>
-      <View>
-        <ThemedText variant="heading2">Appearance</ThemedText>
-        <ThemedText variant="body" semantic="muted">
-          Choose how the app looks for you.
+    <>
+      <Stack.Screen options={{ title: "Appearance", headerBackTitle: "Me" }} />
+      <View style={styles.container}>
+        <View>
+          <ThemedText variant="heading2">Appearance</ThemedText>
+          <ThemedText variant="body" semantic="muted">
+            Choose how the app looks for you.
+          </ThemedText>
+        </View>
+        <ThemedText variant="button">Theme Mode</ThemedText>
+        <ThemedText variant="bodySmall" semantic="muted">
+          Tap a card to apply that theme.
         </ThemedText>
+        <Pressable onPress={() => setTheme("light")}>
+          <ThemedCard
+            variant="outlined"
+            style={mode === "light" ? styles.optionCardSelected : undefined}
+          >
+            <ThemedText
+              variant="button"
+              semantic={mode === "light" ? "primary" : "default"}
+            >
+              Light
+            </ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Bright background with dark text.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+        <Pressable onPress={() => setTheme("dark")}>
+          <ThemedCard
+            variant="outlined"
+            style={mode === "dark" ? styles.optionCardSelected : undefined}
+          >
+            <ThemedText
+              variant="button"
+              semantic={mode === "dark" ? "primary" : "default"}
+            >
+              Dark
+            </ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Dark background optimized for low light.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
       </View>
-
-      <ThemedText variant="button">Theme Mode</ThemedText>
-      <ThemedText variant="bodySmall" semantic="muted">
-        Tap a card to apply that theme.
-      </ThemedText>
-
-      <Pressable onPress={() => setTheme("light")}>
-        <ThemedCard
-          variant="outlined"
-          style={mode === "light" ? styles.optionCardSelected : undefined}
-        >
-          <ThemedText
-            variant="button"
-            semantic={mode === "light" ? "primary" : "default"}
-          >
-            Light
-          </ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            Bright background with dark text.
-          </ThemedText>
-        </ThemedCard>
-      </Pressable>
-
-      <Pressable onPress={() => setTheme("dark")}>
-        <ThemedCard
-          variant="outlined"
-          style={mode === "dark" ? styles.optionCardSelected : undefined}
-        >
-          <ThemedText
-            variant="button"
-            semantic={mode === "dark" ? "primary" : "default"}
-          >
-            Dark
-          </ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            Dark background optimized for low light.
-          </ThemedText>
-        </ThemedCard>
-      </Pressable>
-    </View>
+    </>
   );
 }
 

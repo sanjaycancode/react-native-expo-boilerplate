@@ -9,7 +9,7 @@ export default function CoursesScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Courses" }} />
+      <Stack.Screen options={{ title: "Courses", headerShown: false }} />
       <View style={styles.container}>
         <ThemedText variant="heading2">Courses</ThemedText>
         <ThemedText variant="body" semantic="muted">

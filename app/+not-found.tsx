@@ -1,19 +1,21 @@
 import { StyleSheet, View } from "react-native";
 
-import { Link, Stack } from "expo-router";
+import { Link, Stack, usePathname } from "expo-router";
 
 import { ThemedText } from "@/components/ThemedText";
 
 export default function NotFoundScreen() {
+  const pathname = usePathname();
+
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
 
       <View style={styles.container}>
+        <ThemedText variant="mono">{pathname}</ThemedText>
         <ThemedText variant="heading3" semantic="error" style={styles.title}>
           This screen doesn't exist.
         </ThemedText>
-
         <Link href="/" style={styles.link}>
           <ThemedText
             variant="bodySmall"

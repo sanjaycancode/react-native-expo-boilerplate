@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -20,68 +20,71 @@ export default function TabLayout() {
   const colors = useThemeColors();
 
   return (
-    <Tabs
-      initialRouteName="dashboard"
-      screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        // Disable the static render of the header on sweb
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}
-    >
-      {/* The `index` route is required to set up the initial screen of the tab navigator. */}
-      <Tabs.Screen
-        name="index"
-        options={{
-          href: null,
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Tabs
+        initialRouteName="dashboard"
+        screenOptions={{
+          tabBarActiveTintColor: colors.primary,
+          // Disable the static render of the header on sweb
+          // to prevent a hydration error in React Navigation v6.
+          headerShown: useClientOnlyValue(false, true),
         }}
-      />
-      <Tabs.Screen
-        name="dashboard"
-        options={{
-          headerShown: false,
-          title: "Dashboard",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="th-large" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="practice"
-        options={{
-          headerShown: false,
-          title: "Practice",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="pencil-square-o" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="learn"
-        options={{
-          headerShown: false,
-          title: "Learn",
-          tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="coaching"
-        options={{
-          headerShown: false,
-          title: "Coaching",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="graduation-cap" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="me"
-        options={{
-          headerShown: false,
-          title: "Me",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        {/* The `index` route is required to set up the initial screen of the tab navigator. */}
+        <Tabs.Screen
+          name="index"
+          options={{
+            href: null,
+          }}
+        />
+        <Tabs.Screen
+          name="dashboard"
+          options={{
+            headerShown: false,
+            title: "Dashboard",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="th-large" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="practice"
+          options={{
+            headerShown: false,
+            title: "Practice",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="pencil-square-o" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="learn"
+          options={{
+            headerShown: false,
+            title: "Learn",
+            tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="coaching"
+          options={{
+            headerShown: false,
+            title: "Coaching",
+            tabBarIcon: ({ color }) => (
+              <TabBarIcon name="graduation-cap" color={color} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="me"
+          options={{
+            headerShown: false,
+            title: "Me",
+            tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          }}
+        />
+      </Tabs>
+    </>
   );
 }

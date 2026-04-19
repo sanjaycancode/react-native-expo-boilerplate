@@ -19,7 +19,7 @@ export default function LearnScreen() {
           </ThemedText>
         </View>
 
-        <Link href="/learn/courses" asChild>
+        <Link href="../courses" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
               <ThemedText variant="button">Courses</ThemedText>
@@ -30,7 +30,7 @@ export default function LearnScreen() {
           </Pressable>
         </Link>
 
-        <Link href="/learn/classes" asChild>
+        <Link href="../classes" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
               <ThemedText variant="button">Classes</ThemedText>

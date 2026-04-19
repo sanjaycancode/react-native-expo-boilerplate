@@ -53,11 +53,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <ThemeProvider>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        <Stack.Screen name="appearance" options={{ title: "Appearance" }} />
-      </Stack>
+      <Stack />
     </ThemeProvider>
   );
 }
