@@ -9,7 +9,7 @@ export default function SmartPracticeScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Smart Practice" }} />
+      <Stack.Screen options={{ title: "Smart Practice", headerShown: false }} />
       <View style={styles.container}>
         <ThemedText variant="heading2">Smart Practice</ThemedText>
         <ThemedText variant="body" semantic="muted">

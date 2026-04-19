@@ -4,16 +4,16 @@ import { Stack } from "expo-router";
 
 import { ThemedText } from "@/components/ThemedText";
 
-export default function MockTestScreen() {
+export default function ManualPracticeScreen() {
   const styles = createStyles();
 
   return (
     <>
-      <Stack.Screen options={{ title: "Mock Test" }} />
+      <Stack.Screen options={{ title: "Manual Practice", headerShown: false }} />
       <View style={styles.container}>
-        <ThemedText variant="heading2">Mock Test</ThemedText>
+        <ThemedText variant="heading2">Manual Practice</ThemedText>
         <ThemedText variant="body" semantic="muted">
-          Full-length timed practice tests will appear here.
+          Choose topics and difficulty to practice manually.
         </ThemedText>
       </View>
     </>
