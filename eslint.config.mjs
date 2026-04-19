@@ -42,8 +42,13 @@ export default tseslint.config(
         {
           groups: [
             ["^\\u0000"],
-            ["^react$", "^react-native$", "^react-dom$"],
-            ["^expo($|/)", "^expo-", "^@react-navigation($|/)"],
+            [
+              "^react$",
+              "^react-native$",
+              "^react-dom$",
+              "^@react-navigation($|/)",
+            ],
+            ["^expo($|/)", "^expo-"],
             ["^@?\\w"],
             ["^@/app(/.*)?$"],
             ["^@/components(/.*)?$"],
