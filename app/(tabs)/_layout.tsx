@@ -35,25 +35,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="th-large" color={color} />
           ),
-          // headerRight: () => (
-          //   <Link href="/modal" asChild>
-          //     <Pressable>
-          //       {({ pressed }) => (
-          //         <FontAwesome
-          //           name="info-circle"
-          //           size={25}
-          //           color={colors.text}
-          //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-          //         />
-          //       )}
-          //     </Pressable>
-          //   </Link>
-          // ),
         }}
       />
       <Tabs.Screen
         name="practice"
         options={{
+          headerShown: false,
           title: "Practice",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="pencil-square-o" color={color} />
@@ -63,6 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="learn"
         options={{
+          headerShown: false,
           title: "Learn",
           tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
         }}

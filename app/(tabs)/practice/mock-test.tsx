@@ -1,17 +1,22 @@
 import { StyleSheet, View } from "react-native";
 
+import { Stack } from "expo-router";
+
 import { ThemedText } from "@/components/ThemedText";
 
 export default function MockTestScreen() {
   const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <ThemedText variant="heading2">Mock Test</ThemedText>
-      <ThemedText variant="body" semantic="muted">
-        Full-length timed practice tests will appear here.
-      </ThemedText>
-    </View>
+    <>
+      <Stack.Screen options={{ title: "Mock Test" }} />
+      <View style={styles.container}>
+        <ThemedText variant="heading2">Mock Test</ThemedText>
+        <ThemedText variant="body" semantic="muted">
+          Full-length timed practice tests will appear here.
+        </ThemedText>
+      </View>
+    </>
   );
 }
 

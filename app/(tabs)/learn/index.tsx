@@ -10,7 +10,7 @@ export default function LearnScreen() {
 
   return (
     <>
-      <Stack.Screen options={{ title: "Learn", headerShown: false }} />
+      <Stack.Screen options={{ title: "Learn" }} />
       <View style={styles.container}>
         <View>
           <ThemedText variant="heading2">Learn</ThemedText>

@@ -1,17 +1,22 @@
 import { StyleSheet, View } from "react-native";
 
+import { Stack } from "expo-router";
+
 import { ThemedText } from "@/components/ThemedText";
 
 export default function ManualPracticeScreen() {
   const styles = createStyles();
 
   return (
-    <View style={styles.container}>
-      <ThemedText variant="heading2">Manual Practice</ThemedText>
-      <ThemedText variant="body" semantic="muted">
-        Choose topics and difficulty to practice manually.
-      </ThemedText>
-    </View>
+    <>
+      <Stack.Screen options={{ title: "Manual Practice" }} />
+      <View style={styles.container}>
+        <ThemedText variant="heading2">Manual Practice</ThemedText>
+        <ThemedText variant="body" semantic="muted">
+          Choose topics and difficulty to practice manually.
+        </ThemedText>
+      </View>
+    </>
   );
 }
 
