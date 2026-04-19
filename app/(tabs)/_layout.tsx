@@ -21,6 +21,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="dashboard"
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         // Disable the static render of the header on sweb
@@ -28,9 +29,17 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}
     >
+      {/* The `index` route is required to set up the initial screen of the tab navigator. */}
       <Tabs.Screen
         name="index"
         options={{
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          headerShown: false,
           title: "Dashboard",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="th-large" color={color} />
@@ -58,6 +67,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="coaching"
         options={{
+          headerShown: false,
           title: "Coaching",
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="graduation-cap" color={color} />
@@ -67,6 +77,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="me"
         options={{
+          headerShown: false,
           title: "Me",
           tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
