@@ -11,15 +11,25 @@ import { ManualPracticeType } from "@/components/manual_practice/types";
 
 import { useTheme } from "@/context/ThemeContext";
 
+const ALL_TYPES_PREVIEW_LIMIT = 2;
+
+function getVisibleSections(selectedType: ManualPracticeType) {
+  if (selectedType === "All types") {
+    return manualPracticeSections.map((section) => ({
+      ...section,
+      tasks: section.tasks.slice(0, ALL_TYPES_PREVIEW_LIMIT),
+    }));
+  }
+
+  return manualPracticeSections.filter((section) => section.type === selectedType);
+}
+
 export default function ManualPracticeScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const [selectedType, setSelectedType] =
     useState<ManualPracticeType>("All types");
-  const visibleSections =
-    selectedType === "All types"
-      ? manualPracticeSections
-      : manualPracticeSections.filter((section) => section.type === selectedType);
+  const visibleSections = getVisibleSections(selectedType);
 
   return (
     <>
@@ -38,7 +48,12 @@ export default function ManualPracticeScreen() {
         />
 
         {visibleSections.map((section) => (
-          <ManualPracticeSection key={section.type} section={section} />
+          <ManualPracticeSection
+            key={section.type}
+            section={section}
+            showViewAll={selectedType === "All types"}
+            onViewAll={(selectedSection) => setSelectedType(selectedSection.type)}
+          />
         ))}
       </ScrollView>
     </>

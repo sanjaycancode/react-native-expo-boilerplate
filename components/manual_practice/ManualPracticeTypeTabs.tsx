@@ -34,7 +34,7 @@ export function ManualPracticeTypeTabs({
             onPress={() => onSelectType(type)}
             variant={isSelected ? "primary" : "secondary"}
             size="small"
-            style={isSelected ? styles.typeButtonSelected : styles.typeButton}
+            style={styles.typeButton}
           />
         );
       })}
@@ -52,13 +52,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     typeButton: {
       alignSelf: "flex-start",
-      borderRadius: theme.borderRadius.large,
-      backgroundColor: theme.colors.overlay,
-      minWidth: theme.spacing.xxl * 2,
-    },
-    typeButtonSelected: {
-      alignSelf: "flex-start",
-      borderRadius: theme.borderRadius.large,
       minWidth: theme.spacing.xxl * 2,
     },
   });

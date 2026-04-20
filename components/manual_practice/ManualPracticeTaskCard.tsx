@@ -4,6 +4,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { ProgressTrack } from "@/components/ProgressTrack";
 import { ThemedButton } from "@/components/ThemedButton";
+import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -28,7 +29,11 @@ function getMetaLabel(task: ManualPracticeTask) {
     return `${task.durationMinutes} Minutes`;
   }
 
-  return `${task.questionCount} questions`;
+  return `${task.questionCount} Qs`;
+}
+
+function getProgressLabel(task: ManualPracticeTask) {
+  return `${task.completedQuestionCount}/${task.questionCount} done`;
 }
 
 export function ManualPracticeTaskCard({
@@ -42,7 +47,7 @@ export function ManualPracticeTaskCard({
   const hasProgress = task.completedQuestionCount > 0;
 
   return (
-    <View style={styles.card}>
+    <ThemedCard style={styles.card}>
       <View style={styles.cardHeader}>
         <View style={styles.copy}>
           {hasProgress ? (
@@ -53,7 +58,7 @@ export function ManualPracticeTaskCard({
                 style={styles.progressTrack}
               />
               <ThemedText variant="caption" semantic="muted">
-                {progress}% done
+                {getProgressLabel(task)}
               </ThemedText>
             </View>
           ) : null}
@@ -79,29 +84,19 @@ export function ManualPracticeTaskCard({
         <ThemedButton
           title={task.actionLabel}
           onPress={() => onPress?.(task)}
-          variant={task.actionLabel === "Practice" ? "primary" : "secondary"}
+          variant={task.actionLabel === "Resume" ? "secondary" : "primary"}
           size="small"
-          style={
-            task.actionLabel === "Resume"
-              ? styles.resumeButton
-              : styles.actionButton
-          }
-          textStyle={styles.actionButtonText}
+          style={styles.actionButton}
         />
       </View>
-    </View>
+    </ThemedCard>
   );
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
-  const colors = theme.colors;
-
   return StyleSheet.create({
     card: {
-      backgroundColor: colors.surface,
-      borderRadius: theme.borderRadius.medium,
       gap: theme.spacing.md,
-      padding: theme.spacing.md,
     },
     cardHeader: {
       alignItems: "flex-start",
@@ -123,7 +118,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
     },
     iconBadge: {
       alignItems: "center",
-      backgroundColor: colors.primaryLight,
+      backgroundColor: theme.colors.primaryLight,
       borderRadius: theme.borderRadius.large,
       height: 32,
       justifyContent: "center",
@@ -141,22 +136,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
       gap: theme.spacing.xs,
     },
     actionButton: {
-      borderRadius: theme.borderRadius.large,
       minWidth: 84,
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.xs,
-    },
-    resumeButton: {
-      backgroundColor: colors.overlay,
-      borderRadius: theme.borderRadius.large,
-      minWidth: 84,
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.xs,
-    },
-    actionButtonText: {
-      fontFamily: "LexendSemiBold",
-      fontSize: 12,
-      lineHeight: 16,
     },
   });
 };

@@ -9,12 +9,14 @@ import { ManualPracticeTaskCard } from "./ManualPracticeTaskCard";
 
 type ManualPracticeSectionProps = {
   section: ManualPracticeSectionData;
+  showViewAll?: boolean;
   onViewAll?: (section: ManualPracticeSectionData) => void;
   onPressTask?: (task: ManualPracticeTask) => void;
 };
 
 export function ManualPracticeSection({
   section,
+  showViewAll = false,
   onViewAll,
   onPressTask,
 }: ManualPracticeSectionProps) {
@@ -24,12 +26,25 @@ export function ManualPracticeSection({
   return (
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
-        <ThemedText variant="button">{section.type}</ThemedText>
-        <Pressable onPress={() => onViewAll?.(section)}>
-          <ThemedText variant="caption" semantic="primary">
-            View All
+        <View style={styles.sectionTitle}>
+          <ThemedText variant="button">{section.type}</ThemedText>
+          <ThemedText variant="caption" semantic="muted">
+            {section.typeCount} types
           </ThemedText>
-        </Pressable>
+        </View>
+        {showViewAll ? (
+          <Pressable
+            onPress={() => onViewAll?.(section)}
+            style={({ pressed }) => [
+              styles.viewAllButton,
+              pressed && styles.viewAllButtonPressed,
+            ]}
+          >
+            <ThemedText variant="caption" semantic="primary">
+              View All
+            </ThemedText>
+          </Pressable>
+        ) : null}
       </View>
 
       <View style={styles.taskList}>
@@ -51,9 +66,23 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.sm,
     },
     sectionHeader: {
-      alignItems: "center",
+      alignItems: "flex-start",
       flexDirection: "row",
+      gap: theme.spacing.md,
       justifyContent: "space-between",
+    },
+    sectionTitle: {
+      flex: 1,
+      gap: 2,
+    },
+    viewAllButton: {
+      borderRadius: theme.borderRadius.medium,
+      paddingHorizontal: theme.spacing.sm,
+      paddingVertical: theme.spacing.xs,
+    },
+    viewAllButtonPressed: {
+      backgroundColor: theme.colors.overlay,
+      opacity: 0.75,
     },
     taskList: {
       gap: theme.spacing.sm,
