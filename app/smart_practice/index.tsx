@@ -1,30 +1,44 @@
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
-import { Stack } from "expo-router";
+import { HighPriorityReviewSection } from "@/components/smart_practice/HighPriorityReviewSection";
+import { PacingAnalysisCard } from "@/components/smart_practice/PacingAnalysisCard";
+import { SkillHeatmapSection } from "@/components/smart_practice/SkillHeatmapSection";
+import { SmartPracticeHeaderSection } from "@/components/smart_practice/SmartPracticeHeaderSection";
+import { SmartPracticeHeroCard } from "@/components/smart_practice/SmartPracticeHeroCard";
+import { ThemedSafeAreaView } from "@/components/ThemedSafeAreaView";
 
-import { ThemedText } from "@/components/ThemedText";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function SmartPracticeScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   return (
-    <>
-      <Stack.Screen options={{ title: "Smart Practice", headerShown: false }} />
-      <View style={styles.container}>
-        <ThemedText variant="heading2">Smart Practice</ThemedText>
-        <ThemedText variant="body" semantic="muted">
-          Adaptive practice based on your weakest concepts.
-        </ThemedText>
-      </View>
-    </>
+    <ThemedSafeAreaView>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <SmartPracticeHeaderSection />
+        <SmartPracticeHeroCard />
+        <SkillHeatmapSection />
+        <PacingAnalysisCard />
+        <HighPriorityReviewSection />
+      </ScrollView>
+    </ThemedSafeAreaView>
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+    },
+    content: {
+      gap: theme.spacing.lg,
+      paddingBottom: theme.spacing.xl,
+      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.md,
     },
   });
