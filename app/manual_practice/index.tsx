@@ -1,30 +1,42 @@
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Stack } from "expo-router";
 
-import { ThemedText } from "@/components/ThemedText";
+import { ManualPracticeHeaderSection } from "@/components/manual_practice/ManualPracticeHeaderSection";
+import { ManualPracticeTypeTabs } from "@/components/manual_practice/ManualPracticeTypeTabs";
+import { ManualPracticeType } from "@/components/manual_practice/types";
+
+import { useTheme } from "@/context/ThemeContext";
 
 export default function ManualPracticeScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+  const [selectedType, setSelectedType] =
+    useState<ManualPracticeType>("All types");
 
   return (
     <>
-      <Stack.Screen options={{ title: "Manual Practice", headerShown: false }} />
+      <Stack.Screen
+        options={{ title: "Manual Practice", headerShown: false }}
+      />
       <View style={styles.container}>
-        <ThemedText variant="heading2">Manual Practice</ThemedText>
-        <ThemedText variant="body" semantic="muted">
-          Choose topics and difficulty to practice manually.
-        </ThemedText>
+        <ManualPracticeHeaderSection />
+        <ManualPracticeTypeTabs
+          selectedType={selectedType}
+          onSelectType={setSelectedType}
+        />
       </View>
     </>
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.md,
+      gap: theme.spacing.sm,
     },
   });
