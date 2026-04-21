@@ -1,7 +1,6 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-
+import { IconBadge } from "@/components/IconBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -21,13 +20,7 @@ export function MockTestSectionSetCard({
 
   return (
     <ThemedCard style={styles.card}>
-      <View style={styles.iconBadge}>
-        <Ionicons
-          name={sectionSet.iconName}
-          size={22}
-          color={theme.colors.primaryDark}
-        />
-      </View>
+      <IconBadge name={sectionSet.iconName} />
       <ThemedText variant="button">{sectionSet.title}</ThemedText>
       <ThemedText variant="caption">
         {sectionSet.practiceSetCount} practice sets
@@ -42,13 +35,5 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
       gap: theme.spacing.md,
       minHeight: 160,
-    },
-    iconBadge: {
-      alignItems: "center",
-      backgroundColor: theme.colors.primaryLight,
-      borderRadius: theme.borderRadius.full,
-      height: 44,
-      justifyContent: "center",
-      width: 44,
     },
   });

@@ -2,6 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+import { IconBadge } from "@/components/IconBadge";
 import { ProgressTrack } from "@/components/ProgressTrack";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
@@ -66,9 +67,13 @@ export function ManualPracticeTaskCard({
           <ThemedText variant="button">{task.title}</ThemedText>
         </View>
 
-        <View style={styles.iconBadge}>
-          <Ionicons name={task.iconName} size={16} color={colors.primaryDark} />
-        </View>
+        <IconBadge
+          name={task.iconName}
+          size={16}
+          badgeSize={32}
+          backgroundColor={colors.background}
+          borderRadius={theme.borderRadius.large}
+        />
       </View>
 
       <View style={styles.cardFooter}>
@@ -115,14 +120,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
     },
     progressTrack: {
       width: 72,
-    },
-    iconBadge: {
-      alignItems: "center",
-      backgroundColor: theme.colors.primaryLight,
-      borderRadius: theme.borderRadius.large,
-      height: 32,
-      justifyContent: "center",
-      width: 32,
     },
     cardFooter: {
       alignItems: "center",
