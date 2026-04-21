@@ -267,7 +267,10 @@ export default function SettingsScreen() {
             title="Cancel"
             variant="secondary"
             size="medium"
-            onPress={() => setSettings(initialState)}
+            onPress={() => {
+              setSettings(initialState);
+              router.back();
+            }}
           />
           <ThemedButton
             title="Save Changes"
