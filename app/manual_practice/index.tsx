@@ -66,9 +66,9 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
     },
     content: {
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
+      paddingBottom: theme.spacing.lg,
       paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.md,
-      paddingBottom: theme.spacing.xl,
+      paddingTop: theme.spacing.sm,
     },
   });

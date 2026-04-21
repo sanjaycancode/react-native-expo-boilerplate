@@ -60,13 +60,13 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     card: {
       backgroundColor: theme.colors.primaryDark,
       borderRadius: theme.borderRadius.xl,
-      gap: theme.spacing.lg,
-      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
+      padding: theme.spacing.md,
     },
     tags: {
       flexDirection: "row",
       flexWrap: "wrap",
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     tag: {
       alignItems: "center",
@@ -74,7 +74,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       borderRadius: theme.borderRadius.full,
       flexDirection: "row",
       gap: theme.spacing.xs,
-      paddingHorizontal: theme.spacing.md,
+      paddingHorizontal: theme.spacing.sm,
       paddingVertical: theme.spacing.xs,
     },
     tagText: {

@@ -16,6 +16,6 @@ export function MockTestSectionSetGrid() {
 const styles = StyleSheet.create({
   grid: {
     flexDirection: "row",
-    gap: 16,
+    gap: 12,
   },
 });

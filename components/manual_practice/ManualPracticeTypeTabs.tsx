@@ -46,9 +46,9 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     typeFilterRow: {
       alignItems: "center",
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
       paddingRight: theme.spacing.md,
-      paddingVertical: theme.spacing.xs,
+      paddingVertical: 2,
     },
     typeButton: {
       alignSelf: "flex-start",

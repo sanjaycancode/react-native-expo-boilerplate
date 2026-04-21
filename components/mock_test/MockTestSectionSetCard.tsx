@@ -33,7 +33,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     card: {
       flex: 1,
-      gap: theme.spacing.md,
-      minHeight: 160,
+      gap: theme.spacing.sm,
+      minHeight: 132,
+      padding: theme.spacing.md,
     },
   });

@@ -70,7 +70,7 @@ export function ManualPracticeTaskCard({
         <IconBadge
           name={task.iconName}
           size={16}
-          badgeSize={32}
+          badgeSize={30}
           backgroundColor={colors.background}
           borderRadius={theme.borderRadius.large}
         />
@@ -101,12 +101,13 @@ export function ManualPracticeTaskCard({
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
   return StyleSheet.create({
     card: {
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
+      padding: theme.spacing.md,
     },
     cardHeader: {
       alignItems: "flex-start",
       flexDirection: "row",
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
       justifyContent: "space-between",
     },
     copy: {
@@ -124,7 +125,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
     cardFooter: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
       justifyContent: "space-between",
     },
     metaRow: {

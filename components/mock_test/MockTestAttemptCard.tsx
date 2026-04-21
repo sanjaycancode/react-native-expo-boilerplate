@@ -46,7 +46,7 @@ export function MockTestAttemptCard({ attempt }: MockTestAttemptCardProps) {
       <IconBadge
         name={attempt.iconName}
         size={18}
-        badgeSize={40}
+        badgeSize={36}
         borderRadius={theme.borderRadius.large}
       />
 
@@ -75,14 +75,14 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     card: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.sm,
-      padding: theme.spacing.sm,
+      gap: theme.spacing.xs,
+      padding: theme.spacing.xs,
     },
     copy: {
       flex: 1,
     },
     statusColumn: {
       alignItems: "flex-end",
-      gap: 2,
+      gap: 1,
     },
   });

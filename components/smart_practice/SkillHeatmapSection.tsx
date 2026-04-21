@@ -49,7 +49,7 @@ export function SkillHeatmapSection({ onViewHistory }: SkillHeatmapSectionProps)
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     section: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     header: {
       alignItems: "center",
@@ -58,8 +58,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     historyButton: {
       borderRadius: theme.borderRadius.medium,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.xs,
+      paddingVertical: 2,
     },
     historyButtonPressed: {
       backgroundColor: theme.colors.overlay,
@@ -68,12 +68,12 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     grid: {
       flexDirection: "row",
       flexWrap: "wrap",
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     heatmapCard: {
       flexBasis: "48%",
       flexGrow: 1,
       gap: theme.spacing.xs,
-      padding: theme.spacing.sm,
+      padding: theme.spacing.xs,
     },
   });

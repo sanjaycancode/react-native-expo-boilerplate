@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-
+import { IconBadge } from "@/components/IconBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -30,14 +29,13 @@ export function HighPriorityReviewSection() {
 
           return (
             <ThemedCard key={item.id} style={styles.reviewCard}>
-              <View
-                style={[
-                  styles.iconBadge,
-                  { backgroundColor: `${toneColor}20` },
-                ]}
-              >
-                <Ionicons name={item.iconName} size={18} color={toneColor} />
-              </View>
+              <IconBadge
+                name={item.iconName}
+                size={18}
+                color={toneColor}
+                badgeSize={36}
+                backgroundColor={`${toneColor}20`}
+              />
 
               <View style={styles.copy}>
                 <ThemedText variant="bodySmall">{item.title}</ThemedText>
@@ -65,23 +63,16 @@ export function HighPriorityReviewSection() {
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     section: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     list: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     reviewCard: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.md,
-      padding: theme.spacing.md,
-    },
-    iconBadge: {
-      alignItems: "center",
-      borderRadius: theme.borderRadius.full,
-      height: 40,
-      justifyContent: "center",
-      width: 40,
+      gap: theme.spacing.sm,
+      padding: theme.spacing.sm,
     },
     copy: {
       flex: 1,

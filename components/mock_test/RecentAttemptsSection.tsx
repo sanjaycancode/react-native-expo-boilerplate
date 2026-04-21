@@ -44,7 +44,7 @@ export function RecentAttemptsSection({ onViewAll }: RecentAttemptsSectionProps)
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     section: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     header: {
       alignItems: "center",
@@ -53,14 +53,14 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     viewAllButton: {
       borderRadius: theme.borderRadius.medium,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.xs,
+      paddingVertical: 2,
     },
     viewAllButtonPressed: {
       backgroundColor: theme.colors.overlay,
       opacity: 0.75,
     },
     list: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
   });

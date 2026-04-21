@@ -46,13 +46,14 @@ export function PacingAnalysisCard() {
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     card: {
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
+      padding: theme.spacing.md,
     },
     header: {
       gap: theme.spacing.xs,
     },
     list: {
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
     },
     pacingItem: {
       gap: theme.spacing.xs,
@@ -60,7 +61,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     row: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
       justifyContent: "space-between",
     },
   });

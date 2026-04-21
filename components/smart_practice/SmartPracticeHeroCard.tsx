@@ -59,8 +59,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     card: {
       backgroundColor: theme.colors.primaryDark,
       borderRadius: theme.borderRadius.xl,
-      gap: theme.spacing.lg,
-      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
+      padding: theme.spacing.md,
     },
     dueBadge: {
       alignItems: "center",
@@ -69,8 +69,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       borderRadius: theme.borderRadius.full,
       flexDirection: "row",
       gap: theme.spacing.xs,
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.sm,
+      paddingVertical: 2,
     },
     copy: {
       gap: theme.spacing.xs,
@@ -89,7 +89,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     footer: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.md,
+      gap: theme.spacing.sm,
       justifyContent: "space-between",
     },
     startButton: {

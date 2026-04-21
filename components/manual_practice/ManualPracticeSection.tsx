@@ -63,7 +63,7 @@ export function ManualPracticeSection({
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     section: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
     sectionHeader: {
       alignItems: "flex-start",
@@ -77,14 +77,14 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     viewAllButton: {
       borderRadius: theme.borderRadius.medium,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
+      paddingHorizontal: theme.spacing.xs,
+      paddingVertical: 2,
     },
     viewAllButtonPressed: {
       backgroundColor: theme.colors.overlay,
       opacity: 0.75,
     },
     taskList: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.xs,
     },
   });
