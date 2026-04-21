@@ -3,6 +3,7 @@ import { Image, ScrollView, StyleSheet, View } from "react-native";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
+import { AboutCard } from "@/components/courses/AboutCard";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -90,18 +91,10 @@ export default function ClassDetail() {
 
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
-          <ThemedCard variant="outlined" style={styles.descriptionCard}>
-            <ThemedText variant="heading3" semantic="default">
-              About This Class
-            </ThemedText>
-            <ThemedText
-              variant="body"
-              semantic="default"
-              style={styles.justifyText}
-            >
-              {classData.description}
-            </ThemedText>
-          </ThemedCard>
+          <AboutCard
+            description={classData.description}
+            title="About This Class"
+          />
 
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
@@ -181,15 +174,6 @@ const createStyles = () =>
     },
     divider: {
       height: 1,
-    },
-    descriptionCard: {
-      gap: Spacing.md,
-      borderRadius: BorderRadius.large,
-      alignSelf: "center",
-      width: "100%",
-    },
-    justifyText: {
-      textAlign: "justify",
     },
     infoGrid: {
       flexDirection: "row",

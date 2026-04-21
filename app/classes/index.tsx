@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 
 import { Stack, router } from "expo-router";
 
-import { ClassCard } from "@/components/ClassCard";
+import { ClassCard } from "@/components/classes/ClassCard";
 import { HeaderBackButton } from "@/components/HeaderBackButton";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";

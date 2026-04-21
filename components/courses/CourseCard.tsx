@@ -5,6 +5,7 @@ import {
   View,
 } from "react-native";
 
+import { ProgressTrack } from "@/components/ProgressTrack";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -68,24 +69,10 @@ export function CourseCard({
           <ThemedText variant="caption" semantic="muted">
             {Math.round(progress * 100)}% Complete
           </ThemedText>
-
-         
-          <View
-            style={[
-              styles.progressTrack,
-              { backgroundColor: colors.border },
-            ]}
-          >
-            <View
-              style={[
-                styles.progressFill,
-                {
-                  width: `${Math.round(progress * 100)}%`,
-                  backgroundColor: colors.primary,
-                },
-              ]}
-            />
-          </View>
+          <ProgressTrack
+            progress={Math.round(progress * 100)}
+            height={8}
+          />
         </View>
 
        
@@ -122,15 +109,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   progressSection: {
-    gap: Spacing.xs + Spacing.xs,
-  },
-  progressTrack: {
-    height: 8,
-    borderRadius: BorderRadius.full,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: 8,
-    borderRadius: BorderRadius.full,
+    gap: Spacing.sm,
   },
 });

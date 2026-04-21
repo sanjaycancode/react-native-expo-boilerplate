@@ -3,8 +3,9 @@ import { Image, ScrollView, StyleSheet, View } from "react-native";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
-import { CourseAboutCard } from "@/components/CourseAboutCard";
-import { CourseSectionCard } from "@/components/CourseSectionCard";
+import { AboutCard } from "@/components/courses/AboutCard";
+import { CourseSectionCard } from "@/components/courses/CourseSectionCard";
+import { ProgressTrack } from "@/components/ProgressTrack";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -67,9 +68,9 @@ export default function CourseDetail() {
             {courseData.subtitle}
           </ThemedText>
 
-          <CourseAboutCard description={courseData.description} />
+          
 
-          <View style={styles.progressBarContainer}>
+          <View style={styles.progressSection}>
             <View style={styles.progressLabelRow}>
               <ThemedText variant="caption" semantic="muted">
                 Your Progress
@@ -78,19 +79,10 @@ export default function CourseDetail() {
                 {progressPercent}% Complete
               </ThemedText>
             </View>
-            <View
-              style={[styles.progressTrack, { backgroundColor: colors.border }]}
-            >
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${progressPercent}%`,
-                    backgroundColor: colors.primary,
-                  },
-                ]}
-              />
-            </View>
+            <ProgressTrack
+              progress={progressPercent}
+              height={8}
+            />
           </View>
 
           <View style={styles.statsRow}>
@@ -122,7 +114,7 @@ export default function CourseDetail() {
 
           <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
-          
+          <AboutCard description={courseData.description} />
 
           <ThemedText variant="heading3" semantic="default">
             Course Content
@@ -174,21 +166,12 @@ const createStyles = () =>
       gap: Spacing.md,
       paddingBottom: Spacing.xl + Spacing.sm,
     },
-    progressBarContainer: {
+    progressSection: {
       gap: Spacing.xs,
     },
     progressLabelRow: {
       flexDirection: "row",
       justifyContent: "space-between",
-    },
-    progressTrack: {
-      height: 8,
-      borderRadius: BorderRadius.full,
-      overflow: "hidden",
-    },
-    progressFill: {
-      height: 8,
-      borderRadius: BorderRadius.full,
     },
     statsRow: {
       flexDirection: "row",
