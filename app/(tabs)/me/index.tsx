@@ -34,53 +34,86 @@ export default function MeScreen() {
 
   const styles = useMemo(() => createStyles(theme), [theme.mode]);
 
-  const menuList = [
+  const MENU_SECTIONS = [
     {
-      key: "basic_information",
-      title: "Basic information",
-      icon: "user",
-      iconFamily: FontAwesome,
-      href: "/(tabs)/me/basic-information",
+      title: "Account",
+      items: [
+        {
+          key: "basic_information",
+          title: "Basic information",
+          icon: "user",
+          iconFamily: FontAwesome,
+          href: "/(tabs)/me/basic-information",
+        },
+        {
+          key: "device_check",
+          title: "Device Check",
+          icon: "phone-android",
+          iconFamily: MaterialIcons,
+          href: "/(tabs)/me/device-check",
+        },
+        {
+          key: "notification",
+          title: "Notification",
+          icon: "bell",
+          iconFamily: FontAwesome,
+          href: "/notification",
+        },
+      ],
     },
     {
-      key: "device_check",
-      title: "Device Check",
-      icon: "phone-android",
-      iconFamily: MaterialIcons,
-      href: "/(tabs)/me/device-check",
+      title: "Extras",
+      items: [
+        {
+          key: "games",
+          title: "Games",
+          icon: "gamepad",
+          iconFamily: FontAwesome,
+          href: "/games",
+        },
+        {
+          key: "referral",
+          title: "Referrals",
+          icon: "user-plus",
+          iconFamily: FontAwesome,
+          href: "/games",
+        },
+      ],
     },
-
     {
-      key: "notification",
-      title: "Notification",
-      icon: "bell",
-      iconFamily: FontAwesome,
-      href: "/notification",
-    },
-    {
-      key: "settings",
       title: "Settings",
-      icon: "settings",
-      iconFamily: MaterialIcons,
-      href: "/(tabs)/me/settings",
+      items: [
+        {
+          key: "settings",
+          title: "Settings",
+          icon: "settings",
+          iconFamily: MaterialIcons,
+          href: "/(tabs)/me/settings",
+        },
+        {
+          key: "terms",
+          title: "Terms and Conditions",
+          icon: "file-alt",
+          iconFamily: FontAwesome5,
+          href: "/(tabs)/me/terms",
+        },
+      ],
     },
     {
-      key: "terms",
-      title: "Terms and Conditions",
-      icon: "file-alt",
-      iconFamily: FontAwesome5,
-      href: "/(tabs)/me/terms",
+      title: "Appearance",
+      items: [
+        {
+          key: "switch_mode",
+          title: theme.mode === "dark" ? "Dark Mode" : "Light Mode",
+          icon: theme.mode === "dark" ? "moon" : "sunny",
+          iconFamily: Ionicons,
+          onPress: toggleTheme,
+          isSwitch: true,
+          switchValue: theme.mode === "dark",
+        },
+      ],
     },
-    {
-      key: "switch_mode",
-      title: theme.mode === "dark" ? "Dark Mode" : "Light Mode",
-      icon: theme.mode === "dark" ? "moon" : "sunny",
-      iconFamily: Ionicons,
-      onPress: toggleTheme,
-      isSwitch: true,
-      switchValue: theme.mode === "dark",
-    },
-  ];
+  ] as const;
 
   return (
     <View style={styles.screen}>
@@ -129,74 +162,85 @@ export default function MeScreen() {
           </View>
         </View>
 
+        {MENU_SECTIONS.map((section) => (
+          <View key={section.title} style={styles.sectionWrap}>
+            <ThemedText variant="caption" semantic="muted" style={styles.sectionTitle}>
+              {section.title}
+            </ThemedText>
+            <ThemedCard variant="outlined" style={styles.listCard}>
+              {section.items.map((item, idx) => {
+                const IconComponent = item.iconFamily ?? MaterialIcons;
+                const isLast = idx === section.items.length - 1;
+
+                const handlePress = () => {
+                  if ("isSwitch" in item && item.isSwitch) return;
+                  if ("onPress" in item && item.onPress) return item.onPress();
+                  if ("href" in item && item.href) router.push(item.href);
+                };
+
+                return (
+                  <TouchableOpacity
+                    key={item.key}
+                    onPress={handlePress}
+                    style={[
+                      styles.menuRow,
+                      "isSwitch" in item && item.isSwitch && styles.modeRow,
+                      !isLast && styles.menuRowDivider,
+                    ]}
+                    disabled={"isSwitch" in item && item.isSwitch}
+                    activeOpacity={
+                      "isSwitch" in item && item.isSwitch ? 1 : 0.85
+                    }
+                  >
+                    <View style={styles.menuIconWrap}>
+                      <IconComponent
+                        // @ts-expect-error icon names vary by family
+                        name={item.icon}
+                        size={22}
+                        color={theme.colors.primary}
+                      />
+                    </View>
+
+                    <ThemedText
+                      variant="button"
+                      style={styles.menuTitle}
+                      numberOfLines={1}
+                    >
+                      {item.title}
+                    </ThemedText>
+
+                    <View style={styles.menuRight}>
+                      {"isSwitch" in item && item.isSwitch ? (
+                        <Switch
+                          value={item.switchValue}
+                          onValueChange={item.onPress}
+                          trackColor={{
+                            false: theme.colors.border,
+                            true: theme.colors.primary,
+                          }}
+                          thumbColor={
+                            item.switchValue
+                              ? theme.colors.primaryLight
+                              : theme.colors.textSecondary
+                          }
+                          ios_backgroundColor={theme.colors.border}
+                        />
+                      ) : (
+                        <Ionicons
+                          name="chevron-forward"
+                          size={22}
+                          color={theme.colors.primary}
+                        />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ThemedCard>
+          </View>
+        ))}
+
         <ThemedCard variant="outlined" style={styles.listCard}>
-          {menuList.map((item, idx) => {
-            const IconComponent = item.iconFamily ?? MaterialIcons;
-            const isLast = idx === menuList.length - 1;
-
-            const handlePress = () => {
-              if (item.isSwitch) return;
-              if (item.onPress) return item.onPress();
-              if (item.href) router.push(item.href);
-            };
-
-            return (
-              <TouchableOpacity
-                key={item.key}
-                onPress={handlePress}
-                style={[
-                  styles.menuRow,
-                  item.isSwitch && styles.modeRow,
-                  !isLast && styles.menuRowDivider,
-                ]}
-                disabled={item.isSwitch}
-                activeOpacity={item.isSwitch ? 1 : 0.85}
-              >
-                <View style={styles.menuIconWrap}>
-                  <IconComponent
-                    // @ts-expect-error icon names vary by family
-                    name={item.icon}
-                    size={22}
-                    color={theme.colors.primary}
-                  />
-                </View>
-
-                <ThemedText
-                  variant="button"
-                  style={styles.menuTitle}
-                  numberOfLines={1}
-                >
-                  {item.title}
-                </ThemedText>
-
-                <View style={styles.menuRight}>
-                  {item.isSwitch ? (
-                    <Switch
-                      value={item.switchValue}
-                      onValueChange={item.onPress}
-                      trackColor={{
-                        false: theme.colors.border,
-                        true: theme.colors.primary,
-                      }}
-                      thumbColor={
-                        item.switchValue
-                          ? theme.colors.primaryLight
-                          : theme.colors.textSecondary
-                      }
-                      ios_backgroundColor={theme.colors.border}
-                    />
-                  ) : (
-                    <Ionicons
-                      name="chevron-forward"
-                      size={22}
-                      color={theme.colors.primary}
-                    />
-                  )}
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-
           <TouchableOpacity
             onPress={() => {}}
             style={[styles.menuRow, styles.logoutRow]}
@@ -260,6 +304,12 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
       gap: 2,
     },
+    sectionWrap: {
+      gap: theme.spacing.xs + 2,
+    },
+    sectionTitle: {
+      paddingHorizontal: 2,
+    },
     listCard: {
       padding: 0,
       overflow: "hidden",
@@ -279,7 +329,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     modeRow: {
       borderTopWidth: 1,
-      borderBottomWidth: 1,
       borderColor: theme.colors.border,
     },
     menuIconWrap: {

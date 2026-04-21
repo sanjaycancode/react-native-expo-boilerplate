@@ -81,7 +81,7 @@ export function ListItem({
       </View>
 
       <View style={styles.textWrap}>
-        <ThemedText variant="button" numberOfLines={1}>
+        <ThemedText variant="body" numberOfLines={1}>
           {title}
         </ThemedText>
         {subtitle ? (
@@ -139,12 +139,12 @@ const createStyles = (
     row: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 14,
-      paddingVertical: 12,
+      paddingVertical: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
       backgroundColor: theme.colors.backgroundAlt,
       borderBottomWidth: isLast ? 0 : 1,
       borderBottomColor: theme.colors.border,
-      gap: 12,
+      gap: theme.borderRadius.large,
     },
     rowPressed: {
       opacity: 0.85,
@@ -152,13 +152,13 @@ const createStyles = (
     iconWrap: {
       width: 40,
       height: 40,
-      borderRadius: 12,
+      borderRadius: theme.borderRadius.large,
       alignItems: "center",
       justifyContent: "center",
       backgroundColor: theme.colors.overlay,
     },
     textWrap: {
       flex: 1,
-      gap: 2,
+      gap: theme.spacing.xs,
     },
   });
