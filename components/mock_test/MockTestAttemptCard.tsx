@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 
-import Ionicons from "@expo/vector-icons/Ionicons";
-
+import { IconBadge } from "@/components/IconBadge";
+import { StatusBadge, StatusBadgeVariant } from "@/components/StatusBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -18,6 +18,12 @@ const statusLabelMap = {
   completed: "Completed",
   expired: "Expired",
 } as const satisfies Record<MockTestAttemptStatus, string>;
+
+const statusVariantMap = {
+  started: "primary",
+  completed: "success",
+  expired: "neutral",
+} as const satisfies Record<MockTestAttemptStatus, StatusBadgeVariant>;
 
 function getAttemptDetail(attempt: MockTestAttempt) {
   if (attempt.progress !== undefined) {
@@ -37,13 +43,12 @@ export function MockTestAttemptCard({ attempt }: MockTestAttemptCardProps) {
 
   return (
     <ThemedCard style={styles.card}>
-      <View style={styles.iconBadge}>
-        <Ionicons
-          name={attempt.iconName}
-          size={18}
-          color={theme.colors.primaryDark}
-        />
-      </View>
+      <IconBadge
+        name={attempt.iconName}
+        size={18}
+        badgeSize={40}
+        borderRadius={theme.borderRadius.large}
+      />
 
       <View style={styles.copy}>
         <ThemedText variant="bodySmall">{attempt.title}</ThemedText>
@@ -53,14 +58,10 @@ export function MockTestAttemptCard({ attempt }: MockTestAttemptCardProps) {
       </View>
 
       <View style={styles.statusColumn}>
-        <View style={[styles.statusBadge, styles[attempt.status]]}>
-          <ThemedText
-            variant="caption"
-            style={[styles.statusText, styles[`${attempt.status}Text`]]}
-          >
-            {statusLabelMap[attempt.status]}
-          </ThemedText>
-        </View>
+        <StatusBadge
+          label={statusLabelMap[attempt.status]}
+          variant={statusVariantMap[attempt.status]}
+        />
         <ThemedText variant="caption" semantic="muted">
           {getAttemptDetail(attempt)}
         </ThemedText>
@@ -77,47 +78,11 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.sm,
       padding: theme.spacing.sm,
     },
-    iconBadge: {
-      alignItems: "center",
-      backgroundColor: theme.colors.overlay,
-      borderRadius: theme.borderRadius.large,
-      height: 40,
-      justifyContent: "center",
-      width: 40,
-    },
     copy: {
       flex: 1,
     },
     statusColumn: {
       alignItems: "flex-end",
       gap: 2,
-    },
-    statusBadge: {
-      borderRadius: theme.borderRadius.full,
-      paddingHorizontal: theme.spacing.xs,
-      paddingVertical: 2,
-    },
-    started: {
-      backgroundColor: theme.colors.primaryLight,
-    },
-    completed: {
-      backgroundColor: "#DCFCE7",
-    },
-    expired: {
-      backgroundColor: theme.colors.overlay,
-    },
-    statusText: {
-      fontFamily: "LexendSemiBold",
-      fontSize: 10,
-      lineHeight: 12,
-    },
-    startedText: {
-      color: theme.colors.primaryDark,
-    },
-    completedText: {
-      color: theme.colors.success,
-    },
-    expiredText: {
-      color: theme.colors.textSecondary,
     },
   });
