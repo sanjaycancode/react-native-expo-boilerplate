@@ -9,10 +9,9 @@ export default function SmartPracticeLayout() {
         options={{
           title: "Smart Practice",
           headerBackTitle: "Practice",
-          headerShown: false,
         }}
       />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack />
     </>
   );
 }

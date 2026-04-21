@@ -66,14 +66,16 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.xs,
     },
     sectionHeader: {
-      alignItems: "flex-start",
+      alignItems: "center",
       flexDirection: "row",
       gap: theme.spacing.md,
       justifyContent: "space-between",
     },
     sectionTitle: {
+      alignItems: "center",
       flex: 1,
-      gap: 2,
+      flexDirection: "row",
+      gap: theme.spacing.xs,
     },
     viewAllButton: {
       borderRadius: theme.borderRadius.medium,

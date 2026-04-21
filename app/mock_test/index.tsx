@@ -37,8 +37,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     content: {
       gap: theme.spacing.md,
-      paddingBottom: theme.spacing.lg,
+      paddingBottom: theme.spacing.sm,
       paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.lg,
+      paddingTop: theme.spacing.sm,
     },
   });
