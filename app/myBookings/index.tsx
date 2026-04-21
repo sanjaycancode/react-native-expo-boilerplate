@@ -29,7 +29,7 @@ type Booking = {
 
 export default function MyBookingsScreen() {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const styles = createStyles();
   const navigation = useNavigation();
   const colors = useThemeColors();
 
@@ -306,7 +306,7 @@ const createStyles = () =>
     },
     filterChip: {
       borderWidth: 1,
-      paddingVertical: 8,
+      paddingVertical: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
       borderRadius: BorderRadius.full,
     },
@@ -320,11 +320,11 @@ const createStyles = () =>
     cardTopRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 12,
+      gap: theme.spacing.md,
     },
     avatar: {
-      width: 40,
-      height: 40,
+      width: theme.spacing.lg,
+      height: theme.spacing.lg,
       borderRadius: theme.borderRadius.large,
       alignItems: "center",
       justifyContent: "center",

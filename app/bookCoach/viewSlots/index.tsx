@@ -200,7 +200,7 @@ const createStyles = (theme: AppTheme) =>
       borderRadius: theme.borderRadius.medium,
       paddingVertical: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
-      minWidth: 88,
+      minWidth: theme.spacing.lg,
       alignItems: "center",
       justifyContent: "center",
     },

@@ -8,6 +8,11 @@ import { ActionCard } from "@/components/ActionCard";
 import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Themes";
 
+import { useTheme } from "@/context/ThemeContext";
+import { Spacing } from "@/constants/Themes";
+
+type AppTheme = ReturnType<typeof useTheme>["theme"];
+
 interface MenuItem {
   title: string;
   description: string;
@@ -18,7 +23,8 @@ interface MenuItem {
 }
 
 export default function CoachingScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const iconBackgroundColor = Colors.light.primary;
   const iconForegroundColor = Colors.light.textOnPrimary;
@@ -27,7 +33,7 @@ export default function CoachingScreen() {
     () => [
       {
         title: "Book Coach",
-        description: "Browse & book sessions with available coaches.",
+        description: "Browse & book sessions with  coaches.",
         href: "/bookCoach",
         iconName: "calendar-plus",
         iconBackgroundColor,
@@ -71,11 +77,11 @@ export default function CoachingScreen() {
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
   });

@@ -10,7 +10,11 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useThemeColors } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
+
+import { BorderRadius, Spacing } from "@/constants/Themes";
+
+type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 type Params = {
   id?: string;
@@ -22,7 +26,8 @@ type Params = {
 };
 
 export default function CoachProfileScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const colors = useThemeColors();
   const navigation = useNavigation();
   const router = useRouter();
@@ -164,61 +169,61 @@ export default function CoachProfileScreen() {
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
     headerCard: {
-      padding: 14,
-      gap: 12,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
     headerRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 12,
+      gap: theme.spacing.md,
     },
     avatar: {
       width: 44,
       height: 44,
-      borderRadius: 16,
+      borderRadius: theme.borderRadius.large,
       alignItems: "center",
       justifyContent: "center",
       borderWidth: 1,
     },
     headerText: {
       flex: 1,
-      gap: 2,
+      gap: theme.spacing.xs,
     },
     metaRow: {
       flexDirection: "row",
       flexWrap: "wrap",
-      gap: 14,
+      gap: theme.spacing.md,
       alignItems: "center",
     },
     metaItem: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 8,
+      gap: theme.spacing.xs,
     },
     sectionCard: {
-      padding: 14,
-      gap: 8,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.sm,
     },
     actionsRow: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 12,
-      marginTop: 4,
+      gap: theme.spacing.md,
+      marginTop: theme.spacing.xs,
     },
     secondaryButton: {
       flex: 1,
       borderWidth: 1,
-      borderRadius: 8,
-      paddingVertical: 10,
-      paddingHorizontal: 12,
+      borderRadius: theme.borderRadius.small,
+      paddingVertical: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
       alignItems: "center",
       justifyContent: "center",
     },
