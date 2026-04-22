@@ -162,7 +162,7 @@ const createStyles = () =>
       height: 200,
     },
     content: {
-      padding: Spacing.lg,
+      padding: Spacing.md,
       gap: Spacing.md,
       paddingBottom: Spacing.xl + Spacing.sm,
     },

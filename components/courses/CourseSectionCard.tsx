@@ -160,7 +160,7 @@ export function CourseSectionCard({
 const styles = StyleSheet.create({
   sectionCard: {
     gap: Spacing.sm,
-    borderRadius: BorderRadius.large,
+    borderRadius: BorderRadius.xl,
     flexDirection: "row",
     flexWrap: "wrap",
   },
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Spacing.sm,
     padding: Spacing.md,
-    borderRadius: BorderRadius.medium,
+    borderRadius: BorderRadius.xl,
     alignItems: "flex-start",
   },
   goalText: {
