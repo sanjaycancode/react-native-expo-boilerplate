@@ -11,6 +11,8 @@ import { Link, Stack } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+import { IconBadge } from "@/components/IconBadge";
+import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -115,19 +117,31 @@ export default function NotificationScreen() {
     setTimeout(() => setRefreshing(false), 700);
   }, []);
 
-  const tabs = useMemo(
-    () =>
-      [
-        { key: "all" as const, label: "All" },
-        { key: "unread" as const, label: "Unread", count: unreadCount },
-        { key: "booking" as const, label: "Booking", count: bookingCount },
-        { key: "result" as const, label: "Results" },
-      ] as const,
+  const tabKeys = useMemo(
+    () => ["all", "unread", "booking", "result"] as const,
+    [],
+  );
+
+  const getTabLabel = useCallback(
+    (tab: TabKey) => {
+      switch (tab) {
+        case "all":
+          return "All";
+        case "unread":
+          return unreadCount > 0 ? `Unread (${unreadCount})` : "Unread";
+        case "booking":
+          return bookingCount > 0 ? `Booking (${bookingCount})` : "Booking";
+        case "result":
+          return "Results";
+        default:
+          return tab;
+      }
+    },
     [bookingCount, unreadCount],
   );
 
   return (
-    <View style={styles.screen}>
+    <View style={styles.container}>
       <Stack.Screen
         options={{
           title: "Notification",
@@ -150,68 +164,12 @@ export default function NotificationScreen() {
           />
         }
       >
-        <View style={styles.tabsRow}>
-          {tabs.map((tab) => {
-            const selected = activeTab === tab.key;
-            return (
-              <TouchableOpacity
-                key={tab.key}
-                accessibilityRole="button"
-                onPress={() => setActiveTab(tab.key)}
-                style={[styles.tab, selected && styles.tabSelected]}
-                activeOpacity={0.82}
-              >
-                <View style={styles.tabLabelRow}>
-                  <ThemedText
-                    variant="caption"
-                    style={[
-                      styles.tabLabel,
-                      {
-                        color: selected
-                          ? theme.colors.primary
-                          : theme.colors.textSecondary,
-                      },
-                    ]}
-                  >
-                    {tab.label}
-                  </ThemedText>
-
-                  {"count" in tab && tab.count > 0 ? (
-                    <View
-                      style={[
-                        styles.tabBadge,
-                        {
-                          backgroundColor: theme.colors.overlay,
-                          borderColor: theme.colors.primary,
-                        },
-                      ]}
-                    >
-                      <ThemedText
-                        variant="caption"
-                        style={[
-                          styles.tabBadgeText,
-                          { color: theme.colors.primary },
-                        ]}
-                        numberOfLines={1}
-                      >
-                        {tab.count > 99 ? "99+" : `${tab.count}`}
-                      </ThemedText>
-                    </View>
-                  ) : null}
-                </View>
-                <View
-                  style={[
-                    styles.tabUnderline,
-                    {
-                      opacity: selected ? 1 : 0,
-                      backgroundColor: theme.colors.primary,
-                    },
-                  ]}
-                />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+        <ThemedMaterialTopTabs
+          tabs={tabKeys}
+          selectedTab={activeTab}
+          onSelectTab={setActiveTab}
+          getLabel={getTabLabel}
+        />
 
         <View style={styles.sectionHeader}>
           <View style={styles.sectionTitleWrap}>
@@ -230,13 +188,14 @@ export default function NotificationScreen() {
           <View key={item.id} style={styles.itemWrap}>
             <Link href={`/notification/${item.id}/detail`} asChild>
               <TouchableOpacity activeOpacity={0.86} style={styles.itemCard}>
-                <View style={styles.iconBox}>
-                  <Ionicons
-                    name={item.iconName}
-                    size={18}
-                    color={theme.colors.primary}
-                  />
-                </View>
+                <IconBadge
+                  name={item.iconName}
+                  size={18}
+                  color={theme.colors.primary}
+                  badgeSize={theme.spacing.xl + theme.spacing.xs}
+                  borderRadius={theme.borderRadius.medium}
+                  backgroundColor={theme.colors.overlay}
+                />
 
                 <View style={styles.itemCopy}>
                   <ThemedText
@@ -276,55 +235,11 @@ export default function NotificationScreen() {
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
-    screen: {
+    container: {
       flex: 1,
+      padding: 10,
+      gap: 12,
       backgroundColor: theme.colors.background,
-    },
-    tabsRow: {
-      flexDirection: "row",
-      paddingHorizontal: theme.spacing.md,
-      justifyContent: "center",
-      alignItems: "flex-end",
-      gap: theme.spacing.lg,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
-    },
-    tab: {
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.sm,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    tabSelected: {},
-    tabLabelRow: {
-      flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
-      gap: theme.spacing.xs + 2,
-    },
-    tabLabel: {
-      fontWeight: theme.typography.button.fontWeight,
-    },
-    tabBadge: {
-      minWidth: 18,
-      height: 18,
-      paddingHorizontal: theme.spacing.sm,
-      borderRadius: theme.borderRadius.full,
-      alignItems: "center",
-      justifyContent: "center",
-      borderWidth: 1,
-      marginTop: -15,
-      marginStart: -5,
-    },
-    tabBadgeText: {
-      fontWeight: theme.typography.button.fontWeight,
-      lineHeight: 16,
-    },
-    tabUnderline: {
-      height: 2,
-      borderRadius: 2,
-      alignSelf: "stretch",
-      marginTop: theme.spacing.sm,
     },
     sectionHeader: {
       paddingHorizontal: theme.spacing.md,
@@ -363,12 +278,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       borderColor: theme.colors.border,
     },
     iconBox: {
-      width: theme.spacing.xl + theme.spacing.xs,
-      height: theme.spacing.xl + theme.spacing.xs,
-      borderRadius: theme.borderRadius.medium,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: theme.colors.overlay,
+      // kept for backwards compatibility (no longer used)
     },
     itemCopy: {
       flex: 1,

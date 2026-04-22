@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import type { ComponentProps } from "react";
 
+import { IconBadge } from "@/components/IconBadge";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -19,13 +20,6 @@ export type NotificationItemProps = {
   onPress?: () => void;
   style?: ViewStyle;
 };
-
-function withOpacity(hexColor: string, opacity: number) {
-  const alpha = Math.round(opacity * 255)
-    .toString(16)
-    .padStart(2, "0");
-  return `${hexColor}${alpha}`;
-}
 
 export function NotificationItem({
   title,
@@ -45,14 +39,12 @@ export function NotificationItem({
       onPress={onPress}
       style={[styles.row, style]}
     >
-      <View
-        style={[
-          styles.iconWrap,
-          { backgroundColor: withOpacity(theme.colors.primary, 0.14) },
-        ]}
-      >
-        <Ionicons name={iconName} size={18} color={theme.colors.primary} />
-      </View>
+      <IconBadge
+        name={iconName}
+        size={18}
+        badgeSize={34}
+        borderRadius={theme.borderRadius.full}
+      />
 
       <View style={styles.copy}>
         <View style={styles.topLine}>
@@ -87,13 +79,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
-    },
-    iconWrap: {
-      height: 34,
-      width: 34,
-      borderRadius: theme.borderRadius.full,
-      alignItems: "center",
-      justifyContent: "center",
     },
     copy: {
       flex: 1,
