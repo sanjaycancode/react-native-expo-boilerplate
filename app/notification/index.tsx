@@ -274,8 +274,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       paddingHorizontal: theme.spacing.md,
       borderRadius: theme.borderRadius.large,
       backgroundColor: theme.colors.surface,
-      borderWidth: 1,
-      borderColor: theme.colors.border,
     },
     iconBox: {
       // kept for backwards compatibility (no longer used)
