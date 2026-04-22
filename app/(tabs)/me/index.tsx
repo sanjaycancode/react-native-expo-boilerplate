@@ -17,6 +17,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
+import { TaskItem } from "@/components/TaskItem";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -27,6 +28,14 @@ const PROFILE = {
   email: "systemuser@gmail.com",
   avatarUri: "https://i.pravatar.cc/128?img=9",
 };
+
+function withOpacity(hexColor: string, opacity: number) {
+  const alpha = Math.round(opacity * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+  return `${hexColor}${alpha}`;
+}
 
 export default function MeScreen() {
   const { theme, toggleTheme } = useTheme();
@@ -116,10 +125,10 @@ export default function MeScreen() {
   ] as const;
 
   return (
-    <View style={styles.screen}>
+    <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "",
+          title: "Profile",
           headerShadowVisible: false,
           headerTransparent: false,
           headerTitleAlign: "left",
@@ -164,53 +173,32 @@ export default function MeScreen() {
 
         {MENU_SECTIONS.map((section) => (
           <View key={section.title} style={styles.sectionWrap}>
-            <ThemedText variant="caption" semantic="muted" style={styles.sectionTitle}>
+            <ThemedText
+              variant="caption"
+              semantic="muted"
+              style={styles.sectionTitle}
+            >
               {section.title}
             </ThemedText>
-            <ThemedCard variant="outlined" style={styles.listCard}>
-              {section.items.map((item, idx) => {
-                const IconComponent = item.iconFamily ?? MaterialIcons;
-                const isLast = idx === section.items.length - 1;
-
-                const handlePress = () => {
-                  if ("isSwitch" in item && item.isSwitch) return;
-                  if ("onPress" in item && item.onPress) return item.onPress();
-                  if ("href" in item && item.href) router.push(item.href);
-                };
+            <View style={styles.sectionList}>
+              {section.items.map((item) => {
+                const isSwitch =
+                  "isSwitch" in item && item.isSwitch && "switchValue" in item;
 
                 return (
-                  <TouchableOpacity
+                  <TaskItem
                     key={item.key}
-                    onPress={handlePress}
-                    style={[
-                      styles.menuRow,
-                      "isSwitch" in item && item.isSwitch && styles.modeRow,
-                      !isLast && styles.menuRowDivider,
-                    ]}
-                    disabled={"isSwitch" in item && item.isSwitch}
-                    activeOpacity={
-                      "isSwitch" in item && item.isSwitch ? 1 : 0.85
-                    }
-                  >
-                    <View style={styles.menuIconWrap}>
-                      <IconComponent
-                        // @ts-expect-error icon names vary by family
-                        name={item.icon}
-                        size={22}
-                        color={theme.colors.primary}
-                      />
-                    </View>
-
-                    <ThemedText
-                      variant="button"
-                      style={styles.menuTitle}
-                      numberOfLines={1}
-                    >
-                      {item.title}
-                    </ThemedText>
-
-                    <View style={styles.menuRight}>
-                      {"isSwitch" in item && item.isSwitch ? (
+                    title={item.title}
+                    meta={undefined}
+                    icon={item.icon}
+                    iconFamily={item.iconFamily}
+                    onPress={() => {
+                      if ("onPress" in item && item.onPress) item.onPress();
+                      if ("href" in item && item.href) router.push(item.href);
+                    }}
+                    showChevron={!isSwitch}
+                    rightAccessory={
+                      isSwitch ? (
                         <Switch
                           value={item.switchValue}
                           onValueChange={item.onPress}
@@ -225,34 +213,27 @@ export default function MeScreen() {
                           }
                           ios_backgroundColor={theme.colors.border}
                         />
-                      ) : (
-                        <Ionicons
-                          name="chevron-forward"
-                          size={22}
-                          color={theme.colors.primary}
-                        />
-                      )}
-                    </View>
-                  </TouchableOpacity>
+                      ) : undefined
+                    }
+                    style={[styles.taskItemNoBorder, isSwitch && styles.modeRow]}
+                  />
                 );
               })}
-            </ThemedCard>
+            </View>
           </View>
         ))}
 
-        <ThemedCard variant="outlined" style={styles.listCard}>
+        <ThemedCard style={[styles.listCard, styles.logoutCard]}>
           <TouchableOpacity
             onPress={() => {}}
             style={[styles.menuRow, styles.logoutRow]}
             activeOpacity={0.85}
           >
-            <View style={styles.menuIconWrap}>
-              <Ionicons
-                name="log-out-outline"
-                size={22}
-                color={theme.colors.error}
-              />
-            </View>
+            <Ionicons
+              name="log-out-outline"
+              size={20}
+              color={theme.colors.error}
+            />
             <ThemedText variant="button" style={styles.logoutText}>
               Log Out
             </ThemedText>
@@ -265,12 +246,13 @@ export default function MeScreen() {
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
-    screen: {
+    container: {
       flex: 1,
+      gap: theme.spacing.sm + 2,
+      paddingHorizontal: theme.spacing.md,
       backgroundColor: theme.colors.background,
     },
     content: {
-      paddingHorizontal: theme.spacing.md,
       paddingTop: theme.spacing.sm,
       paddingBottom: theme.spacing.lg,
       gap: 18,
@@ -315,45 +297,27 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       overflow: "hidden",
       borderRadius: theme.borderRadius.xl + 2,
     },
-    menuRow: {
+    sectionList: {
+      gap: theme.spacing.sm,
+    },
+    taskItemNoBorder: {
+      borderWidth: 0,
+    },
+    modeRow: {},
+    logoutRow: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: theme.spacing.lg - 6,
-      paddingVertical: theme.spacing.lg - 6,
-      backgroundColor: theme.colors.backgroundAlt,
-      gap: theme.spacing.md - 2,
-    },
-    menuRowDivider: {
-      borderBottomWidth: 1,
-      borderBottomColor: theme.colors.border,
-    },
-    modeRow: {
-      borderTopWidth: 1,
-      borderColor: theme.colors.border,
-    },
-    menuIconWrap: {
-      width: 40,
-      height: 40,
-      borderRadius: theme.borderRadius.large,
-      alignItems: "center",
       justifyContent: "center",
-      backgroundColor: theme.colors.overlay,
-    },
-    menuTitle: {
-      flex: 1,
-    },
-    menuRight: {
-      minWidth: 32,
-      alignItems: "flex-end",
-      justifyContent: "center",
-    },
-    logoutRow: {
-      paddingTop: theme.spacing.lg - 4,
-      paddingBottom: theme.spacing.lg - 4,
-      backgroundColor: theme.colors.backgroundAlt,
+      paddingVertical: theme.spacing.sm + 2,
+      paddingHorizontal: theme.spacing.md,
+      backgroundColor: "transparent",
+      gap: theme.spacing.sm,
     },
     logoutText: {
-      flex: 1,
       color: theme.colors.error,
+    },
+    logoutCard: {
+      borderWidth: 0,
+      backgroundColor: withOpacity(theme.colors.error, 0.12),
     },
   });
