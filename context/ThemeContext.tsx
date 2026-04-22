@@ -2,7 +2,7 @@
  * Theme context and provider for managing app-wide theme
  */
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useColorScheme } from "react-native";
 import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
 
@@ -16,9 +16,11 @@ import {
 } from "@/constants/Themes";
 
 export type ThemeMode = "light" | "dark";
+export type ThemePreference = ThemeMode | "system";
 
 interface Theme {
   mode: ThemeMode;
+  preference: ThemePreference;
   colors: typeof Colors.light | typeof Colors.dark;
   typography: typeof Typography;
   spacing: typeof Spacing;
@@ -30,39 +32,41 @@ interface Theme {
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
-  setTheme: (mode: ThemeMode) => void;
+  setTheme: (preference: ThemePreference) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const systemColorScheme = useColorScheme();
-  const [themeMode, setThemeMode] = useState<ThemeMode>(
-    (systemColorScheme as ThemeMode) || "light",
-  );
+  const [themePreference, setThemePreference] =
+    useState<ThemePreference>("system");
 
-  useEffect(() => {
-    if (systemColorScheme) {
-      setThemeMode(systemColorScheme as ThemeMode);
-    }
-  }, [systemColorScheme]);
+  const resolvedMode: ThemeMode =
+    themePreference === "system"
+      ? ((systemColorScheme as ThemeMode) ?? "light")
+      : themePreference;
 
   const theme: Theme = {
-    mode: themeMode,
-    colors: Colors[themeMode],
+    mode: resolvedMode,
+    preference: themePreference,
+    colors: Colors[resolvedMode],
     typography: Typography,
     spacing: Spacing,
     borderRadius: BorderRadius,
     shadows: Shadows,
-    navigationTheme: getNavigationTheme(themeMode),
+    navigationTheme: getNavigationTheme(resolvedMode),
   };
 
   const toggleTheme = () => {
-    setThemeMode((prev) => (prev === "light" ? "dark" : "light"));
+    setThemePreference((prev) => {
+      if (prev === "dark") return "light";
+      return "dark";
+    });
   };
 
-  const setTheme = (mode: ThemeMode) => {
-    setThemeMode(mode);
+  const setTheme = (preference: ThemePreference) => {
+    setThemePreference(preference);
   };
 
   return (
@@ -95,5 +99,10 @@ export function useThemeColors() {
  */
 export function useThemeMode() {
   const { theme, toggleTheme, setTheme } = useTheme();
-  return { mode: theme.mode, toggleTheme, setTheme };
+  return {
+    mode: theme.mode,
+    preference: theme.preference,
+    toggleTheme,
+    setTheme,
+  };
 }
