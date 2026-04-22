@@ -19,7 +19,7 @@ export default function PracticeScreen() {
           </ThemedText>
         </View>
 
-        <Link href="/practice/mock-test" asChild>
+        <Link href="/mock_test" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
               <ThemedText variant="button">Mock Test</ThemedText>
@@ -30,7 +30,7 @@ export default function PracticeScreen() {
           </Pressable>
         </Link>
 
-        <Link href="/practice/manual-practice" asChild>
+        <Link href="/manual_practice" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
               <ThemedText variant="button">Manual Practice</ThemedText>
@@ -41,7 +41,7 @@ export default function PracticeScreen() {
           </Pressable>
         </Link>
 
-        <Link href="/practice/smart-practice" asChild>
+        <Link href="/smart_practice" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
               <ThemedText variant="button">Smart Practice</ThemedText>
