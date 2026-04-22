@@ -328,9 +328,9 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: theme.spacing.md,
-      paddingTop: theme.spacing.md,
-      paddingBottom: theme.spacing.xl,
-      gap: theme.spacing.lg,
+      paddingTop: theme.spacing.lg,
+      paddingBottom: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
     headerButton: {
       marginRight: theme.spacing.sm,

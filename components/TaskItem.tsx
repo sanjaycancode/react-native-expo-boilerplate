@@ -1,9 +1,10 @@
+import React from "react";
 import {
-    Pressable,
-    StyleProp,
-    StyleSheet,
-    View,
-    ViewStyle,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
 } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -15,14 +16,24 @@ import { useTheme } from "@/context/ThemeContext";
 
 export type FocusTaskTone = "primary" | "tertiary";
 
+type IconFamily = React.ComponentType<{
+  name: string;
+  size?: number;
+  color?: string;
+}>;
+
 export type TaskItemProps = {
   title: string;
-  meta: string;
-  iconName: ComponentProps<typeof Ionicons>["name"];
+  meta?: string;
+  iconName?: ComponentProps<typeof Ionicons>["name"];
+  icon?: string;
+  iconFamily?: IconFamily;
   tone?: FocusTaskTone;
   onPress?: () => void;
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
+  showChevron?: boolean;
+  rightAccessory?: React.ReactNode;
 };
 
 function withOpacity(hexColor: string, opacity: number) {
@@ -35,17 +46,22 @@ function withOpacity(hexColor: string, opacity: number) {
 
 export function TaskItem({
   title,
-  meta,
   iconName,
-  tone = "tertiary",
+  icon,
+  iconFamily,
+  meta,
   onPress,
   disabled = false,
   style,
+  showChevron = true,
+  rightAccessory,
 }: TaskItemProps) {
   const { theme } = useTheme();
   const colors = theme.colors;
   const styles = createStyles(theme);
-  const iconColor = tone === "primary" ? colors.primary : colors.accent;
+  const iconColor = colors.primary;
+  const IconComponent = iconFamily ?? Ionicons;
+  const resolvedIconName = (iconName ?? icon ?? "ellipse") as string;
 
   return (
     <Pressable
@@ -66,17 +82,32 @@ export function TaskItem({
           { backgroundColor: withOpacity(iconColor, 0.14) },
         ]}
       >
-        <Ionicons name={iconName} size={18} color={iconColor} />
+        <IconComponent
+          // @ts-expect-error icon names vary by family
+          name={resolvedIconName}
+          size={18}
+          color={iconColor}
+        />
       </View>
 
       <View style={styles.copy}>
         <ThemedText variant="bodySmall">{title}</ThemedText>
-        <ThemedText variant="caption" semantic="muted">
-          {meta}
-        </ThemedText>
+        {meta ? (
+          <ThemedText variant="caption" semantic="muted">
+            {meta}
+          </ThemedText>
+        ) : null}
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color={colors.textTertiary} />
+      {rightAccessory ? (
+        rightAccessory
+      ) : showChevron ? (
+        <Ionicons
+          name="chevron-forward"
+          size={18}
+          color={colors.textTertiary}
+        />
+      ) : null}
     </Pressable>
   );
 }
