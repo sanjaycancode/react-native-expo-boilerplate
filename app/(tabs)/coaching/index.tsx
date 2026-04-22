@@ -1,15 +1,13 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useMemo } from "react";
 
 import type { Href } from "expo-router";
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 
-import { ActionCard } from "@/components/ActionCard";
+import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
-import { Colors } from "@/constants/Themes";
 
 import { useTheme } from "@/context/ThemeContext";
-import { Spacing } from "@/constants/Themes";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
@@ -17,38 +15,26 @@ interface MenuItem {
   title: string;
   description: string;
   href: Href;
-  iconName: string;
-  iconBackgroundColor: string;
-  iconColor: string;
 }
 
 export default function CoachingScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
-  const iconBackgroundColor = Colors.light.primary;
-  const iconForegroundColor = Colors.light.textOnPrimary;
-
   const menuList: MenuItem[] = useMemo(
     () => [
       {
         title: "Book Coach",
-        description: "Browse & book sessions with  coaches.",
+        description: "Browse & book sessions with available coaches.",
         href: "/bookCoach",
-        iconName: "calendar-plus",
-        iconBackgroundColor,
-        iconColor: iconForegroundColor,
       },
       {
         title: "My Bookings",
         description: "View & manage your coaching sessions.",
         href: "/myBookings",
-        iconName: "calendar-check",
-        iconBackgroundColor,
-        iconColor: iconForegroundColor,
       },
     ],
-    [iconBackgroundColor, iconForegroundColor],
+    [],
   );
 
   return (
@@ -63,15 +49,16 @@ export default function CoachingScreen() {
       </View>
 
       {menuList.map((item) => (
-        <ActionCard
-          key={item.title}
-          href={item.href}
-          iconName={item.iconName}
-          iconBackgroundColor={item.iconBackgroundColor}
-          iconColor={item.iconColor}
-          title={item.title}
-          description={item.description}
-        />
+        <Link href={item.href} asChild key={item.title}>
+          <Pressable>
+            <ThemedCard>
+              <ThemedText variant="button">{item.title}</ThemedText>
+              <ThemedText variant="bodySmall" semantic="muted">
+                {item.description}
+              </ThemedText>
+            </ThemedCard>
+          </Pressable>
+        </Link>
       ))}
     </View>
   );
@@ -81,7 +68,8 @@ const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
       gap: theme.spacing.md,
+      paddingHorizontal: theme.spacing.md,
     },
   });

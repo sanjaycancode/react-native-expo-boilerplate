@@ -1,17 +1,14 @@
 import { useCallback, useMemo, useState } from "react";
-import { FlatList, StyleSheet, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Stack, useRouter } from "expo-router";
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-
 import { CoachCard } from "@/components/CoachCard";
+import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
-
-import { BorderRadius, Spacing } from "@/constants/Themes";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
@@ -104,36 +101,12 @@ export default function BookCoachScreen() {
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={
           <View style={styles.headerBlock}>
-            <View style={styles.header}>
-              <ThemedText variant="heading2">Book Coach</ThemedText>
-              <ThemedText variant="body" semantic="muted">
-                Browse coaches and pick an available slot.
-              </ThemedText>
-            </View>
+            <ThemedSearchBar
+              value={query}
+              onChangeText={setQuery}
+              placeholder="Search coaches..."
+            />
 
-            <View
-              style={[
-                styles.searchContainer,
-                {
-                  backgroundColor: colors.backgroundAlt,
-                  borderColor: colors.border,
-                },
-              ]}
-            >
-              <FontAwesome5
-                name="search"
-                size={16}
-                color={colors.textSecondary}
-              />
-
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Search content..."
-                placeholderTextColor={colors.textTertiary}
-                style={[styles.searchInput, { color: colors.text }]}
-              />
-            </View>
           </View>
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -184,29 +157,15 @@ export default function BookCoachScreen() {
 const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
+      paddingHorizontal: theme.spacing.md,
     },
     headerBlock: {
-      gap: theme.spacing.lg,
-      marginBottom: theme.spacing.lg,
+      gap: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
     header: {
       gap: theme.spacing.sm,
-    },
-    searchContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: theme.spacing.sm,
-      borderWidth: 1,
-      borderRadius: theme.borderRadius.medium,
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.sm,
-    },
-    searchInput: {
-      flex: 1,
-      fontSize: 14,
-      lineHeight: 20,
-      fontFamily: "Lexend",
     },
     separator: {
       height: theme.spacing.md,

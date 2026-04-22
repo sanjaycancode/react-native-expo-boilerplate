@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from "react-native";
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { IconBadge } from "@/components/IconBadge";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -29,7 +29,7 @@ export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
   const colors = useThemeColors();
 
   return (
-    <ThemedCard variant="outlined" style={styles.card}>
+    <ThemedCard style={styles.card}>
       {/* Top row */}
       <View style={styles.cardTopRow}>
         <View
@@ -55,18 +55,14 @@ export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
       {/* Meta info */}
       <View style={styles.metaRow}>
         <View style={styles.metaItem}>
-          <FontAwesome5
-            name="calendar-alt"
-            size={14}
-            color={colors.textSecondary}
-          />
+          <IconBadge name="calendar-outline" size={18} badgeSize={18} backgroundColor="transparent" />
           <ThemedText variant="bodySmall" semantic="muted">
             {coach.nextAvailable}
           </ThemedText>
         </View>
 
         <View style={styles.metaItem}>
-          <FontAwesome5 name="tag" size={14} color={colors.textSecondary} />
+          <IconBadge name="pricetag-outline" size={18} badgeSize={18} backgroundColor="transparent" />
           <ThemedText variant="bodySmall" semantic="muted">
             ${coach.pricePerSession.toFixed(2)}/session
           </ThemedText>
@@ -121,8 +117,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: 40,
-      height: 40,
+      width: theme.spacing.xl,
+      height: theme.spacing.xl,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",

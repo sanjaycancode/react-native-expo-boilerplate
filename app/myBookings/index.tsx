@@ -4,7 +4,8 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Stack } from "expo-router";
 
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { IconBadge } from "@/components/IconBadge";
+import { StatusBadge, StatusBadgeVariant } from "@/components/StatusBadge";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -16,6 +17,18 @@ import { BorderRadius, Spacing } from "@/constants/Themes";
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 type BookingStatus = "upcoming" | "completed" | "cancelled";
+
+const statusLabelMap = {
+  upcoming: "Upcoming",
+  completed: "Completed",
+  cancelled: "Cancelled",
+} as const satisfies Record<BookingStatus, string>;
+
+const statusVariantMap = {
+  upcoming: "primary",
+  completed: "success",
+  cancelled: "danger",
+} as const satisfies Record<BookingStatus, StatusBadgeVariant>;
 
 type Booking = {
   id: string;
@@ -120,12 +133,12 @@ export default function MyBookingsScreen() {
         contentContainerStyle={styles.container}
         ListHeaderComponent={
           <View style={styles.headerBlock}>
-            <View style={styles.header}>
+            {/* <View style={styles.header}>
               <ThemedText variant="heading2">My Bookings</ThemedText>
               <ThemedText variant="body" semantic="muted">
                 View and manage your coaching sessions.
               </ThemedText>
-            </View>
+            </View> */}
 
             <View style={styles.filtersRow}>
               <FilterChip
@@ -153,10 +166,8 @@ export default function MyBookingsScreen() {
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         renderItem={({ item: booking }) => {
-          const statusStyles = getStatusStyles(booking.status, colors);
-
           return (
-            <ThemedCard variant="outlined" style={styles.card}>
+            <ThemedCard style={styles.card}>
               <View style={styles.cardTopRow}>
                 <View
                   style={[
@@ -177,48 +188,27 @@ export default function MyBookingsScreen() {
                   </ThemedText>
                 </View>
 
-                <View
-                  style={[
-                    styles.statusPill,
-                    { backgroundColor: statusStyles.backgroundColor },
-                  ]}
-                >
-                  <ThemedText
-                    variant="caption"
-                    style={{ color: statusStyles.textColor }}
-                  >
-                    {booking.status}
-                  </ThemedText>
-                </View>
+                <StatusBadge
+                  label={statusLabelMap[booking.status]}
+                  variant={statusVariantMap[booking.status]}
+                />
               </View>
 
               <View style={styles.metaRow}>
                 <View style={styles.metaItem}>
-                  <FontAwesome5
-                    name="calendar-alt"
-                    size={14}
-                    color={colors.textSecondary}
-                  />
+                  <IconBadge name="calendar-outline" size={18} badgeSize={18} backgroundColor="transparent" />
                   <ThemedText variant="bodySmall" semantic="muted">
                     {booking.dateLabel}
                   </ThemedText>
                 </View>
                 <View style={styles.metaItem}>
-                  <FontAwesome5
-                    name="clock"
-                    size={14}
-                    color={colors.textSecondary}
-                  />
+                  <IconBadge name="time-outline" size={18} badgeSize={18} backgroundColor="transparent" />
                   <ThemedText variant="bodySmall" semantic="muted">
                     {booking.durationMinutes} min
                   </ThemedText>
                 </View>
                 <View style={styles.metaItem}>
-                  <FontAwesome5
-                    name="video"
-                    size={14}
-                    color={colors.textSecondary}
-                  />
+                  <IconBadge name="videocam-outline" size={18} badgeSize={18} backgroundColor="transparent" />
                   <ThemedText variant="bodySmall" semantic="muted">
                     {booking.meetingType}
                   </ThemedText>
@@ -243,44 +233,27 @@ export default function MyBookingsScreen() {
     label,
     selected,
     onPress,
-  }: {
-    label: string;
-    selected: boolean;
-    onPress: () => void;
-  }) {
+  }: { label: string; selected: boolean; onPress: () => void }) {
     return (
       <Pressable
         onPress={onPress}
-        style={[
+        style={({ pressed }) => [
           styles.filterChip,
-          {
-            borderColor: colors.border,
-            backgroundColor: selected ? colors.primary : colors.backgroundAlt,
-          },
+          selected && styles.selectedFilterChip,
+          pressed && styles.pressedFilterChip,
         ]}
       >
         <ThemedText
-          variant="bodySmall"
-          style={{ color: selected ? colors.textOnPrimary : colors.text }}
+          variant="caption"
+          style={[styles.filterChipLabel, selected && styles.selectedFilterChipLabel]}
         >
           {label}
         </ThemedText>
+        <View
+          style={[styles.filterChipIndicator, selected && styles.selectedFilterChipIndicator]}
+        />
       </Pressable>
     );
-  }
-}
-
-function getStatusStyles(
-  status: BookingStatus,
-  colors: ReturnType<typeof useThemeColors>,
-) {
-  switch (status) {
-    case "upcoming":
-      return { backgroundColor: colors.info, textColor: colors.textOnPrimary };
-    case "completed":
-      return { backgroundColor: colors.success, textColor: colors.textOnPrimary };
-    case "cancelled":
-      return { backgroundColor: colors.error, textColor: colors.textOnPrimary };
   }
 }
 
@@ -290,11 +263,11 @@ const createStyles = () =>
 
  return StyleSheet.create({
     container: {
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
     },
     headerBlock: {
-      gap: theme.spacing.lg,
-      marginBottom: theme.spacing.lg,
+      gap: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
     header: {
       gap: theme.spacing.sm,
@@ -305,10 +278,35 @@ const createStyles = () =>
       gap: theme.spacing.xs,
     },
     filterChip: {
-      borderWidth: 1,
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.md,
-      borderRadius: BorderRadius.full,
+      alignItems: "center",
+      gap: theme.spacing.xs,
+      minWidth: theme.spacing.xxl*1.81,
+      paddingHorizontal: theme.spacing.sm,
+      paddingTop: theme.spacing.sm,
+    },
+    selectedFilterChip: {
+      backgroundColor: theme.colors.overlay,
+      borderRadius: theme.borderRadius.small,
+    },
+    pressedFilterChip: {
+      opacity: 0.72,
+    },
+    filterChipLabel: {
+      color: theme.colors.textSecondary,
+      fontFamily: "LexendSemiBold",
+      textAlign: "center",
+    },
+    selectedFilterChipLabel: {
+      color: theme.colors.primary,
+    },
+    filterChipIndicator: {
+      backgroundColor: "transparent",
+      borderRadius: theme.borderRadius.full,
+      height: 3,
+      width: "100%",
+    },
+    selectedFilterChipIndicator: {
+      backgroundColor: theme.colors.primary,
     },
     separator: {
       height: theme.spacing.md,
@@ -323,9 +321,9 @@ const createStyles = () =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.lg,
-      height: theme.spacing.lg,
-      borderRadius: theme.borderRadius.large,
+      width:theme.spacing.xl,
+      height: theme.spacing.xl,
+      borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",
       borderWidth: 1,
@@ -334,13 +332,7 @@ const createStyles = () =>
       flex: 1,
       gap: theme.spacing.xs,
     },
-    statusPill: {
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.sm,
-      borderRadius: BorderRadius.full,
-      alignItems: "center",
-      justifyContent: "center",
-    },
+
     metaRow: {
       flexDirection: "row",
       flexWrap: "wrap",
