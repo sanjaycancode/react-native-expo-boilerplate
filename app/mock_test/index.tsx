@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 
 import { FeaturedMockTestCard } from "@/components/mock_test/FeaturedMockTestCard";
-import { MockTestHeaderSection } from "@/components/mock_test/MockTestHeaderSection";
 import { MockTestSectionSetGrid } from "@/components/mock_test/MockTestSectionSetGrid";
 import { RecentAttemptsSection } from "@/components/mock_test/RecentAttemptsSection";
 
@@ -21,7 +20,6 @@ export default function MockTestScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <MockTestHeaderSection />
         <FeaturedMockTestCard />
         <MockTestSectionSetGrid />
         <RecentAttemptsSection />
@@ -38,7 +36,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     content: {
       gap: theme.spacing.md,
       paddingBottom: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.lg,
-      paddingTop: theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
+      paddingTop: theme.spacing.md,
     },
   });

@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
 
 import { manualPracticeSections } from "@/components/manual_practice/data";
-import { ManualPracticeHeaderSection } from "@/components/manual_practice/ManualPracticeHeaderSection";
 import { ManualPracticeSection } from "@/components/manual_practice/ManualPracticeSection";
 import { ManualPracticeTypeTabs } from "@/components/manual_practice/ManualPracticeTypeTabs";
 import { ManualPracticeType } from "@/components/manual_practice/types";
@@ -21,7 +20,9 @@ function getVisibleSections(selectedType: ManualPracticeType) {
     }));
   }
 
-  return manualPracticeSections.filter((section) => section.type === selectedType);
+  return manualPracticeSections.filter(
+    (section) => section.type === selectedType,
+  );
 }
 
 export default function ManualPracticeScreen() {
@@ -41,7 +42,6 @@ export default function ManualPracticeScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <ManualPracticeHeaderSection />
         <ManualPracticeTypeTabs
           selectedType={selectedType}
           onSelectType={setSelectedType}
@@ -52,7 +52,9 @@ export default function ManualPracticeScreen() {
             key={section.type}
             section={section}
             showViewAll={selectedType === "All types"}
-            onViewAll={(selectedSection) => setSelectedType(selectedSection.type)}
+            onViewAll={(selectedSection) =>
+              setSelectedType(selectedSection.type)
+            }
           />
         ))}
       </ScrollView>
@@ -68,7 +70,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     content: {
       gap: theme.spacing.sm,
       paddingBottom: theme.spacing.xs,
-      paddingHorizontal: theme.spacing.lg,
+      paddingHorizontal: theme.spacing.md,
       paddingTop: theme.spacing.xs,
     },
   });
