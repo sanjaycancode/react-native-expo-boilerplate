@@ -7,13 +7,14 @@ import { IconBadge } from "@/components/IconBadge";
 import { TaskItem } from "@/components/TaskItem";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useThemeColors, useThemeMode } from "@/context/ThemeContext";
+import { useTheme, useThemeMode } from "@/context/ThemeContext";
 
 export default function AppearanceScreen() {
-  const colors = useThemeColors();
+  const { theme } = useTheme();
+  const colors = theme.colors;
   const { preference, setTheme } = useThemeMode();
 
-  const styles = createStyles(colors);
+  const styles = useMemo(() => createStyles(theme), [theme.mode]);
   const options = useMemo(
     () =>
       [
@@ -88,7 +89,7 @@ export default function AppearanceScreen() {
             color={colors.primary}
             badgeSize={28}
             backgroundColor={`${colors.primary}1F`}
-            borderRadius={8}
+            borderRadius={theme.borderRadius.medium}
             style={{ borderWidth: 1, borderColor: `${colors.primary}2E` }}
           />
           <ThemedText
@@ -105,29 +106,29 @@ export default function AppearanceScreen() {
   );
 }
 
-const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.sm,
     },
     list: {
-      gap: 10,
-      paddingTop: 4,
+      gap: theme.spacing.sm,
+      paddingTop: theme.spacing.xs,
     },
     row: {
       minHeight: 60,
     },
     rowSelected: {
-      borderColor: colors.focusRing,
+      borderColor: theme.colors.focusRing,
       borderWidth: 2,
     },
     infoBox: {
       flexDirection: "row",
       alignItems: "center",
-      gap: 8,
-      paddingTop: 6,
+      gap: theme.spacing.sm,
+      paddingTop: theme.spacing.sm,
     },
     infoText: {
       flex: 1,
