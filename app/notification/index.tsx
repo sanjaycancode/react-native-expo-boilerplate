@@ -194,7 +194,6 @@ export default function NotificationScreen() {
                   color={theme.colors.primary}
                   badgeSize={theme.spacing.xl + theme.spacing.xs}
                   borderRadius={theme.borderRadius.medium}
-                  backgroundColor={theme.colors.overlay}
                 />
 
                 <View style={styles.itemCopy}>

@@ -215,7 +215,10 @@ export default function MeScreen() {
                         />
                       ) : undefined
                     }
-                    style={[styles.taskItemNoBorder, isSwitch && styles.modeRow]}
+                    style={[
+                      styles.taskItemNoBorder,
+                      isSwitch && styles.modeRow,
+                    ]}
                   />
                 );
               })}
@@ -287,7 +290,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: 2,
     },
     sectionWrap: {
-      gap: theme.spacing.xs + 2,
+      gap: theme.spacing.md,
     },
     sectionTitle: {
       paddingHorizontal: 2,
