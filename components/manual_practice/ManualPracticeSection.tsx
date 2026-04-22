@@ -28,9 +28,6 @@ export function ManualPracticeSection({
       <View style={styles.sectionHeader}>
         <View style={styles.sectionTitle}>
           <ThemedText variant="button">{section.type}</ThemedText>
-          <ThemedText variant="caption" semantic="muted">
-            {section.typeCount} types
-          </ThemedText>
         </View>
         {showViewAll ? (
           <Pressable

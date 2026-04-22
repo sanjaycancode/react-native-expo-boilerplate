@@ -9,6 +9,7 @@ type ThemedMaterialTopTabsProps<TValue extends string> = {
   selectedTab: TValue;
   onSelectTab: (tab: TValue) => void;
   getLabel?: (tab: TValue) => string;
+  getMetaLabel?: (tab: TValue) => string | undefined;
 };
 
 export function ThemedMaterialTopTabs<TValue extends string>({
@@ -16,6 +17,7 @@ export function ThemedMaterialTopTabs<TValue extends string>({
   selectedTab,
   onSelectTab,
   getLabel = (tab) => tab,
+  getMetaLabel,
 }: ThemedMaterialTopTabsProps<TValue>) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -29,6 +31,7 @@ export function ThemedMaterialTopTabs<TValue extends string>({
       >
         {tabs.map((tab) => {
           const isSelected = selectedTab === tab;
+          const metaLabel = getMetaLabel?.(tab);
 
           return (
             <Pressable
@@ -40,12 +43,25 @@ export function ThemedMaterialTopTabs<TValue extends string>({
                 pressed && styles.pressedTab,
               ]}
             >
-              <ThemedText
-                variant="caption"
-                style={[styles.label, isSelected && styles.selectedLabel]}
-              >
-                {getLabel(tab)}
-              </ThemedText>
+              <View style={styles.labelRow}>
+                <ThemedText
+                  variant="caption"
+                  style={[styles.label, isSelected && styles.selectedLabel]}
+                >
+                  {getLabel(tab)}
+                </ThemedText>
+                {metaLabel ? (
+                  <ThemedText
+                    variant="caption"
+                    style={[
+                      styles.metaLabel,
+                      isSelected && styles.selectedMetaLabel,
+                    ]}
+                  >
+                    {metaLabel}
+                  </ThemedText>
+                ) : null}
+              </View>
               <View
                 style={[
                   styles.indicator,
@@ -86,12 +102,23 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     pressedTab: {
       opacity: 0.72,
     },
+    labelRow: {
+      alignItems: "center",
+      flexDirection: "row",
+      gap: theme.spacing.xs,
+    },
     label: {
       color: theme.colors.textSecondary,
       fontFamily: "LexendSemiBold",
       textAlign: "center",
     },
     selectedLabel: {
+      color: theme.colors.primary,
+    },
+    metaLabel: {
+      color: theme.colors.textTertiary,
+    },
+    selectedMetaLabel: {
       color: theme.colors.primary,
     },
     indicator: {
