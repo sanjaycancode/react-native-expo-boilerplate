@@ -29,6 +29,14 @@ const PROFILE = {
   avatarUri: "https://i.pravatar.cc/128?img=9",
 };
 
+function withOpacity(hexColor: string, opacity: number) {
+  const alpha = Math.round(opacity * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+  return `${hexColor}${alpha}`;
+}
+
 export default function MeScreen() {
   const { theme, toggleTheme } = useTheme();
   const router = useRouter();
@@ -207,7 +215,7 @@ export default function MeScreen() {
                         />
                       ) : undefined
                     }
-                    style={[isSwitch && styles.modeRow]}
+                    style={[styles.taskItemNoBorder, isSwitch && styles.modeRow]}
                   />
                 );
               })}
@@ -215,7 +223,7 @@ export default function MeScreen() {
           </View>
         ))}
 
-        <ThemedCard variant="outlined" style={styles.listCard}>
+        <ThemedCard style={[styles.listCard, styles.logoutCard]}>
           <TouchableOpacity
             onPress={() => {}}
             style={[styles.menuRow, styles.logoutRow]}
@@ -292,20 +300,24 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     sectionList: {
       gap: theme.spacing.sm,
     },
-    modeRow: {
-      borderTopWidth: 1,
-      borderColor: theme.colors.border,
+    taskItemNoBorder: {
+      borderWidth: 0,
     },
+    modeRow: {},
     logoutRow: {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
       paddingVertical: theme.spacing.sm + 2,
       paddingHorizontal: theme.spacing.md,
-      backgroundColor: theme.colors.backgroundAlt,
+      backgroundColor: "transparent",
       gap: theme.spacing.sm,
     },
     logoutText: {
       color: theme.colors.error,
+    },
+    logoutCard: {
+      borderWidth: 0,
+      backgroundColor: withOpacity(theme.colors.error, 0.12),
     },
   });
