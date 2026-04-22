@@ -75,7 +75,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     card: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.sm,
+      gap: theme.spacing.md,
       padding: theme.spacing.md,
     },
     copy: {
@@ -83,6 +83,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     statusColumn: {
       alignItems: "flex-end",
-      gap: 1,
+      gap: theme.spacing.sm,
     },
   });

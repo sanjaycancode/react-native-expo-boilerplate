@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -23,7 +23,10 @@ export function AboutCard({ description, title = "About This Course" }: AboutCar
 
   return (
     <ThemedCard variant="outlined" style={styles.card}>
-      <View style={styles.headerRow}>
+      <Pressable
+        onPress={() => setIsExpanded(!isExpanded)}
+        style={styles.headerRow}
+      >
         <ThemedText variant="body" semantic="primary">
           {title}
         </ThemedText>
@@ -32,28 +35,10 @@ export function AboutCard({ description, title = "About This Course" }: AboutCar
           size={14}
           color={colors.textSecondary}
         />
-      </View>
+      </Pressable>
       <ThemedText variant="caption" semantic="default">
         {isExpanded ? description : preview}
       </ThemedText>
-      {!isExpanded && description.length > 60 && (
-        <ThemedText
-          variant="bodySmall"
-          semantic="primary"
-          onPress={() => setIsExpanded(true)}
-        >
-          Read more
-        </ThemedText>
-      )}
-      {isExpanded && (
-        <ThemedText
-          variant="bodySmall"
-          semantic="primary"
-          onPress={() => setIsExpanded(false)}
-        >
-          Show less
-        </ThemedText>
-      )}
     </ThemedCard>
   );
 }
@@ -61,7 +46,7 @@ export function AboutCard({ description, title = "About This Course" }: AboutCar
 const styles = StyleSheet.create({
   card: {
     gap: Spacing.xs,
-    borderRadius: BorderRadius.large,
+    borderRadius: BorderRadius.xl,
     width: "100%",
     paddingVertical: Spacing.sm,
   },

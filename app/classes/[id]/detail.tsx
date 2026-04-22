@@ -156,8 +156,8 @@ const createStyles = () =>
       height: 220,
     },
     content: {
-      padding: Spacing.lg,
-      gap: Spacing.lg,
+      padding: Spacing.md,
+      gap: Spacing.md,
       paddingBottom: Spacing.xl + Spacing.sm,
     },
     badgeRow: {

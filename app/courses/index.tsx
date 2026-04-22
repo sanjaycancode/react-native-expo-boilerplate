@@ -64,7 +64,7 @@ export default function CoursesScreen() {
 const createStyles = () =>
   StyleSheet.create({
     scrollContent: {
-      padding: Spacing.lg,
+      padding: Spacing.md,
       paddingBottom: Spacing.xl + Spacing.sm,
     },
     header: {

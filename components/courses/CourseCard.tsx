@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
     padding: 0,
-    borderRadius: BorderRadius.large,
+    borderRadius: BorderRadius.xl,
   },
   image: {
     width: "100%",
