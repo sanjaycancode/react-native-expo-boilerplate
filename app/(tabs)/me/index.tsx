@@ -120,7 +120,7 @@ export default function MeScreen() {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: "",
+          title: "Profile",
           headerShadowVisible: false,
           headerTransparent: false,
           headerTitleAlign: "left",
@@ -240,12 +240,11 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 10,
-      gap: 12,
+      gap: theme.spacing.sm + 2,
+      paddingHorizontal: theme.spacing.md,
       backgroundColor: theme.colors.background,
     },
     content: {
-      paddingHorizontal: theme.spacing.md,
       paddingTop: theme.spacing.sm,
       paddingBottom: theme.spacing.lg,
       gap: 18,
