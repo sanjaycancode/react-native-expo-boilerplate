@@ -7,11 +7,7 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
 
-import { useTheme } from "@/context/ThemeContext";
-
 export default function PracticeScreen() {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -63,7 +59,6 @@ export default function PracticeScreen() {
   );
 }
 
-const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {

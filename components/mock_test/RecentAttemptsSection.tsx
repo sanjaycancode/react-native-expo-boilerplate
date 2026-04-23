@@ -20,7 +20,7 @@ export function RecentAttemptsSection({
   return (
     <View style={styles.section}>
       <View style={styles.header}>
-        <ThemedText variant="button">Recent Attempts</ThemedText>
+        <ThemedText variant="heading6">Recent Attempts</ThemedText>
         <TouchableOpacity
           onPress={() => onViewAll?.()}
           style={styles.viewAllButton}

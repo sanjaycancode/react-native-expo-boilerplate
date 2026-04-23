@@ -152,6 +152,12 @@ export const Typography = {
     lineHeight: 20,
     fontFamily: "Lexend",
   },
+  button: {
+    fontSize: 14,
+    fontWeight: "600",
+    lineHeight: 20,
+    fontFamily: "LexendSemiBold",
+  },
   caption: {
     fontSize: 12,
     fontWeight: "400",

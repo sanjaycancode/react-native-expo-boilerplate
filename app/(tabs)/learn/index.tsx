@@ -4,11 +4,10 @@ import { Link, Stack } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme } from "@/context/ThemeContext";
 
 export default function LearnScreen() {
-  const { theme } = useTheme();
-  const styles = createStyles(theme);
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -49,7 +48,6 @@ export default function LearnScreen() {
   );
 }
 
-const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {

@@ -17,7 +17,7 @@ export function PacingAnalysisCard() {
   return (
     <ThemedCard style={styles.card}>
       <View style={styles.header}>
-        <ThemedText variant="button">Pacing Analysis</ThemedText>
+        <ThemedText variant="bodySmall">Pacing Analysis</ThemedText>
         <ThemedText variant="caption" semantic="muted">
           Avg time per response
         </ThemedText>
@@ -33,7 +33,14 @@ export function PacingAnalysisCard() {
                 color={theme.colors.primaryDark}
               />
               <ThemedText variant="caption">{item.title}</ThemedText>
-              <ThemedText variant="caption">{item.durationSeconds}s</ThemedText>
+              <ThemedText
+                style={{
+                  marginLeft: "auto",
+                }}
+                variant="caption"
+              >
+                {item.durationSeconds}s
+              </ThemedText>
             </View>
             <ProgressTrack progress={item.progress} height={4} />
           </View>
@@ -46,22 +53,22 @@ export function PacingAnalysisCard() {
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     card: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.md,
       padding: theme.spacing.md,
     },
     header: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
     },
     list: {
-      gap: theme.spacing.sm,
+      gap: theme.spacing.md,
     },
     pacingItem: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
     },
     row: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.xs,
-      justifyContent: "space-between",
+      gap: theme.spacing.sm,
+      // justifyContent: "space-between",
     },
   });

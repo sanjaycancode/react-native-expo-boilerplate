@@ -64,7 +64,11 @@ export function ManualPracticeTaskCard({
 
         <View style={styles.content}>
           <View style={styles.headerRow}>
-            <ThemedText variant="button" style={styles.title} numberOfLines={1}>
+            <ThemedText
+              variant="bodySmall"
+              style={styles.title}
+              numberOfLines={1}
+            >
               {task.title}
             </ThemedText>
             <StatusBadge
