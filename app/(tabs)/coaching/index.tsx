@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import type { Href } from "expo-router";
-import { Link, Stack } from "expo-router";
+import { type Href,Link, Stack } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -26,12 +25,12 @@ export default function CoachingScreen() {
       {
         title: "Book Coach",
         description: "Browse & book sessions with available coaches.",
-        href: "/bookCoach",
+        href: "/book_coach",
       },
       {
         title: "My Bookings",
         description: "View & manage your coaching sessions.",
-        href: "/myBookings",
+        href: "/my_bookings",
       },
     ],
     [],
@@ -50,14 +49,14 @@ export default function CoachingScreen() {
 
       {menuList.map((item) => (
         <Link href={item.href} asChild key={item.title}>
-          <Pressable>
+          <TouchableOpacity activeOpacity={0.9}>
             <ThemedCard>
               <ThemedText variant="button">{item.title}</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 {item.description}
               </ThemedText>
             </ThemedCard>
-          </Pressable>
+          </TouchableOpacity>
         </Link>
       ))}
     </View>
