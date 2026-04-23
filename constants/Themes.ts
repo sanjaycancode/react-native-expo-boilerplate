@@ -122,6 +122,24 @@ export const Typography = {
     lineHeight: 32,
     fontFamily: "LexendSemiBold",
   },
+  heading4: {
+    fontSize: 20,
+    fontWeight: "600",
+    lineHeight: 28,
+    fontFamily: "LexendSemiBold",
+  },
+  heading5: {
+    fontSize: 18,
+    fontWeight: "600",
+    lineHeight: 26,
+    fontFamily: "LexendSemiBold",
+  },
+  heading6: {
+    fontSize: 16,
+    fontWeight: "600",
+    lineHeight: 24,
+    fontFamily: "LexendSemiBold",
+  },
   body: {
     fontSize: 16,
     fontWeight: "400",
