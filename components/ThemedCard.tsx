@@ -16,7 +16,7 @@ interface ThemedCardProps {
 export function ThemedCard({
   children,
   style,
-  variant = "default",
+  variant = "outlined",
 }: ThemedCardProps) {
   const { theme } = useTheme();
   const colors = useThemeColors();
