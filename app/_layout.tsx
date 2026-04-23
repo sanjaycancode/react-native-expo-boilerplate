@@ -10,6 +10,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { ThemeProvider } from "@/context/ThemeContext";
 
+import { ReactQueryProvider } from "@/lib/react-query/ReactQueryProvider";
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
@@ -52,8 +54,10 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <ThemeProvider>
-      <Stack />
-    </ThemeProvider>
+    <ReactQueryProvider>
+      <ThemeProvider>
+        <Stack />
+      </ThemeProvider>
+    </ReactQueryProvider>
   );
 }
