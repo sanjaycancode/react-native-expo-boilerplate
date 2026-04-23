@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -23,36 +23,47 @@ export function AboutCard({ description, title = "About This Course" }: AboutCar
 
   return (
     <ThemedCard variant="outlined" style={styles.card}>
-      <Pressable
-        onPress={() => setIsExpanded(!isExpanded)}
-        style={styles.headerRow}
-      >
-        <ThemedText variant="body" semantic="primary">
-          {title}
+      <View style={styles.contentCol}>
+        <Pressable onPress={() => setIsExpanded(!isExpanded)} style={styles.headerRow}>
+          <ThemedText variant="body" semantic="primary">
+            {title}
+          </ThemedText>
+        </Pressable>
+        <ThemedText variant="caption" semantic="default">
+          {isExpanded ? description : preview}
         </ThemedText>
+      </View>
+      <Pressable onPress={() => setIsExpanded(!isExpanded)} style={styles.chevronCol}>
         <FontAwesome
           name={isExpanded ? "chevron-up" : "chevron-down"}
           size={14}
           color={colors.textSecondary}
         />
       </Pressable>
-      <ThemedText variant="caption" semantic="default">
-        {isExpanded ? description : preview}
-      </ThemedText>
     </ThemedCard>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    gap: Spacing.xs,
+    gap: Spacing.sm,
     borderRadius: BorderRadius.xl,
     width: "100%",
     paddingVertical: Spacing.sm,
+    flexDirection: "row",
+  },
+  contentCol: {
+    flex: 1,
+    gap: Spacing.xs,
   },
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  chevronCol: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingLeft: Spacing.xs,
   },
 });
