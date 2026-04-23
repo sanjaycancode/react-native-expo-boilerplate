@@ -78,6 +78,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       paddingVertical: 2,
     },
     taskList: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
     },
   });

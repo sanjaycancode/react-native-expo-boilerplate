@@ -1,10 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { IconBadge } from "@/components/IconBadge";
 import { ProgressTrack } from "@/components/ProgressTrack";
-import { ThemedButton } from "@/components/ThemedButton";
+import { StatusBadge } from "@/components/StatusBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -48,9 +48,31 @@ export function ManualPracticeTaskCard({
   const hasProgress = task.completedQuestionCount > 0;
 
   return (
-    <ThemedCard style={styles.card}>
-      <View style={styles.cardHeader}>
-        <View style={styles.copy}>
+    <TouchableOpacity
+      activeOpacity={0.86}
+      onPress={() => onPress?.(task)}
+      disabled={!onPress}
+    >
+      <ThemedCard style={styles.card}>
+        <IconBadge
+          name={task.iconName}
+          size={16}
+          badgeSize={30}
+          backgroundColor={colors.background}
+          borderRadius={theme.borderRadius.large}
+        />
+
+        <View style={styles.content}>
+          <View style={styles.headerRow}>
+            <ThemedText variant="button" style={styles.title} numberOfLines={1}>
+              {task.title}
+            </ThemedText>
+            <StatusBadge
+              label={task.actionLabel}
+              variant={task.actionLabel === "Resume" ? "primary" : "neutral"}
+            />
+          </View>
+
           {hasProgress ? (
             <View style={styles.progressRow}>
               <ProgressTrack
@@ -64,55 +86,42 @@ export function ManualPracticeTaskCard({
             </View>
           ) : null}
 
-          <ThemedText variant="button">{task.title}</ThemedText>
+          <View style={styles.metaRow}>
+            <Ionicons
+              name={task.durationMinutes ? "timer-outline" : "reader-outline"}
+              size={14}
+              color={colors.textSecondary}
+            />
+            <ThemedText variant="caption" semantic="muted">
+              {getMetaLabel(task)}
+            </ThemedText>
+          </View>
         </View>
-
-        <IconBadge
-          name={task.iconName}
-          size={16}
-          badgeSize={30}
-          backgroundColor={colors.background}
-          borderRadius={theme.borderRadius.large}
-        />
-      </View>
-
-      <View style={styles.cardFooter}>
-        <View style={styles.metaRow}>
-          <Ionicons
-            name={task.durationMinutes ? "timer-outline" : "reader-outline"}
-            size={14}
-            color={colors.textSecondary}
-          />
-          <ThemedText variant="caption">{getMetaLabel(task)}</ThemedText>
-        </View>
-
-        <ThemedButton
-          title={task.actionLabel}
-          onPress={() => onPress?.(task)}
-          variant={task.actionLabel === "Resume" ? "secondary" : "primary"}
-          size="small"
-          style={styles.actionButton}
-        />
-      </View>
-    </ThemedCard>
+      </ThemedCard>
+    </TouchableOpacity>
   );
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
   return StyleSheet.create({
     card: {
+      alignItems: "flex-start",
+      flexDirection: "row",
       gap: theme.spacing.sm,
       padding: theme.spacing.md,
     },
-    cardHeader: {
-      alignItems: "flex-start",
+    content: {
+      flex: 1,
+      gap: theme.spacing.xs,
+    },
+    headerRow: {
+      alignItems: "center",
       flexDirection: "row",
       gap: theme.spacing.sm,
       justifyContent: "space-between",
     },
-    copy: {
+    title: {
       flex: 1,
-      gap: theme.spacing.xs,
     },
     progressRow: {
       alignItems: "center",
@@ -122,19 +131,10 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) => {
     progressTrack: {
       width: 72,
     },
-    cardFooter: {
-      alignItems: "center",
-      flexDirection: "row",
-      gap: theme.spacing.sm,
-      justifyContent: "space-between",
-    },
     metaRow: {
       alignItems: "center",
       flexDirection: "row",
       gap: theme.spacing.xs,
-    },
-    actionButton: {
-      minWidth: 84,
     },
   });
 };
