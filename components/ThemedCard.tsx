@@ -24,6 +24,11 @@ export function ThemedCard({
   const dynamicStyles = useMemo(
     () =>
       StyleSheet.create({
+        card: {
+          borderRadius: theme.borderRadius.large,
+          padding: theme.spacing.md,
+          borderWidth: 0,
+        },
         container: {
           backgroundColor: colors.backgroundAlt,
           borderColor: colors.border,
@@ -35,13 +40,19 @@ export function ThemedCard({
           borderWidth: 1,
         },
       }),
-    [colors, theme.shadows.medium, variant],
+    [
+      colors.backgroundAlt,
+      colors.border,
+      theme.borderRadius.large,
+      theme.spacing.md,
+      theme.shadows.medium,
+    ],
   );
 
   return (
     <View
       style={[
-        styles.card,
+        dynamicStyles.card,
         dynamicStyles.container,
         variant === "elevated" && dynamicStyles.elevated,
         variant === "outlined" && dynamicStyles.outlined,
@@ -52,11 +63,3 @@ export function ThemedCard({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 0,
-  },
-});

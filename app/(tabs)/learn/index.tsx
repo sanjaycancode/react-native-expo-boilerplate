@@ -5,8 +5,11 @@ import { Link, Stack } from "expo-router";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
+import { useTheme } from "@/context/ThemeContext";
+
 export default function LearnScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   return (
     <>
@@ -45,11 +48,11 @@ export default function LearnScreen() {
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      padding: theme.spacing.md,
+      gap: theme.spacing.md,
     },
   });

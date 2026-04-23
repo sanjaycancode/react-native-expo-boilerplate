@@ -5,13 +5,14 @@ import { Stack } from "expo-router";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useThemeColors, useThemeMode } from "@/context/ThemeContext";
+import { useTheme, useThemeColors, useThemeMode } from "@/context/ThemeContext";
 
 export default function AppearanceScreen() {
+  const { theme } = useTheme();
   const colors = useThemeColors();
   const { mode, setTheme } = useThemeMode();
 
-  const styles = createStyles(colors);
+  const styles = createStyles(colors, theme);
 
   return (
     <>
@@ -64,12 +65,15 @@ export default function AppearanceScreen() {
   );
 }
 
-const createStyles = (colors: ReturnType<typeof useThemeColors>) =>
+const createStyles = (
+  colors: ReturnType<typeof useThemeColors>,
+  theme: ReturnType<typeof useTheme>["theme"],
+) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 20,
-      gap: 12,
+      padding: theme.spacing.md,
+      gap: theme.spacing.md,
     },
     optionCardSelected: {
       backgroundColor: colors.backgroundAlt,

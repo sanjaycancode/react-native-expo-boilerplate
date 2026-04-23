@@ -4,10 +4,12 @@ import { StatusBar } from "expo-status-bar";
 
 import { ThemedText } from "@/components/ThemedText";
 
-import { useThemeColors } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 export default function ModalScreen() {
+  const { theme } = useTheme();
   const colors = useThemeColors();
+  const styles = createStyles(theme);
 
   return (
     <View style={styles.container}>
@@ -22,18 +24,19 @@ export default function ModalScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    marginBottom: 2,
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    title: {
+      marginBottom: theme.spacing.xs / 2,
+    },
+    separator: {
+      marginVertical: theme.spacing.xl,
+      height: 1,
+      width: "80%",
+    },
+  });
