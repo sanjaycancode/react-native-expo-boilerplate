@@ -4,7 +4,6 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
-
 import { ThemeProvider as NavigationThemeProvider } from "@react-navigation/native";
 
 import {
