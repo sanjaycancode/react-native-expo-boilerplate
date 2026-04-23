@@ -1,6 +1,6 @@
 
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
@@ -63,31 +63,33 @@ export function CourseSectionCard({
         isExpanded ? { borderColor: colors.primary } : undefined,
       ]}
     >
-      <FontAwesome
-        name={isExpanded ? "chevron-down" : "chevron-right"}
-        size={14}
-        color={isExpanded ? colors.primary : colors.textSecondary}
-      />
-      <View style={styles.sectionHeader}>
-        <View style={styles.sectionTitleRow}>
-          <ThemedText
-            variant="body"
-            semantic={isExpanded ? "primary" : "default"}
-          >
-            {title}
+      <Pressable onPress={onToggle} style={styles.headerRow}>
+        <View style={styles.sectionHeader}>
+          <View style={styles.titleRow}>
+            <ThemedText
+              variant="body"
+              semantic={isExpanded ? "primary" : "default"}
+            >
+              {title}
+            </ThemedText>
+            {sectionCompleted && (
+              <FontAwesome
+                name="check-circle"
+                size={14}
+                color={colors.success}
+              />
+            )}
+          </View>
+          <ThemedText variant="caption" semantic="muted">
+            {lessons.length} lessons
           </ThemedText>
-          {sectionCompleted && (
-            <FontAwesome
-              name="check-circle"
-              size={16}
-              color={colors.success}
-            />
-          )}
         </View>
-        <ThemedText variant="caption" semantic="muted">
-          {lessons.length} lessons
-        </ThemedText>
-      </View>
+        <FontAwesome
+          name={isExpanded ? "chevron-up" : "chevron-down"}
+          size={14}
+          color={isExpanded ? colors.primary : colors.textSecondary}
+        />
+      </Pressable>
 
       {isExpanded && (
         <View style={styles.expandedContent}>
@@ -114,22 +116,25 @@ export function CourseSectionCard({
           {lessons.map((lesson) => (
             <View key={lesson.id} style={styles.lessonRow}>
               <View style={styles.lessonLeft}>
-                <FontAwesome
-                  name={
-                    lesson.completed
-                      ? "check-circle"
-                      : getTypeIcon(lesson.type)
-                  }
-                  size={18}
-                  color={
-                    lesson.completed
-                      ? colors.success
-                      : getTypeColor(lesson.type)
-                  }
-                />
+                <View style={styles.iconWrapper}>
+                  <FontAwesome
+                    name={
+                      lesson.completed
+                        ? "check-circle"
+                        : getTypeIcon(lesson.type)
+                    }
+                    size={16}
+                    color={
+                      lesson.completed
+                        ? colors.success
+                        : getTypeColor(lesson.type)
+                    }
+                  />
+                </View>
                 <ThemedText
                   variant="bodySmall"
                   semantic={lesson.completed ? "muted" : "default"}
+                  numberOfLines={1}
                 >
                   {lesson.title}
                 </ThemedText>
@@ -145,7 +150,7 @@ export function CourseSectionCard({
                     {lesson.type}
                   </ThemedText>
                 </View>
-                <ThemedText variant="caption" semantic="muted">
+                <ThemedText variant="caption" semantic="muted" style={styles.durationText}>
                   {lesson.duration}
                 </ThemedText>
               </View>
@@ -161,18 +166,23 @@ const styles = StyleSheet.create({
   sectionCard: {
     gap: Spacing.sm,
     borderRadius: BorderRadius.xl,
+    flexDirection: "column",
+  },
+  headerRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   sectionHeader: {
     flex: 1,
     gap: Spacing.xs,
   },
-  sectionTitleRow: {
+  titleRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    gap: Spacing.sm,
   },
+  
   expandedContent: {
     width: "100%",
     gap: Spacing.sm,
@@ -191,7 +201,6 @@ const styles = StyleSheet.create({
   },
   lessonRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: Spacing.xs,
   },
@@ -199,21 +208,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
-    flex: 1,
+    width: "60%",
+  },
+  iconWrapper: {
+    width: 22,
+    alignItems: "center",
+    justifyContent: "center",
   },
   lessonRight: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
+    width: "40%",
+    justifyContent: "flex-end",
   },
   typeBadge: {
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
     borderRadius: BorderRadius.small,
+    minWidth: 52,
+    alignItems: "center",
   },
   badgeText: {
     color: "#fff",
     fontSize: 10,
     fontFamily: "LexendSemiBold",
+  },
+  durationText: {
+    width: 50,
   },
 });

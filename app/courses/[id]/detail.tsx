@@ -61,7 +61,7 @@ export default function CourseDetail() {
         />
 
         <View style={styles.content}>
-          <ThemedText variant="heading2" semantic="default">
+          <ThemedText variant="heading3" semantic="default">
             {courseData.title}
           </ThemedText>
           <ThemedText variant="body" semantic="muted">
@@ -141,7 +141,7 @@ export default function CourseDetail() {
                 ? "Review Course"
                 : completedLessons === 0
                   ? "Start Course"
-                  : "Continue Learning"
+                  : "Start Learning"
             }
             onPress={() => {}}
             size="large"
