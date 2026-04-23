@@ -17,7 +17,7 @@ export default function ClassesScreen() {
   const [searchText, setSearchText] = useState("");
 
   const filteredClasses = CLASSES.filter((cls) =>
-    cls.title.toLowerCase().includes(searchText.toLowerCase())
+    cls.title.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   return (
@@ -55,7 +55,8 @@ export default function ClassesScreen() {
               />
             </View>
             <ThemedText variant="body" semantic="muted">
-              Access live classes and replays from your mentors. Learn from experts and practice in real-time sessions.
+              Access live classes and replays from your mentors. Learn from
+              experts and practice in real-time sessions.
             </ThemedText>
           </View>
         }
@@ -70,7 +71,7 @@ export default function ClassesScreen() {
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     scrollContent: {
       padding: Spacing.md,

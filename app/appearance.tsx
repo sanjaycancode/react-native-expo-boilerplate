@@ -1,0 +1,83 @@
+import { Pressable, StyleSheet, View } from "react-native";
+
+import { Stack } from "expo-router";
+
+import { ThemedCard } from "@/components/ThemedCard";
+import { ThemedText } from "@/components/ThemedText";
+
+import { useTheme, useThemeColors, useThemeMode } from "@/context/ThemeContext";
+
+export default function AppearanceScreen() {
+  const { theme } = useTheme();
+  const colors = useThemeColors();
+  const { mode, setTheme } = useThemeMode();
+
+  const styles = createStyles(colors, theme);
+
+  return (
+    <>
+      <Stack.Screen options={{ title: "Appearance", headerBackTitle: "Me" }} />
+      <View style={styles.container}>
+        <View>
+          <ThemedText variant="heading2">Appearance</ThemedText>
+          <ThemedText variant="body" semantic="muted">
+            Choose how the app looks for you.
+          </ThemedText>
+        </View>
+        <ThemedText variant="heading5">Theme Mode</ThemedText>
+        <ThemedText variant="bodySmall" semantic="muted">
+          Tap a card to apply that theme.
+        </ThemedText>
+        <Pressable onPress={() => setTheme("light")}>
+          <ThemedCard
+            variant="outlined"
+            style={mode === "light" ? styles.optionCardSelected : undefined}
+          >
+            <ThemedText
+              variant="heading5"
+              semantic={mode === "light" ? "primary" : "default"}
+            >
+              Light
+            </ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Bright background with dark text.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+        <Pressable onPress={() => setTheme("dark")}>
+          <ThemedCard
+            variant="outlined"
+            style={mode === "dark" ? styles.optionCardSelected : undefined}
+          >
+            <ThemedText
+              variant="heading5"
+              semantic={mode === "dark" ? "primary" : "default"}
+            >
+              Dark
+            </ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Dark background optimized for low light.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+      </View>
+    </>
+  );
+}
+
+const createStyles = (
+  colors: ReturnType<typeof useThemeColors>,
+  theme: ReturnType<typeof useTheme>["theme"],
+) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
+    },
+    optionCardSelected: {
+      backgroundColor: colors.backgroundAlt,
+      borderColor: colors.focusRing,
+      borderWidth: 2,
+    },
+  });

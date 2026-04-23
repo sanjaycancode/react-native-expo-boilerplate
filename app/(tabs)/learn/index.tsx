@@ -9,6 +9,8 @@ import { useTheme } from "@/context/ThemeContext";
 export default function LearnScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   return (
     <>
@@ -24,7 +26,7 @@ export default function LearnScreen() {
         <Link href="../courses" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
-              <ThemedText variant="button">Courses</ThemedText>
+              <ThemedText variant="heading5">Courses</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 Track structured programs and progress.
               </ThemedText>
@@ -35,7 +37,7 @@ export default function LearnScreen() {
         <Link href="../classes" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
-              <ThemedText variant="button">Classes</ThemedText>
+              <ThemedText variant="heading5">Classes</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 Join live and recorded classroom sessions.
               </ThemedText>
@@ -47,6 +49,7 @@ export default function LearnScreen() {
   );
 }
 
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {

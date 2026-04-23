@@ -7,7 +7,11 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
 
+import { useTheme } from "@/context/ThemeContext";
+
 export default function PracticeScreen() {
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -25,7 +29,7 @@ export default function PracticeScreen() {
         <Link href="/mock_test" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
-              <ThemedText variant="button">Mock Test</ThemedText>
+              <ThemedText variant="heading5">Mock Test</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 Simulate full exam conditions with timer.
               </ThemedText>
@@ -36,7 +40,7 @@ export default function PracticeScreen() {
         <Link href="/manual_practice" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
-              <ThemedText variant="button">Manual Practice</ThemedText>
+              <ThemedText variant="heading5">Manual Practice</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 Pick topics and practice at your own pace.
               </ThemedText>
@@ -47,7 +51,7 @@ export default function PracticeScreen() {
         <Link href="/smart_practice" asChild>
           <Pressable>
             <ThemedCard variant="outlined">
-              <ThemedText variant="button">Smart Practice</ThemedText>
+              <ThemedText variant="heading5">Smart Practice</ThemedText>
               <ThemedText variant="bodySmall" semantic="muted">
                 Adaptive drills based on weak areas.
               </ThemedText>
@@ -59,6 +63,7 @@ export default function PracticeScreen() {
   );
 }
 
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {

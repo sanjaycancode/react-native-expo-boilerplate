@@ -2,49 +2,35 @@
  * Theme-aware card component for displaying content
  */
 
-import React, { useMemo } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import React from "react";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedCardProps {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   variant?: "default" | "elevated" | "outlined";
 }
 
 export function ThemedCard({
   children,
   style,
-  variant = "default",
+  variant = "outlined",
 }: ThemedCardProps) {
   const { theme } = useTheme();
+
   const colors = useThemeColors();
 
-  const dynamicStyles = useMemo(
-    () =>
-      StyleSheet.create({
-        container: {
-          backgroundColor: colors.backgroundAlt,
-          borderColor: colors.border,
-        },
-        elevated: {
-          ...theme.shadows.medium,
-        },
-        outlined: {
-          borderWidth: 1,
-        },
-      }),
-    [colors, theme.shadows.medium, variant],
-  );
+  const styles = createStyles(theme, colors);
 
   return (
     <View
       style={[
         styles.card,
-        dynamicStyles.container,
-        variant === "elevated" && dynamicStyles.elevated,
-        variant === "outlined" && dynamicStyles.outlined,
+        styles.container,
+        variant === "elevated" && styles.elevated,
+        variant === "outlined" && styles.outlined,
         style,
       ]}
     >
@@ -53,10 +39,24 @@ export function ThemedCard({
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 0,
-  },
-});
+const createStyles = (
+  theme: ReturnType<typeof useTheme>["theme"],
+  colors: ReturnType<typeof useThemeColors>,
+) =>
+  StyleSheet.create({
+    card: {
+      borderRadius: theme.borderRadius.large,
+      padding: theme.spacing.md,
+      borderWidth: 0,
+    },
+    container: {
+      backgroundColor: colors.backgroundAlt,
+      borderColor: colors.border,
+    },
+    elevated: {
+      ...theme.shadows.medium,
+    },
+    outlined: {
+      borderWidth: 1,
+    },
+  });

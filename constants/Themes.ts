@@ -122,6 +122,24 @@ export const Typography = {
     lineHeight: 32,
     fontFamily: "LexendSemiBold",
   },
+  heading4: {
+    fontSize: 20,
+    fontWeight: "600",
+    lineHeight: 28,
+    fontFamily: "LexendSemiBold",
+  },
+  heading5: {
+    fontSize: 18,
+    fontWeight: "600",
+    lineHeight: 26,
+    fontFamily: "LexendSemiBold",
+  },
+  heading6: {
+    fontSize: 16,
+    fontWeight: "600",
+    lineHeight: 24,
+    fontFamily: "LexendSemiBold",
+  },
   body: {
     fontSize: 16,
     fontWeight: "400",
@@ -146,21 +164,14 @@ export const Typography = {
     lineHeight: 20,
     fontFamily: "SpaceMono",
   },
-  button: {
-    fontSize: 16,
-    fontWeight: "600",
-    lineHeight: 24,
-    fontFamily: "LexendSemiBold",
-  },
 } as const;
 
 export const Spacing = {
-  xs: 4,
-  sm: 8,
-  md: 16,
-  lg: 24,
-  xl: 32,
-  xxl: 48,
+  xs: 3,
+  sm: 6,
+  md: 12,
+  lg: 18,
+  xl: 24,
 } as const;
 
 export const BorderRadius = {

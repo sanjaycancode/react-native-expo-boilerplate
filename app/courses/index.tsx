@@ -31,7 +31,10 @@ export default function CoursesScreen() {
           <CourseCard
             title={item.title}
             modules={item.sections.length}
-            lessons={item.sections.reduce((sum, s) => sum + s.lessons.length, 0)}
+            lessons={item.sections.reduce(
+              (sum, s) => sum + s.lessons.length,
+              0,
+            )}
             progress={item.progress}
             image={item.image}
             onPress={() => router.push(`/courses/${item.id}/detail`)}
@@ -41,16 +44,17 @@ export default function CoursesScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             {/* <ThemedText variant="heading2">Courses</ThemedText> */}
-  
+
             <ThemedSearchBar
               value={searchText}
               onChangeText={setSearchText}
               placeholder="Search courses..."
             />
-            
+
             <ThemedText variant="body" semantic="muted">
-              Curate your learning journey and prepare for IELTS and PTE
-              with structured lessons, guided practice, and clear progress every step of the way.
+              Curate your learning journey and prepare for IELTS and PTE with
+              structured lessons, guided practice, and clear progress every step
+              of the way.
             </ThemedText>
           </View>
         }
@@ -61,7 +65,7 @@ export default function CoursesScreen() {
   );
 }
 
-const createStyles = () =>
+const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     scrollContent: {
       padding: Spacing.md,
