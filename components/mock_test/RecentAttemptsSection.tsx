@@ -44,7 +44,7 @@ export function RecentAttemptsSection({
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     section: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
     },
     header: {
       alignItems: "center",
