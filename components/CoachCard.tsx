@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { useCallback } from "react";
+import { StyleSheet, View } from "react-native";
 
 import { IconBadge } from "@/components/IconBadge";
-
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useCallback } from "react";import { useTheme, useThemeColors } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
@@ -19,19 +19,20 @@ type Coach = {
 
 type Props = {
   coach: Coach;
-  onViewProfile?: () => void;
-  onViewSlots?: () => void;
 };
 
-export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
+export function CoachCard({ coach }: Props) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const colors = useThemeColors();
 
   const getAvatarInitials = useCallback((name: string) => {
     const nameParts = name.trim().split(/\s+/).filter(Boolean);
-    const initials = nameParts.slice(0, 2).map(part => part[0].toUpperCase()).join('');
-    return initials || name[0]?.toUpperCase() || '';
+    const initials = nameParts
+      .slice(0, 2)
+      .map((part) => part[0].toUpperCase())
+      .join("");
+    return initials || name[0]?.toUpperCase() || "";
   }, []);
 
   return (
@@ -61,51 +62,27 @@ export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
       {/* Meta info */}
       <View style={styles.metaRow}>
         <View style={styles.metaItem}>
-          <IconBadge name="calendar-outline" size={18} badgeSize={18} backgroundColor="transparent" />
+          <IconBadge
+            name="calendar-outline"
+            size={18}
+            badgeSize={18}
+            backgroundColor="transparent"
+          />
           <ThemedText variant="bodySmall" semantic="muted">
             {coach.nextAvailable}
           </ThemedText>
         </View>
 
         <View style={styles.metaItem}>
-          <IconBadge name="pricetag-outline" size={18} badgeSize={18} backgroundColor="transparent" />
+          <IconBadge
+            name="pricetag-outline"
+            size={18}
+            badgeSize={18}
+            backgroundColor="transparent"
+          />
           <ThemedText variant="bodySmall" semantic="muted">
             ${coach.pricePerSession.toFixed(2)}/session
           </ThemedText>
-        </View>
-      </View>
-
-      {/* Actions */}
-      <View style={styles.actionsRow}>
-        <View style={styles.actionButtons}>
-          <Pressable
-            style={({ pressed }) => [
-              styles.secondaryButton,
-              {
-                borderColor: colors.border,
-                backgroundColor: colors.backgroundAlt,
-                opacity: pressed ? 0.85 : 1,
-              },
-            ]}
-            onPress={onViewProfile}
-          >
-            <ThemedText variant="bodySmall">View Profile</ThemedText>
-          </Pressable>
-
-          <Pressable
-            style={({ pressed }) => [
-              styles.primaryButton,
-              {
-                backgroundColor: colors.primary,
-                opacity: pressed ? 0.85 : 1,
-              },
-            ]}
-            onPress={onViewSlots ?? (() => {})}
-          >
-            <ThemedText variant="bodySmall" style={{ color: "#fff" }}>
-              View Slots
-            </ThemedText>
-          </Pressable>
         </View>
       </View>
     </ThemedCard>
@@ -123,8 +100,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.xl,
-      height: theme.spacing.xl,
+      width: theme.spacing.lg*2,
+      height: theme.spacing.lg*2,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",
@@ -144,26 +121,5 @@ const createStyles = (theme: AppTheme) =>
       flexDirection: "row",
       alignItems: "center",
       gap: theme.spacing.xs,
-    },
-    actionsRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: theme.spacing.md,
-    },
-    actionButtons: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: theme.spacing.sm,
-    },
-    secondaryButton: {
-      borderWidth: 1,
-      borderRadius: theme.borderRadius.small,
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.md,
-    },
-    primaryButton: {
-      borderRadius: theme.borderRadius.small,
-      paddingVertical: theme.spacing.sm,
-      paddingHorizontal: theme.spacing.md,
     },
   });
