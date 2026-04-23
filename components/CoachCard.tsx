@@ -5,7 +5,7 @@ import { IconBadge } from "@/components/IconBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useTheme, useThemeColors } from "@/context/ThemeContext";
+import { useCallback } from "react";import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
@@ -28,6 +28,12 @@ export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
   const styles = createStyles(theme);
   const colors = useThemeColors();
 
+  const getAvatarInitials = useCallback((name: string) => {
+    const nameParts = name.trim().split(/\s+/).filter(Boolean);
+    const initials = nameParts.slice(0, 2).map(part => part[0].toUpperCase()).join('');
+    return initials || name[0]?.toUpperCase() || '';
+  }, []);
+
   return (
     <ThemedCard style={styles.card}>
       {/* Top row */}
@@ -41,7 +47,7 @@ export function CoachCard({ coach, onViewProfile, onViewSlots }: Props) {
             },
           ]}
         >
-          <ThemedText variant="button">{coach.name[0]}</ThemedText>
+          <ThemedText variant="button">{getAvatarInitials(coach.name)}</ThemedText>
         </View>
 
         <View style={styles.cardMain}>

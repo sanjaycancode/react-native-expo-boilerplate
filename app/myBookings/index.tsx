@@ -7,12 +7,10 @@ import { Stack } from "expo-router";
 import { IconBadge } from "@/components/IconBadge";
 import { StatusBadge, StatusBadgeVariant } from "@/components/StatusBadge";
 
-import { ThemedCard } from "@/components/ThemedCard";
+import { ThemedCard } from "@/components/ThemedCard";import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
-
-import { BorderRadius, Spacing } from "@/constants/Themes";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
@@ -47,6 +45,12 @@ export default function MyBookingsScreen() {
   const colors = useThemeColors();
 
   const [filter, setFilter] = useState<"all" | BookingStatus>("all");
+
+  const getAvatarInitials = useCallback((name: string) => {
+    const nameParts = name.trim().split(/\s+/).filter(Boolean);
+    const initials = nameParts.slice(0, 2).map(part => part[0].toUpperCase()).join('');
+    return initials || name[0]?.toUpperCase() || '';
+  }, []);
 
   const bookings: Booking[] = useMemo(
     () => [
@@ -140,28 +144,12 @@ export default function MyBookingsScreen() {
               </ThemedText>
             </View> */}
 
-            <View style={styles.filtersRow}>
-              <FilterChip
-                label="All"
-                selected={filter === "all"}
-                onPress={() => setFilter("all")}
-              />
-              <FilterChip
-                label="Upcoming"
-                selected={filter === "upcoming"}
-                onPress={() => setFilter("upcoming")}
-              />
-              <FilterChip
-                label="Completed"
-                selected={filter === "completed"}
-                onPress={() => setFilter("completed")}
-              />
-              <FilterChip
-                label="Cancelled"
-                selected={filter === "cancelled"}
-                onPress={() => setFilter("cancelled")}
-              />
-            </View>
+            <ThemedMaterialTopTabs
+              tabs={["all", "upcoming", "completed", "cancelled"] as const}
+              selectedTab={filter}
+              onSelectTab={setFilter}
+              getLabel={(tab) => tab.charAt(0).toUpperCase() + tab.slice(1)}
+            />
           </View>
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -178,7 +166,7 @@ export default function MyBookingsScreen() {
                     },
                   ]}
                 >
-                  <ThemedText variant="button">{booking.coachName[0]}</ThemedText>
+                  <ThemedText variant="button">{getAvatarInitials(booking.coachName)}</ThemedText>
                 </View>
 
                 <View style={styles.cardMain}>
@@ -229,32 +217,7 @@ export default function MyBookingsScreen() {
     </>
   );
 
-  function FilterChip({
-    label,
-    selected,
-    onPress,
-  }: { label: string; selected: boolean; onPress: () => void }) {
-    return (
-      <Pressable
-        onPress={onPress}
-        style={({ pressed }) => [
-          styles.filterChip,
-          selected && styles.selectedFilterChip,
-          pressed && styles.pressedFilterChip,
-        ]}
-      >
-        <ThemedText
-          variant="caption"
-          style={[styles.filterChipLabel, selected && styles.selectedFilterChipLabel]}
-        >
-          {label}
-        </ThemedText>
-        <View
-          style={[styles.filterChipIndicator, selected && styles.selectedFilterChipIndicator]}
-        />
-      </Pressable>
-    );
-  }
+
 }
 
 const createStyles = () =>
@@ -272,42 +235,7 @@ const createStyles = () =>
     header: {
       gap: theme.spacing.sm,
     },
-    filtersRow: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: theme.spacing.xs,
-    },
-    filterChip: {
-      alignItems: "center",
-      gap: theme.spacing.xs,
-      minWidth: theme.spacing.xxl*1.81,
-      paddingHorizontal: theme.spacing.sm,
-      paddingTop: theme.spacing.sm,
-    },
-    selectedFilterChip: {
-      backgroundColor: theme.colors.overlay,
-      borderRadius: theme.borderRadius.small,
-    },
-    pressedFilterChip: {
-      opacity: 0.72,
-    },
-    filterChipLabel: {
-      color: theme.colors.textSecondary,
-      fontFamily: "LexendSemiBold",
-      textAlign: "center",
-    },
-    selectedFilterChipLabel: {
-      color: theme.colors.primary,
-    },
-    filterChipIndicator: {
-      backgroundColor: "transparent",
-      borderRadius: theme.borderRadius.full,
-      height: 3,
-      width: "100%",
-    },
-    selectedFilterChipIndicator: {
-      backgroundColor: theme.colors.primary,
-    },
+
     separator: {
       height: theme.spacing.md,
     },
