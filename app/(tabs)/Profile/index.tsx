@@ -1,9 +1,8 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
-  Image,
+  RefreshControl,
   ScrollView,
   StyleSheet,
-  Switch,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -17,6 +16,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
+import { Avatar } from "@/components/Avatar";
 import { TaskItem } from "@/components/TaskItem";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -26,7 +26,7 @@ import { useTheme } from "@/context/ThemeContext";
 const PROFILE = {
   name: "System User",
   email: "systemuser@gmail.com",
-  avatarUri: "https://i.pravatar.cc/128?img=9",
+  avatarUri: "https://i.pravatar.cc/128?img=9" as string | null,
 };
 
 function withOpacity(hexColor: string, opacity: number) {
@@ -37,29 +37,27 @@ function withOpacity(hexColor: string, opacity: number) {
   return `${hexColor}${alpha}`;
 }
 
-export default function MeScreen() {
-  const { theme, toggleTheme } = useTheme();
+export default function ProfileScreen() {
+  const { theme } = useTheme();
   const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
 
   const styles = useMemo(() => createStyles(theme), [theme.mode]);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 800);
+  }, []);
 
   const MENU_SECTIONS = [
     {
       title: "Account",
       items: [
         {
-          key: "basic_information",
-          title: "Basic information",
-          icon: "user",
-          iconFamily: FontAwesome,
-          href: "/(tabs)/me/basic-information",
-        },
-        {
           key: "device_check",
           title: "Device Check",
           icon: "phone-android",
           iconFamily: MaterialIcons,
-          href: "/(tabs)/me/device-check",
+          href: "/(tabs)/Profile/device-check",
         },
         {
           key: "notification",
@@ -97,14 +95,14 @@ export default function MeScreen() {
           title: "Settings",
           icon: "settings",
           iconFamily: MaterialIcons,
-          href: "/(tabs)/me/settings",
+          href: "/(tabs)/Profile/settings",
         },
         {
           key: "terms",
           title: "Terms and Conditions",
           icon: "file-alt",
           iconFamily: FontAwesome5,
-          href: "/(tabs)/me/terms",
+          href: "/(tabs)/Profile/terms",
         },
       ],
     },
@@ -112,13 +110,11 @@ export default function MeScreen() {
       title: "Appearance",
       items: [
         {
-          key: "switch_mode",
-          title: theme.mode === "dark" ? "Dark Mode" : "Light Mode",
-          icon: theme.mode === "dark" ? "moon" : "sunny",
+          key: "appearance",
+          title: "Appearance",
+          icon: "color-palette-outline",
           iconFamily: Ionicons,
-          onPress: toggleTheme,
-          isSwitch: true,
-          switchValue: theme.mode === "dark",
+          href: "/Profile/appearance",
         },
       ],
     },
@@ -144,7 +140,9 @@ export default function MeScreen() {
           headerRight: () => (
             <View style={styles.headerButtons}>
               <TouchableOpacity
-                onPress={() => {}}
+                onPress={() => {
+                  router.push("/notification");
+                }}
                 style={styles.headerIconButton}
                 activeOpacity={0.85}
                 hitSlop={10}
@@ -158,17 +156,46 @@ export default function MeScreen() {
       <ScrollView
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View style={styles.profileRow}>
-          <Image source={{ uri: PROFILE.avatarUri }} style={styles.avatar} />
-          <View style={styles.profileMeta}>
-            <ThemedText variant="heading3" numberOfLines={1}>
-              {PROFILE.name}
-            </ThemedText>
-            <ThemedText variant="bodySmall" semantic="muted" numberOfLines={1}>
-              {PROFILE.email}
-            </ThemedText>
-          </View>
+          <ThemedCard style={styles.profileCard}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              activeOpacity={0.86}
+              onPress={() => router.push("/(tabs)/Profile/basic-information")}
+              style={styles.profileRowContent}
+            >
+              <Avatar
+                name={PROFILE.name}
+                uri={PROFILE.avatarUri}
+                sizeVariant="md"
+              />
+              <View style={styles.profileMeta}>
+                <ThemedText
+                  variant="bodySmall"
+                  style={styles.profileName}
+                  numberOfLines={1}
+                >
+                  {PROFILE.name}
+                </ThemedText>
+                <ThemedText
+                  variant="bodySmall"
+                  semantic="muted"
+                  numberOfLines={1}
+                >
+                  {PROFILE.email}
+                </ThemedText>
+              </View>
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={theme.colors.textTertiary}
+              />
+            </TouchableOpacity>
+          </ThemedCard>
         </View>
 
         {MENU_SECTIONS.map((section) => (
@@ -182,9 +209,6 @@ export default function MeScreen() {
             </ThemedText>
             <View style={styles.sectionList}>
               {section.items.map((item) => {
-                const isSwitch =
-                  "isSwitch" in item && item.isSwitch && "switchValue" in item;
-
                 return (
                   <TaskItem
                     key={item.key}
@@ -193,32 +217,10 @@ export default function MeScreen() {
                     icon={item.icon}
                     iconFamily={item.iconFamily}
                     onPress={() => {
-                      if ("onPress" in item && item.onPress) item.onPress();
                       if ("href" in item && item.href) router.push(item.href);
                     }}
-                    showChevron={!isSwitch}
-                    rightAccessory={
-                      isSwitch ? (
-                        <Switch
-                          value={item.switchValue}
-                          onValueChange={item.onPress}
-                          trackColor={{
-                            false: theme.colors.border,
-                            true: theme.colors.primary,
-                          }}
-                          thumbColor={
-                            item.switchValue
-                              ? theme.colors.primaryLight
-                              : theme.colors.textSecondary
-                          }
-                          ios_backgroundColor={theme.colors.border}
-                        />
-                      ) : undefined
-                    }
-                    style={[
-                      styles.taskItemNoBorder,
-                      isSwitch && styles.modeRow,
-                    ]}
+                    showChevron
+                    style={[styles.taskItemNoBorder]}
                   />
                 );
               })}
@@ -226,7 +228,7 @@ export default function MeScreen() {
           </View>
         ))}
 
-        <ThemedCard style={[styles.listCard, styles.logoutCard]}>
+        <ThemedCard style={styles.logoutCard}>
           <TouchableOpacity
             onPress={() => {}}
             style={[styles.menuRow, styles.logoutRow]}
@@ -273,21 +275,27 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       backgroundColor: theme.colors.overlay,
     },
     profileRow: {
+      paddingHorizontal: 2,
+    },
+    profileCard: {
+      padding: 0,
+      borderWidth: 0,
+      backgroundColor: theme.colors.surface,
+    },
+    profileRowContent: {
       flexDirection: "row",
       alignItems: "center",
-      paddingHorizontal: 2,
-      paddingVertical: theme.spacing.sm + 2,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.md,
       gap: theme.spacing.md - 4,
-    },
-    avatar: {
-      width: 54,
-      height: 54,
-      borderRadius: theme.borderRadius.full,
-      backgroundColor: theme.colors.overlay,
     },
     profileMeta: {
       flex: 1,
       gap: 2,
+    },
+    profileName: {
+      fontFamily: theme.typography.heading3.fontFamily,
+      fontWeight: theme.typography.heading3.fontWeight,
     },
     sectionWrap: {
       gap: theme.spacing.md,
@@ -306,7 +314,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     taskItemNoBorder: {
       borderWidth: 0,
     },
-    modeRow: {},
     logoutRow: {
       flexDirection: "row",
       alignItems: "center",
@@ -320,7 +327,10 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       color: theme.colors.error,
     },
     logoutCard: {
+      padding: 0,
+      overflow: "hidden",
       borderWidth: 0,
       backgroundColor: withOpacity(theme.colors.error, 0.12),
+      borderRadius: theme.borderRadius.large,
     },
   });

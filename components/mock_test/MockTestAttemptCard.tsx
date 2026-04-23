@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
 
 import { IconBadge } from "@/components/IconBadge";
+import { ListItem } from "@/components/ListItem";
 import { StatusBadge, StatusBadgeVariant } from "@/components/StatusBadge";
-import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
@@ -42,47 +42,56 @@ export function MockTestAttemptCard({ attempt }: MockTestAttemptCardProps) {
   const styles = createStyles(theme);
 
   return (
-    <ThemedCard style={styles.card}>
-      <IconBadge
-        name={attempt.iconName}
-        size={18}
-        badgeSize={36}
-        borderRadius={theme.borderRadius.large}
-      />
-
-      <View style={styles.copy}>
-        <ThemedText variant="bodySmall">{attempt.title}</ThemedText>
-        <ThemedText variant="caption" semantic="muted">
-          {attempt.date}
-        </ThemedText>
-      </View>
-
-      <View style={styles.statusColumn}>
-        <StatusBadge
-          label={statusLabelMap[attempt.status]}
-          variant={statusVariantMap[attempt.status]}
+    <ListItem
+      icon={
+        <IconBadge
+          name={attempt.iconName}
+          size={18}
+          badgeSize={36}
+          borderRadius={theme.borderRadius.large}
         />
-        <ThemedText variant="caption" semantic="muted">
-          {getAttemptDetail(attempt)}
-        </ThemedText>
+      }
+    >
+      <View style={styles.content}>
+        <View style={styles.row}>
+          <ThemedText
+            variant="bodySmall"
+            style={styles.title}
+            numberOfLines={1}
+          >
+            {attempt.title}
+          </ThemedText>
+          <StatusBadge
+            label={statusLabelMap[attempt.status]}
+            variant={statusVariantMap[attempt.status]}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <ThemedText variant="caption" semantic="muted">
+            {attempt.date}
+          </ThemedText>
+          <ThemedText variant="caption" semantic="muted">
+            {getAttemptDetail(attempt)}
+          </ThemedText>
+        </View>
       </View>
-    </ThemedCard>
+    </ListItem>
   );
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
-    card: {
+    content: {
+      gap: theme.spacing.sm,
+    },
+    row: {
       alignItems: "center",
       flexDirection: "row",
-      gap: theme.spacing.md,
-      padding: theme.spacing.md,
+      gap: theme.spacing.xs,
+      justifyContent: "space-between",
     },
-    copy: {
+    title: {
       flex: 1,
-    },
-    statusColumn: {
-      alignItems: "flex-end",
-      gap: theme.spacing.sm,
     },
   });

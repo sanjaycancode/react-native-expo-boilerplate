@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 
@@ -11,7 +11,9 @@ type RecentAttemptsSectionProps = {
   onViewAll?: () => void;
 };
 
-export function RecentAttemptsSection({ onViewAll }: RecentAttemptsSectionProps) {
+export function RecentAttemptsSection({
+  onViewAll,
+}: RecentAttemptsSectionProps) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -19,17 +21,15 @@ export function RecentAttemptsSection({ onViewAll }: RecentAttemptsSectionProps)
     <View style={styles.section}>
       <View style={styles.header}>
         <ThemedText variant="button">Recent Attempts</ThemedText>
-        <Pressable
+        <TouchableOpacity
           onPress={() => onViewAll?.()}
-          style={({ pressed }) => [
-            styles.viewAllButton,
-            pressed && styles.viewAllButtonPressed,
-          ]}
+          style={styles.viewAllButton}
+          activeOpacity={0.75}
         >
           <ThemedText variant="caption" semantic="primary">
             View All
           </ThemedText>
-        </Pressable>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.list}>
@@ -56,11 +56,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       paddingHorizontal: theme.spacing.xs,
       paddingVertical: 2,
     },
-    viewAllButtonPressed: {
-      backgroundColor: theme.colors.overlay,
-      opacity: 0.75,
-    },
     list: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
     },
   });

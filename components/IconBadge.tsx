@@ -1,5 +1,11 @@
 import { ComponentProps } from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import {
+  StyleProp,
+  StyleSheet,
+  View,
+  type ViewProps,
+  ViewStyle,
+} from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -13,7 +19,10 @@ type IconBadgeProps = {
   backgroundColor?: string;
   borderRadius?: number;
   style?: StyleProp<ViewStyle>;
-};
+} & Pick<
+  ViewProps,
+  "accessibilityRole" | "accessibilityState" | "accessibilityLabel"
+>;
 
 export function IconBadge({
   name,
@@ -23,11 +32,17 @@ export function IconBadge({
   backgroundColor,
   borderRadius,
   style,
+  accessibilityRole,
+  accessibilityState,
+  accessibilityLabel,
 }: IconBadgeProps) {
   const { theme } = useTheme();
 
   return (
     <View
+      accessibilityRole={accessibilityRole}
+      accessibilityState={accessibilityState}
+      accessibilityLabel={accessibilityLabel}
       style={[
         styles.badge,
         {
