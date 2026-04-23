@@ -5,8 +5,11 @@ import { Stack } from "expo-router";
 
 import { manualPracticeSections } from "@/components/manual_practice/data";
 import { ManualPracticeSection } from "@/components/manual_practice/ManualPracticeSection";
-import { ManualPracticeTypeTabs } from "@/components/manual_practice/ManualPracticeTypeTabs";
-import { ManualPracticeType } from "@/components/manual_practice/types";
+import {
+  ManualPracticeType,
+  manualPracticeTypes,
+} from "@/components/manual_practice/types";
+import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 
 import { useTheme } from "@/context/ThemeContext";
 
@@ -22,6 +25,20 @@ function getVisibleSections(selectedType: ManualPracticeType) {
 
   return manualPracticeSections.filter(
     (section) => section.type === selectedType,
+  );
+}
+
+function getTypeCount(type: ManualPracticeType) {
+  if (type === "All types") {
+    return manualPracticeSections.reduce(
+      (total, section) => total + section.typeCount,
+      0,
+    );
+  }
+
+  return (
+    manualPracticeSections.find((section) => section.type === type)
+      ?.typeCount ?? 0
   );
 }
 
@@ -42,9 +59,11 @@ export default function ManualPracticeScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <ManualPracticeTypeTabs
-          selectedType={selectedType}
-          onSelectType={setSelectedType}
+        <ThemedMaterialTopTabs
+          tabs={manualPracticeTypes}
+          selectedTab={selectedType}
+          onSelectTab={setSelectedType}
+          getMetaLabel={(type) => String(getTypeCount(type))}
         />
 
         {visibleSections.map((section) => (

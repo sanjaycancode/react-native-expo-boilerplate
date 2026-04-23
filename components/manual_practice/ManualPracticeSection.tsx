@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
 
@@ -30,17 +30,15 @@ export function ManualPracticeSection({
           <ThemedText variant="button">{section.type}</ThemedText>
         </View>
         {showViewAll ? (
-          <Pressable
+          <TouchableOpacity
             onPress={() => onViewAll?.(section)}
-            style={({ pressed }) => [
-              styles.viewAllButton,
-              pressed && styles.viewAllButtonPressed,
-            ]}
+            style={styles.viewAllButton}
+            activeOpacity={0.75}
           >
             <ThemedText variant="caption" semantic="primary">
               View All
             </ThemedText>
-          </Pressable>
+          </TouchableOpacity>
         ) : null}
       </View>
 
@@ -78,10 +76,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       borderRadius: theme.borderRadius.medium,
       paddingHorizontal: theme.spacing.xs,
       paddingVertical: 2,
-    },
-    viewAllButtonPressed: {
-      backgroundColor: theme.colors.overlay,
-      opacity: 0.75,
     },
     taskList: {
       gap: theme.spacing.xs,

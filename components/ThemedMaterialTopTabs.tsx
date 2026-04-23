@@ -45,29 +45,32 @@ export function ThemedMaterialTopTabs<TValue extends string>({
             >
               <View style={styles.labelRow}>
                 <ThemedText
-                  variant="caption"
-                  style={[styles.label, isSelected && styles.selectedLabel]}
+                  variant="bodySmall"
+                  semantic={isSelected ? "default" : "muted"}
+                  lightColor={
+                    isSelected ? theme.colors.textOnPrimary : undefined
+                  }
+                  darkColor={
+                    isSelected ? theme.colors.textOnPrimary : undefined
+                  }
                 >
                   {getLabel(tab)}
                 </ThemedText>
                 {metaLabel ? (
                   <ThemedText
                     variant="caption"
-                    style={[
-                      styles.metaLabel,
-                      isSelected && styles.selectedMetaLabel,
-                    ]}
+                    semantic={isSelected ? "default" : "muted"}
+                    lightColor={
+                      isSelected ? theme.colors.textOnPrimary : undefined
+                    }
+                    darkColor={
+                      isSelected ? theme.colors.textOnPrimary : undefined
+                    }
                   >
                     {metaLabel}
                   </ThemedText>
                 ) : null}
               </View>
-              <View
-                style={[
-                  styles.indicator,
-                  isSelected && styles.selectedIndicator,
-                ]}
-              />
             </Pressable>
           );
         })}
@@ -84,50 +87,29 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     tabList: {
       alignItems: "center",
-      gap: theme.spacing.xs,
+      gap: theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
-      paddingTop: theme.spacing.xs,
+      paddingVertical: theme.spacing.xs,
     },
     tab: {
       alignItems: "center",
-      gap: theme.spacing.xs,
-      minWidth: theme.spacing.xxl * 2,
-      paddingHorizontal: theme.spacing.sm,
-      paddingTop: theme.spacing.sm,
+      backgroundColor: theme.colors.backgroundAlt,
+      borderRadius: theme.borderRadius.large,
+      justifyContent: "center",
+      minHeight: 38,
+      minWidth: theme.spacing.xxl * 2 + theme.spacing.sm,
+      paddingHorizontal: theme.spacing.md,
+      paddingVertical: theme.spacing.sm,
     },
     selectedTab: {
-      backgroundColor: theme.colors.overlay,
-      borderRadius: theme.borderRadius.small,
+      backgroundColor: theme.colors.primary,
     },
     pressedTab: {
-      opacity: 0.72,
+      opacity: 0.78,
     },
     labelRow: {
       alignItems: "center",
       flexDirection: "row",
       gap: theme.spacing.xs,
-    },
-    label: {
-      color: theme.colors.textSecondary,
-      fontFamily: "LexendSemiBold",
-      textAlign: "center",
-    },
-    selectedLabel: {
-      color: theme.colors.primary,
-    },
-    metaLabel: {
-      color: theme.colors.textTertiary,
-    },
-    selectedMetaLabel: {
-      color: theme.colors.primary,
-    },
-    indicator: {
-      backgroundColor: "transparent",
-      borderRadius: theme.borderRadius.full,
-      height: 3,
-      width: "100%",
-    },
-    selectedIndicator: {
-      backgroundColor: theme.colors.primary,
     },
   });
