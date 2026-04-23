@@ -26,14 +26,14 @@ export default function DashboardScreen() {
           <ThemedText variant="caption" semantic="muted">
             Continue session
           </ThemedText>
-          <ThemedText variant="button">Resume Algebra Foundations</ThemedText>
+          <ThemedText variant="heading5">Resume Algebra Foundations</ThemedText>
         </ThemedCard>
 
         <ThemedCard variant="outlined">
           <ThemedText variant="caption" semantic="muted">
             Quick actions
           </ThemedText>
-          <ThemedText variant="button">
+          <ThemedText variant="heading5">
             Start quiz, review notes, or join class
           </ThemedText>
         </ThemedCard>
@@ -42,7 +42,7 @@ export default function DashboardScreen() {
           <ThemedText variant="caption" semantic="muted">
             Progress
           </ThemedText>
-          <ThemedText variant="button">
+          <ThemedText variant="heading5">
             12 lessons completed this week
           </ThemedText>
         </ThemedCard>
@@ -51,7 +51,7 @@ export default function DashboardScreen() {
           <ThemedText variant="caption" semantic="muted">
             Recommendations
           </ThemedText>
-          <ThemedText variant="button">
+          <ThemedText variant="heading5">
             Try Smart Practice for weak topics
           </ThemedText>
         </ThemedCard>
@@ -64,7 +64,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
     },
   });

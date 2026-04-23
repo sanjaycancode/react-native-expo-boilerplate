@@ -40,7 +40,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
       alignItems: "center",
       justifyContent: "center",
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
     title: {
       marginBottom: theme.spacing.xs / 2,

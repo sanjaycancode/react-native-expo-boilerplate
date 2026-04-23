@@ -24,7 +24,7 @@ export default function AppearanceScreen() {
             Choose how the app looks for you.
           </ThemedText>
         </View>
-        <ThemedText variant="button">Theme Mode</ThemedText>
+        <ThemedText variant="heading5">Theme Mode</ThemedText>
         <ThemedText variant="bodySmall" semantic="muted">
           Tap a card to apply that theme.
         </ThemedText>
@@ -34,7 +34,7 @@ export default function AppearanceScreen() {
             style={mode === "light" ? styles.optionCardSelected : undefined}
           >
             <ThemedText
-              variant="button"
+              variant="heading5"
               semantic={mode === "light" ? "primary" : "default"}
             >
               Light
@@ -50,7 +50,7 @@ export default function AppearanceScreen() {
             style={mode === "dark" ? styles.optionCardSelected : undefined}
           >
             <ThemedText
-              variant="button"
+              variant="heading5"
               semantic={mode === "dark" ? "primary" : "default"}
             >
               Dark
@@ -72,7 +72,7 @@ const createStyles = (
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
     },
     optionCardSelected: {

@@ -86,7 +86,7 @@ export function ThemedButton({
       ]}
     >
       <ThemedText
-        variant="button"
+        variant="heading5"
         style={[styles.text, dynamicStyles.textContent, textStyle]}
       >
         {title}

@@ -164,12 +164,6 @@ export const Typography = {
     lineHeight: 20,
     fontFamily: "SpaceMono",
   },
-  button: {
-    fontSize: 16,
-    fontWeight: "600",
-    lineHeight: 24,
-    fontFamily: "LexendSemiBold",
-  },
 } as const;
 
 export const Spacing = {

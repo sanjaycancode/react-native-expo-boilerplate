@@ -23,7 +23,7 @@ export default function CoachingScreen() {
         </View>
 
         <ThemedCard variant="outlined">
-          <ThemedText variant="button">Bookings</ThemedText>
+          <ThemedText variant="heading5">Bookings</ThemedText>
           <ThemedText variant="bodySmall" semantic="muted">
             View upcoming and past coaching sessions.
           </ThemedText>
@@ -37,7 +37,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
     },
   });
