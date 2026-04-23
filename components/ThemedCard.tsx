@@ -3,13 +3,13 @@
  */
 
 import React, { useMemo } from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedCardProps {
   children: React.ReactNode;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   variant?: "default" | "elevated" | "outlined";
 }
 
