@@ -2,42 +2,56 @@ import { StyleSheet, View } from "react-native";
 
 import { Stack } from "expo-router";
 
-import { ThemedCard } from "@/components/ThemedCard";
+import { ActionCard } from "@/components/ActionCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
+
+type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 export default function CoachingScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const colors = useThemeColors();
 
   return (
-    <>
+    <View style={styles.container}>
       <Stack.Screen options={{ title: "Coaching" }} />
-      <View style={styles.container}>
-        <View>
-          <ThemedText variant="heading2">Coaching</ThemedText>
-          <ThemedText variant="body" semantic="muted">
-            Manage your mentor and session flow.
-          </ThemedText>
-        </View>
 
-        <ThemedCard variant="outlined">
-          <ThemedText variant="heading5">Bookings</ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            View upcoming and past coaching sessions.
-          </ThemedText>
-        </ThemedCard>
+      <View>
+        <ThemedText variant="heading2">Coaching</ThemedText>
+        <ThemedText variant="body" semantic="muted">
+          Personalized guidance & support from expert coaches.
+        </ThemedText>
       </View>
-    </>
+
+      <ActionCard
+        href="/book_coach"
+        iconName="search"
+        iconBackgroundColor={colors.primaryLight}
+        iconColor={colors.primary}
+        title="Book Coach"
+        description="Browse & book sessions with available coaches."
+      />
+
+      <ActionCard
+        href="/my_bookings"
+        iconName="calendar-check"
+        iconBackgroundColor={colors.primaryLight}
+        iconColor={colors.primary}
+        title="My Bookings"
+        description="View & manage your coaching sessions."
+      />
+    </View>
   );
 }
 
-const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
+const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
       gap: theme.spacing.md,
+      paddingHorizontal: theme.spacing.md,
     },
   });

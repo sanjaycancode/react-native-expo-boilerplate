@@ -1,71 +1,46 @@
 import React from "react";
-import { StyleSheet, TextInput, View } from "react-native";
 
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Ionicons } from "@expo/vector-icons";
 
-import { BorderRadius, Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
+import {
+  ThemedTextInput,
+  type ThemedTextInputProps,
+} from "@/components/ThemedTextInput";
 
-interface ThemedSearchBarProps {
-  value: string;
-  onChangeText: (text: string) => void;
-  placeholder?: string;
-}
+export type ThemedSearchBarProps = Omit<
+  ThemedTextInputProps,
+  "label" | "startIcon" | "endIcon" | "onEndIconPress"
+> & {
+  onClear?: () => void;
+};
 
 export function ThemedSearchBar({
   value,
   onChangeText,
   placeholder = "Search...",
+  onClear,
+  ...props
 }: ThemedSearchBarProps) {
-  const colors = useThemeColors();
+  const showClear = typeof value === "string" && value.length > 0;
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: colors.backgroundAlt,
-          borderColor: colors.border,
-        },
-      ]}
-    >
-      <FontAwesome
-        name="search"
-        size={16}
-        color={colors.textSecondary}
-      />
-      <TextInput
-        value={value}
-        onChangeText={onChangeText}
-        placeholder={placeholder}
-        placeholderTextColor={colors.textSecondary}
-        style={[
-          styles.input,
-          {
-            color: colors.text,
-          },
-        ]}
-      />
-    </View>
+    <ThemedTextInput
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      variant="accent"
+      color="primary"
+      startIcon={<Ionicons name="search-outline" size={18} />}
+      endIcon={showClear ? <Ionicons name="close-circle" size={18} /> : undefined}
+      onEndIconPress={
+        showClear
+          ? () => {
+              if (onClear) onClear();
+              else onChangeText?.("");
+            }
+          : undefined
+      }
+      {...props}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: BorderRadius.large,
-    paddingHorizontal: Spacing.md,
-    gap: Spacing.sm,
-    height: 48,
-    alignSelf: "center",
-    width: "100%",
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    fontFamily: "Lexend",
-    paddingVertical: 0,
-  },
-});
