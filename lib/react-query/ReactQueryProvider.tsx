@@ -64,4 +64,4 @@ export function ReactQueryProvider({ children }: ReactQueryProviderProps) {
       {children}
     </PersistQueryClientProvider>
   );
-}
+}   

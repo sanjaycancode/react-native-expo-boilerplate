@@ -4,6 +4,7 @@ import { StyleSheet, TextInput, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { BorderRadius, Spacing } from "@/constants/Themes";
+
 import { useThemeColors } from "@/context/ThemeContext";
 
 interface ThemedSearchBarProps {

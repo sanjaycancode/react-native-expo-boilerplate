@@ -52,7 +52,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.md,
-      gap: 12,
+      padding: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
   });

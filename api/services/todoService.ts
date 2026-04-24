@@ -36,3 +36,4 @@ export async function updateTodo(id: number, payload: UpdateTodoPayload) {
 export async function deleteTodo(id: number) {
   await todosApiClient.delete(`/todos/${id}`);
 }
+        
