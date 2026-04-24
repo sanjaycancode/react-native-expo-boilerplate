@@ -125,6 +125,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       padding: theme.spacing.lg,
       gap: theme.spacing.lg,
     },
-    headerContainer: { gap: theme.spacing.md },
+    headerContainer: { gap: theme.spacing.sm },
     formContainer: { gap: theme.spacing.lg, padding: theme.spacing.lg },
   });
