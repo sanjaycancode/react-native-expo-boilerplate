@@ -35,6 +35,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     content: {
       gap: theme.spacing.md,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
   });
