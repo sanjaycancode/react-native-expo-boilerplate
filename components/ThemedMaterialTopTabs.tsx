@@ -37,6 +37,11 @@ export function ThemedMaterialTopTabs<TValue extends string>({
             <Pressable
               key={tab}
               onPress={() => onSelectTab(tab)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isSelected }}
+              accessibilityLabel={
+                metaLabel ? `${getLabel(tab)} ${metaLabel}` : getLabel(tab)
+              }
               style={({ pressed }) => [
                 styles.tab,
                 isSelected && styles.selectedTab,
@@ -97,7 +102,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       borderRadius: theme.borderRadius.large,
       justifyContent: "center",
       minHeight: 38,
-      minWidth: theme.spacing.xxl * 2 + theme.spacing.sm,
+      minWidth: theme.spacing.xl * 2 + theme.spacing.sm,
       paddingHorizontal: theme.spacing.md,
       paddingVertical: theme.spacing.sm,
     },

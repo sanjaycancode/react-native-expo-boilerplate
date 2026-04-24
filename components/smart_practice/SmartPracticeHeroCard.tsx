@@ -18,7 +18,7 @@ export function SmartPracticeHeroCard({ onStart }: SmartPracticeHeroCardProps) {
   return (
     <View style={styles.card}>
       <View style={styles.dueBadge}>
-        <Ionicons name="flash" size={12} color="#FFFFFF" />
+        <Ionicons name="flash" size={12} color={theme.colors.textOnPrimary} />
         <ThemedText variant="caption" style={styles.lightText}>
           7 items due
         </ThemedText>
@@ -76,13 +76,13 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.xs,
     },
     title: {
-      color: "#FFFFFF",
+      color: theme.colors.textOnPrimary,
     },
     description: {
       color: theme.colors.primaryLight,
     },
     lightText: {
-      color: "#FFFFFF",
+      color: theme.colors.textOnPrimary,
       fontFamily: "LexendSemiBold",
       textTransform: "uppercase",
     },
