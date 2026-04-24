@@ -1,40 +1,18 @@
-import { useMemo } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { type Href, Link, Stack } from "expo-router";
+import { Stack } from "expo-router";
 
-import { ThemedCard } from "@/components/ThemedCard";
+import { ActionCard } from "@/components/ActionCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
-
-interface MenuItem {
-  title: string;
-  description: string;
-  href: Href;
-}
 
 export default function CoachingScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-
-  const menuList: MenuItem[] = useMemo(
-    () => [
-      {
-        title: "Book Coach",
-        description: "Browse & book sessions with available coaches.",
-        href: "/book_coach",
-      },
-      {
-        title: "My Bookings",
-        description: "View & manage your coaching sessions.",
-        href: "/my_bookings",
-      },
-    ],
-    [],
-  );
+  const colors = useThemeColors();
 
   return (
     <View style={styles.container}>
@@ -47,18 +25,23 @@ export default function CoachingScreen() {
         </ThemedText>
       </View>
 
-      {menuList.map((item) => (
-        <Link href={item.href} asChild key={item.title}>
-          <TouchableOpacity activeOpacity={0.9}>
-            <ThemedCard>
-              <ThemedText variant="heading6">{item.title}</ThemedText>
-              <ThemedText variant="bodySmall" semantic="muted">
-                {item.description}
-              </ThemedText>
-            </ThemedCard>
-          </TouchableOpacity>
-        </Link>
-      ))}
+      <ActionCard
+        href="/book_coach"
+        iconName="search"
+        iconBackgroundColor={colors.primaryLight}
+        iconColor={colors.primary}
+        title="Book Coach"
+        description="Browse & book sessions with available coaches."
+      />
+
+      <ActionCard
+        href="/my_bookings"
+        iconName="calendar-check"
+        iconBackgroundColor={colors.primaryLight}
+        iconColor={colors.primary}
+        title="My Bookings"
+        description="View & manage your coaching sessions."
+      />
     </View>
   );
 }

@@ -11,6 +11,11 @@ import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
+function formatPrice(value: string | undefined): string {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed.toFixed(2) : "0.00";
+}
+
 type Params = {
   id?: string;
   name?: string;
@@ -90,7 +95,7 @@ export default function CoachDetail() {
                 backgroundColor="transparent"
               />
               <ThemedText variant="bodySmall" semantic="muted">
-                Price: ${Number(pricePerSession ?? 0).toFixed(2)}/session
+                Price: ${formatPrice(pricePerSession)}/session
               </ThemedText>
             </View>
           </View>

@@ -1,10 +1,8 @@
+import type { ComponentProps } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import type { Href } from "expo-router";
-import { Link } from "expo-router";
-
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import type { ComponentProps } from "react";
+import { Link, type Href } from "expo-router";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";

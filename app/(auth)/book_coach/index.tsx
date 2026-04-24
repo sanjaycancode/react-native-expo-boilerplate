@@ -24,7 +24,6 @@ export default function BookCoachScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const navigation = useNavigation();
-  // const colors = useThemeColors();
   const router = useRouter();
 
   const [query, setQuery] = useState("");
