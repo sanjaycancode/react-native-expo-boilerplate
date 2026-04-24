@@ -7,7 +7,8 @@ import { Stack } from "expo-router";
 import { IconBadge } from "@/components/IconBadge";
 import { StatusBadge, StatusBadgeVariant } from "@/components/StatusBadge";
 
-import { ThemedCard } from "@/components/ThemedCard";import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
+import { ThemedCard } from "@/components/ThemedCard";
+import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
@@ -40,7 +41,7 @@ type Booking = {
 
 export default function MyBookingsScreen() {
   const { theme } = useTheme();
-  const styles = createStyles();
+  const styles = createStyles(theme);
   const navigation = useNavigation();
   const colors = useThemeColors();
 
@@ -220,11 +221,8 @@ export default function MyBookingsScreen() {
 
 }
 
-const createStyles = () =>
-{
-  const {theme} = useTheme();
-
- return StyleSheet.create({
+const createStyles = (theme: AppTheme) =>
+  StyleSheet.create({
     container: {
       padding: theme.spacing.md,
     },
@@ -278,5 +276,3 @@ const createStyles = () =>
       alignItems: "center",
     },
   });
-
-}

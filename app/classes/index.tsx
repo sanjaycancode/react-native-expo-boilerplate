@@ -7,13 +7,12 @@ import { ClassCard } from "@/components/classes/ClassCard";
 import { HeaderBackButton } from "@/components/HeaderBackButton";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
-import { BorderRadius, Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 import { CLASSES } from "@/data/classes";
 
 export default function ClassesScreen() {
-  const styles = createStyles();
-  const colors = useThemeColors();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const [searchText, setSearchText] = useState("");
 
   const filteredClasses = CLASSES.filter((cls) =>
@@ -74,22 +73,22 @@ export default function ClassesScreen() {
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     scrollContent: {
-      padding: Spacing.md,
-      paddingBottom: Spacing.xl + Spacing.sm,
+      padding: theme.spacing.md,
+      paddingBottom: theme.spacing.xl + theme.spacing.sm,
     },
     header: {
-      gap: Spacing.md,
-      marginBottom: Spacing.md,
+      gap: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
     searchRow: {
       alignItems: "center",
     },
     infoBox: {
       borderWidth: 1,
-      borderRadius: BorderRadius.large,
-      padding: Spacing.md,
+      borderRadius: theme.borderRadius.large,
+      padding: theme.spacing.md,
     },
     separator: {
-      height: Spacing.md,
+      height: theme.spacing.md,
     },
   });

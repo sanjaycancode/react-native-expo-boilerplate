@@ -2,7 +2,7 @@ import { useCallback, useMemo } from "react";
 import { Alert, FlatList, Pressable, StyleSheet, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
@@ -19,7 +19,6 @@ type Params = {
   name?: string;
   title?: string;
   pricePerSession?: string;
-  fromBookCoach?: string;
 };
 
 type Slot = {
@@ -34,18 +33,7 @@ export default function CoachSlotsScreen() {
   const styles = createStyles(theme);
   const colors = useThemeColors();
   const navigation = useNavigation();
-  const router = useRouter();
-  const { name, title, pricePerSession, fromBookCoach } = useLocalSearchParams<Params>();
-
-  const isFromBookCoach = fromBookCoach === "true";
-
-  const handleBack = useCallback(() => {
-    if (isFromBookCoach) {
-      router.replace("/bookCoach");
-    } else {
-      router.back();
-    }
-  }, [isFromBookCoach, router]);
+  const { name, title, pricePerSession } = useLocalSearchParams<Params>();
 
   useFocusEffect(
     useCallback(() => {

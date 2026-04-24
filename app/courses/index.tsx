@@ -7,11 +7,12 @@ import { CourseCard } from "@/components/courses/CourseCard";
 import { HeaderBackButton } from "@/components/HeaderBackButton";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
-import { Spacing } from "@/constants/Themes";
+import { useTheme } from "@/context/ThemeContext";
 import { COURSES } from "@/data/courses";
 
 export default function CoursesScreen() {
-  const styles = createStyles();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
   const [searchText, setSearchText] = useState("");
 
   return (
@@ -68,14 +69,14 @@ export default function CoursesScreen() {
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     scrollContent: {
-      padding: Spacing.md,
-      paddingBottom: Spacing.xl + Spacing.sm,
+      padding: theme.spacing.md,
+      paddingBottom: theme.spacing.xl + theme.spacing.sm,
     },
     header: {
-      gap: Spacing.md,
-      marginBottom: Spacing.md,
+      gap: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
     separator: {
-      height: Spacing.md,
+      height: theme.spacing.md,
     },
   });
