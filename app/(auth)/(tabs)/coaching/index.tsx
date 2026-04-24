@@ -13,7 +13,7 @@ type AppTheme = ReturnType<typeof useTheme>["theme"];
 interface MenuItem {
   title: string;
   description: string;
-  href: string;
+  href: Href;
 }
 
 export default function CoachingScreen() {
@@ -48,7 +48,7 @@ export default function CoachingScreen() {
       </View>
 
       {menuList.map((item) => (
-        <Link href={item.href as Href} asChild key={item.title}>
+        <Link href={item.href} asChild key={item.title}>
           <TouchableOpacity activeOpacity={0.9}>
             <ThemedCard>
               <ThemedText variant="heading6">{item.title}</ThemedText>
