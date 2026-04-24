@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { Stack, useRouter } from "expo-router";
 
@@ -103,11 +103,11 @@ export default function LoginScreen() {
             <ThemedButton title="Sign In" onPress={handleSubmit(onSubmit)} />
           </ThemedCard>
 
-          <Pressable>
+          <View>
             <ThemedText variant="bodySmall" semantic="primary">
               Forgot password?
             </ThemedText>
-          </Pressable>
+          </View>
         </View>
       </ThemedKeyboardAvoidingView>
     </>
