@@ -56,7 +56,8 @@ export default function MeScreen() {
 
         <ThemedButton
           title="Logout"
-          variant="danger"
+          variant="outlined"
+          color="danger"
           onPress={signOut}
           style={styles.logoutButton}
         />
