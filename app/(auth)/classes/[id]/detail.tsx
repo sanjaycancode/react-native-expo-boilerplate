@@ -54,7 +54,7 @@ export default function ClassDetail() {
             <StatusBadge label={classData.price} type="price" />
           </View>
 
-          <ThemedText variant="heading4" semantic="default">
+          <ThemedText variant="heading5" semantic="default">
             {classData.title}
           </ThemedText>
           <ThemedText variant="body" semantic="muted">

@@ -99,11 +99,13 @@ export function CourseSectionCard({
               { backgroundColor: colors.backgroundAlt },
             ]}
           >
-            <FontAwesome
-              name="bullseye"
-              size={14}
-              color={colors.primary}
-            />
+            <View style={styles.iconWrapper}>
+              <FontAwesome
+                name="bullseye"
+                size={14}
+                color={colors.primary}
+              />
+            </View>
             <ThemedText
               variant="bodySmall"
               semantic="muted"
@@ -115,19 +117,19 @@ export function CourseSectionCard({
 
           {lessons.map((lesson) => (
             <View key={lesson.id} style={styles.lessonRow}>
-              <View style={styles.lessonLeft}>
+              <View style={styles.lessonTitleRow}>
                 <View style={styles.iconWrapper}>
                   <FontAwesome
                     name={
                       lesson.completed
                         ? "check-circle"
-                        : getTypeIcon(lesson.type)
+                        : "circle"
                     }
                     size={16}
                     color={
                       lesson.completed
                         ? colors.success
-                        : getTypeColor(lesson.type)
+                        : colors.textTertiary
                     }
                   />
                 </View>
@@ -139,18 +141,13 @@ export function CourseSectionCard({
                   {lesson.title}
                 </ThemedText>
               </View>
-              <View style={styles.lessonRight}>
-                <View
-                  style={[
-                    styles.typeBadge,
-                    { backgroundColor: getTypeColor(lesson.type) },
-                  ]}
-                >
-                  <ThemedText variant="caption" style={styles.badgeText}>
-                    {lesson.type}
-                  </ThemedText>
-                </View>
-                <ThemedText variant="caption" semantic="muted" style={styles.durationText}>
+              <View style={styles.lessonMetaRow}>
+                <FontAwesome
+                  name={getTypeIcon(lesson.type)}
+                  size={12}
+                  color={getTypeColor(lesson.type)}
+                />
+                <ThemedText variant="caption" semantic="muted">
                   {lesson.duration}
                 </ThemedText>
               </View>
@@ -191,7 +188,8 @@ const styles = StyleSheet.create({
   goalBox: {
     flexDirection: "row",
     gap: Spacing.sm,
-    padding: Spacing.md,
+    paddingVertical: Spacing.md,
+    paddingRight: Spacing.md,
     borderRadius: BorderRadius.xl,
     alignItems: "flex-start",
   },
@@ -200,41 +198,23 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   lessonRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    gap: 2,
     paddingVertical: Spacing.xs,
   },
-  lessonLeft: {
+  lessonTitleRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
-    width: "60%",
   },
   iconWrapper: {
     width: 22,
     alignItems: "center",
     justifyContent: "center",
   },
-  lessonRight: {
+  lessonMetaRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
-    width: "40%",
-    justifyContent: "flex-end",
-  },
-  typeBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: BorderRadius.small,
-    minWidth: 52,
-    alignItems: "center",
-  },
-  badgeText: {
-    color: "#fff",
-    fontSize: 10,
-    fontFamily: "LexendSemiBold",
-  },
-  durationText: {
-    width: 50,
+    marginLeft: 22 + Spacing.sm,
   },
 });

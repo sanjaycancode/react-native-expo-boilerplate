@@ -61,7 +61,7 @@ export default function CourseDetail() {
         />
 
         <View style={styles.content}>
-          <ThemedText variant="heading4" semantic="default">
+          <ThemedText variant="heading5" semantic="default">
             {courseData.title}
           </ThemedText>
           <ThemedText variant="body" semantic="muted">
@@ -117,7 +117,7 @@ export default function CourseDetail() {
           title="About This Course"
           />
 
-          <ThemedText variant="heading5" semantic="default">
+          <ThemedText variant="heading6" semantic="default">
             Course Content
           </ThemedText>
 
