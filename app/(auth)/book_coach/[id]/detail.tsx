@@ -110,7 +110,11 @@ export default function CoachDetail() {
 
         <View style={styles.slots}>
           {slots.map((slot) => (
-            <ThemedCard key={slot.id} style={styles.slotCard} variant="outlined">
+            <ThemedCard
+              key={slot.id}
+              style={styles.slotCard}
+              variant="outlined"
+            >
               <View style={styles.slotRow}>
                 <IconBadge
                   name="time-outline"
@@ -131,9 +135,8 @@ export default function CoachDetail() {
 const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
-      paddingBottom: theme.spacing.xl,
     },
     profileCard: {
       gap: theme.spacing.md,
@@ -144,8 +147,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.xl*2,
-      height: theme.spacing.xl*2,
+      width: theme.spacing.xl * 2,
+      height: theme.spacing.xl * 2,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",

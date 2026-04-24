@@ -31,7 +31,9 @@ export function ThemedSearchBar({
       variant="accent"
       color="primary"
       startIcon={<Ionicons name="search-outline" size={18} />}
-      endIcon={showClear ? <Ionicons name="close-circle" size={18} /> : undefined}
+      endIcon={
+        showClear ? <Ionicons name="close-circle" size={18} /> : undefined
+      }
       onEndIconPress={
         showClear
           ? () => {
