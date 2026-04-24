@@ -69,6 +69,5 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       alignItems: "center",
       flexDirection: "row",
       gap: theme.spacing.sm,
-      // justifyContent: "space-between",
     },
   });
