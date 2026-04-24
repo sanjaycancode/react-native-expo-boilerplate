@@ -20,20 +20,8 @@ export default function ClassDetail() {
   const styles = createStyles();
 
 
-  const classData = CLASSES.find((cls) => cls.id === id);
-
-  if (!classData) {
-    return (
-      <>
-        <Stack.Screen options={{ title:"Class Detail" }} />
-        <View style={styles.container}>
-          <ThemedText variant="body" semantic="muted">
-            Class not found.
-          </ThemedText>
-        </View>
-      </>
-    );
-  }
+  
+  const classData = CLASSES.find((cls) => cls.id === id)!;
 
   const isFree = classData.price.toLowerCase() === "free";
 

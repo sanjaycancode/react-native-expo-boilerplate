@@ -19,20 +19,7 @@ export default function CourseDetail() {
   const styles = createStyles();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
-  const courseData = COURSES.find((c) => c.id === id);
-
-  if (!courseData) {
-    return (
-      <>
-        <Stack.Screen options={{ title:"Course Detail" }} />
-        <View style={styles.container}>
-          <ThemedText variant="body" semantic="muted">
-            Course not found.
-          </ThemedText>
-        </View>
-      </>
-    );
-  }
+  const courseData = COURSES.find((c) => c.id === id)!;
 
   const totalLessons = courseData.sections.reduce(
     (sum, s) => sum + s.lessons.length,
