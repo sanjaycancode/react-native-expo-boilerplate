@@ -2,12 +2,15 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { Link, Stack } from "expo-router";
 
+import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
+import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 
 export default function MeScreen() {
+  const { signOut } = useAuth();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -50,6 +53,13 @@ export default function MeScreen() {
             Invite friends and track rewards.
           </ThemedText>
         </ThemedCard>
+
+        <ThemedButton
+          title="Logout"
+          variant="danger"
+          onPress={signOut}
+          style={styles.logoutButton}
+        />
       </View>
     </>
   );
@@ -61,5 +71,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
       padding: theme.spacing.lg,
       gap: theme.spacing.md,
+    },
+    logoutButton: {
+      marginTop: theme.spacing.sm,
     },
   });
