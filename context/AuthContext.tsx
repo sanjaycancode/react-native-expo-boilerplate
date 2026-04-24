@@ -21,7 +21,7 @@ const mockAuthenticatedUser: AuthenticatedUser = {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loggedInUser, setLoggedInUser] = useState<AuthenticatedUser | null>(
-    mockAuthenticatedUser,
+    null,
   );
 
   const value = useMemo<AuthContextValue>(
