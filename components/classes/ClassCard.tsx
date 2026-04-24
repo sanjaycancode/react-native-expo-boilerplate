@@ -5,7 +5,6 @@ import { StatusBadge } from "@/components/classes/StatusBadgeClass";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
 
 interface ClassCardProps {
   family: string;
@@ -26,8 +25,6 @@ export function ClassCard({
   image,
   onPress,
 }: ClassCardProps) {
-  const colors = useThemeColors();
-
   return (
     <Pressable onPress={onPress}>
       <ThemedCard variant="outlined" style={styles.card}>

@@ -19,11 +19,25 @@ export default function ClassDetail() {
   const colors = useThemeColors();
   const styles = createStyles();
 
+  const classData = CLASSES.find((cls) => cls.id === id);
 
-  
-  const classData = CLASSES.find((cls) => cls.id === id)!;
-
-  const isFree = classData.price.toLowerCase() === "free";
+  if (!classData) {
+    return (
+      <>
+        <Stack.Screen options={{ title: "Class not found" }} />
+        <ScrollView style={styles.container}>
+          <View style={styles.content}>
+            <ThemedText variant="heading5" semantic="default">
+              Class not found
+            </ThemedText>
+            <ThemedText semantic="muted">
+              The requested class does not exist or is no longer available.
+            </ThemedText>
+          </View>
+        </ScrollView>
+      </>
+    );
+  }
 
   return (
     <>

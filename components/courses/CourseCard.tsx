@@ -11,7 +11,6 @@ import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
 import { BorderRadius, Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
 
 
 interface CourseCardProps {
@@ -31,9 +30,6 @@ export function CourseCard({
   image,
   onPress,
 }: CourseCardProps) {
-
-
-  const colors = useThemeColors();
 
   return (
     <Pressable onPress={onPress}>

@@ -10,16 +10,28 @@ import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
 import { COURSES } from "@/data/courses";
 
 export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id?: string }>();
-  const colors = useThemeColors();
   const styles = createStyles();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
-  const courseData = COURSES.find((c) => c.id === id)!;
+  const courseData =
+    typeof id === "string" ? COURSES.find((c) => c.id === id) : undefined;
+
+  if (!courseData) {
+    return (
+      <>
+        <Stack.Screen options={{ title: "Course not found" }} />
+        <View style={styles.container}>
+          <ThemedCard>
+            <ThemedText>Course not found.</ThemedText>
+          </ThemedCard>
+        </View>
+      </>
+    );
+  }
 
   const totalLessons = courseData.sections.reduce(
     (sum, s) => sum + s.lessons.length,
@@ -29,7 +41,8 @@ export default function CourseDetail() {
     (sum, s) => sum + s.lessons.filter((l) => l.completed).length,
     0
   );
-  const progressPercent = Math.round(courseData.progress * 100);
+  const progressPercent =
+    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
 
   const toggleSection = (sectionId: string) => {
     setExpandedSection(

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import { Stack, router } from "expo-router";
@@ -7,12 +8,11 @@ import { HeaderBackButton } from "@/components/HeaderBackButton";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
 import { Spacing } from "@/constants/Themes";
-import { useThemeColors } from "@/context/ThemeContext";
 import { CLASSES } from "@/data/classes";
 
 export default function ClassesScreen() {
   const styles = createStyles();
-  const colors = useThemeColors();
+  const [searchText, setSearchText] = useState("");
 
   return (
     <>
@@ -39,7 +39,12 @@ export default function ClassesScreen() {
               date={item.date}
               time={item.time}
               image={item.image}
-              onPress={() => router.push(`/classes/${item.id}/detail` as any)}
+              onPress={() =>
+                router.push({
+                  pathname: "/classes/[id]/detail",
+                  params: { id: item.id },
+                })
+              }
             />
           </View>
         )}
@@ -48,8 +53,8 @@ export default function ClassesScreen() {
           <View style={styles.header}>
             <View style={styles.searchRow}>
               <ThemedSearchBar
-                value=""
-                onChangeText={() => {}}
+                value={searchText}
+                onChangeText={setSearchText}
                 placeholder="Search classes..."
               />
             </View>
