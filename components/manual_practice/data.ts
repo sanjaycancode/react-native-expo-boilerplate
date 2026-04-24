@@ -1,7 +1,7 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import type Ionicons from "@expo/vector-icons/Ionicons";
 import type { ComponentProps } from "react";
 
-import { ManualPracticeType } from "./types";
+import type { ManualPracticeType } from "./types";
 
 export type ManualPracticeTask = {
   id: string;
