@@ -5,7 +5,11 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import { QueryClientProvider } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
+import { getAsyncStorageItem } from "@/utils";
+
 import { queryClient } from "@/lib/react-query/queryClient";
+
+const REACT_QUERY_CACHE_KEY = "english-charlie-react-query-cache";
 
 interface ReactQueryProviderProps {
   children: ReactNode;
@@ -22,16 +26,14 @@ export function ReactQueryProvider({ children }: ReactQueryProviderProps) {
 
     async function initializePersistence() {
       try {
-        await AsyncStorage.getItem("english-charlie-react-query-cache");
+        await getAsyncStorageItem<unknown>(REACT_QUERY_CACHE_KEY);
 
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
 
         setPersistOptions({
           persister: createAsyncStoragePersister({
             storage: AsyncStorage,
-            key: "english-charlie-react-query-cache",
+            key: REACT_QUERY_CACHE_KEY,
           }),
           maxAge: 24 * 60 * 60 * 1000,
         });
