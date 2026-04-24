@@ -159,7 +159,6 @@ export default function MyBookingsScreen() {
         contentContainerStyle={styles.container}
         ListHeaderComponent={
           <View style={styles.headerBlock}>
-
             <ThemedMaterialTopTabs
               tabs={["all", "upcoming", "completed", "cancelled"] as const}
               selectedTab={filter}
@@ -174,13 +173,13 @@ export default function MyBookingsScreen() {
             <TouchableOpacity
               accessibilityRole="button"
               activeOpacity={0.8}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/my_bookings/[id]/details",
-                      params: {
-                        id: booking.id,
-                        coachName: booking.coachName,
-                        coachTitle: booking.coachTitle,
+              onPress={() =>
+                router.push({
+                  pathname: "/my_bookings/[id]/details",
+                  params: {
+                    id: booking.id,
+                    coachName: booking.coachName,
+                    coachTitle: booking.coachTitle,
                     status: booking.status,
                     dateLabel: booking.dateLabel,
                     durationMinutes: String(booking.durationMinutes),
@@ -206,7 +205,9 @@ export default function MyBookingsScreen() {
                   </View>
 
                   <View style={styles.cardMain}>
-                    <ThemedText variant="bodySmall">{booking.coachName}</ThemedText>
+                    <ThemedText variant="bodySmall">
+                      {booking.coachName}
+                    </ThemedText>
                     <ThemedText variant="bodySmall" semantic="muted">
                       {booking.coachTitle}
                     </ThemedText>
@@ -278,7 +279,7 @@ export default function MyBookingsScreen() {
 const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
     headerBlock: {
       gap: theme.spacing.md,
@@ -299,8 +300,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.lg*2,
-      height: theme.spacing.lg*2,
+      width: theme.spacing.lg * 2,
+      height: theme.spacing.lg * 2,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",

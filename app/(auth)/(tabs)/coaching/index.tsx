@@ -26,7 +26,7 @@ export default function CoachingScreen() {
       </View>
 
       <ActionCard
-        href="/book_coach"
+        href="../book_coach"
         iconName="search"
         iconBackgroundColor={colors.primaryLight}
         iconColor={colors.primary}
@@ -35,7 +35,7 @@ export default function CoachingScreen() {
       />
 
       <ActionCard
-        href="/my_bookings"
+        href="../my_bookings"
         iconName="calendar-check"
         iconBackgroundColor={colors.primaryLight}
         iconColor={colors.primary}
@@ -50,8 +50,7 @@ const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
-      paddingHorizontal: theme.spacing.md,
     },
   });

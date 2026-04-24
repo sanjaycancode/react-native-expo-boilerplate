@@ -48,14 +48,14 @@ export default function BookCoachScreen() {
         id: "3",
         name: "Emily Davis",
         title: "IELTS Listening ● Strategy",
-        pricePerSession: 22.80,
+        pricePerSession: 22.8,
         nextAvailable: "Tue ● 7:15 PM",
       },
       {
         id: "4",
         name: "Daniel Kim",
         title: "IELTS Reading ● Time Management",
-        pricePerSession: 17.50,
+        pricePerSession: 17.5,
         nextAvailable: "Tue ● 7:15 PM",
       },
       {
@@ -83,9 +83,9 @@ export default function BookCoachScreen() {
         id: "8",
         name: "Katherine Davis",
         title: "Speaking Practice ● Fluency",
-        pricePerSession: 0.00,
+        pricePerSession: 0.0,
         nextAvailable: "Sat ● 7:15 PM",
-      }
+      },
     ],
     [],
   );
@@ -126,7 +126,6 @@ export default function BookCoachScreen() {
               onChangeText={setQuery}
               placeholder="Search coaches..."
             />
-
           </View>
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -167,8 +166,7 @@ export default function BookCoachScreen() {
 const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md,
-      paddingHorizontal: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
     headerBlock: {
       gap: theme.spacing.md,

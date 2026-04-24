@@ -40,8 +40,14 @@ export default function BookingDetail() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
   const colors = useThemeColors();
-  const { coachName, coachTitle, status, dateLabel, durationMinutes, meetingType } =
-    useLocalSearchParams<Params>();
+  const {
+    coachName,
+    coachTitle,
+    status,
+    dateLabel,
+    durationMinutes,
+    meetingType,
+  } = useLocalSearchParams<Params>();
 
   const resolvedStatus: BookingStatus =
     status && ["upcoming", "completed", "cancelled"].includes(status)
@@ -68,14 +74,19 @@ export default function BookingDetail() {
               <View
                 style={[
                   styles.avatar,
-                  { backgroundColor: colors.overlay, borderColor: colors.border },
+                  {
+                    backgroundColor: colors.overlay,
+                    borderColor: colors.border,
+                  },
                 ]}
               >
                 <ThemedText variant="bodySmall">{initials}</ThemedText>
               </View>
 
               <View style={styles.headerMain}>
-                <ThemedText variant="heading2">{coachName ?? "Coach"}</ThemedText>
+                <ThemedText variant="heading2">
+                  {coachName ?? "Coach"}
+                </ThemedText>
                 <ThemedText variant="bodySmall" semantic="muted">
                   {coachTitle ?? "Session"}
                 </ThemedText>
@@ -160,8 +171,8 @@ export default function BookingDetail() {
             Note
           </ThemedText>
           <ThemedText variant="bodySmall">
-            This is a placeholder booking detail screen. Next step: add real booking
-            data and actions (reschedule/cancel/join).
+            This is a placeholder booking detail screen. Next step: add real
+            booking data and actions (reschedule/cancel/join).
           </ThemedText>
         </ThemedCard>
       </ScrollView>
@@ -172,9 +183,8 @@ export default function BookingDetail() {
 const createStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
       gap: theme.spacing.md,
-      paddingBottom: theme.spacing.xl,
     },
     headerCard: {
       gap: theme.spacing.md,
@@ -192,8 +202,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.xl*2,
-      height: theme.spacing.xl*2, 
+      width: theme.spacing.xl * 2,
+      height: theme.spacing.xl * 2,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",
