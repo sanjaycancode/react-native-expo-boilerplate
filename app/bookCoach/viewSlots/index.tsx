@@ -12,8 +12,6 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
-import { BorderRadius, Spacing } from "@/constants/Themes";
-
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 type Params = {
