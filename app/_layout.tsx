@@ -3,7 +3,12 @@ import "react-native-reanimated";
 import { useEffect } from "react";
 
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import {
+  Stack,
+  useRootNavigationState,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -12,14 +17,16 @@ import { ThemeProvider } from "@/context/ThemeContext";
 
 import { ReactQueryProvider } from "@/lib/react-query/ReactQueryProvider";
 
+import { AuthProvider, useAuth } from "../context/AuthContext";
+
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tabs)",
+  // Default to the public entry route until real session restoration is wired in.
+  initialRouteName: "login",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -56,8 +63,42 @@ function RootLayoutNav() {
   return (
     <ReactQueryProvider>
       <ThemeProvider>
-        <Stack />
+        <AuthProvider>
+          <AuthGuard />
+        </AuthProvider>
       </ThemeProvider>
     </ReactQueryProvider>
   );
+}
+
+function AuthGuard() {
+  const { isAuthenticated, isInitializing } = useAuth();
+  const rootNavigationState = useRootNavigationState();
+  const router = useRouter();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (!rootNavigationState?.key || isInitializing) return;
+
+    const inAuthenticatedGroup = segments[0] === "(auth)";
+
+    if (isAuthenticated && !inAuthenticatedGroup) {
+      router.replace("/(auth)/(tabs)");
+      return;
+    }
+
+    if (!isAuthenticated && inAuthenticatedGroup) {
+      router.replace("/login");
+    }
+  }, [
+    isAuthenticated,
+    isInitializing,
+    rootNavigationState?.key,
+    router,
+    segments,
+  ]);
+
+  if (!rootNavigationState?.key || isInitializing) return null;
+
+  return <Stack screenOptions={{ headerShown: false }} />;
 }
