@@ -17,7 +17,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 
 import { ReactQueryProvider } from "@/lib/react-query/ReactQueryProvider";
 
-import { AuthProvider, useAuth } from "../context/AuthContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 export {
   // Catch any errors thrown by the Layout component.
