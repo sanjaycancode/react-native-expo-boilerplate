@@ -10,14 +10,14 @@ import {
   useSegments,
 } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 
 import { ReactQueryProvider } from "@/lib/react-query/ReactQueryProvider";
-
-import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -73,8 +73,13 @@ function RootLayoutNav() {
 
 function AuthGuard() {
   const { isAuthenticated, isInitializing } = useAuth();
+
+  const { theme } = useTheme();
+
   const rootNavigationState = useRootNavigationState();
+
   const router = useRouter();
+
   const segments = useSegments();
 
   useEffect(() => {
@@ -100,5 +105,13 @@ function AuthGuard() {
 
   if (!rootNavigationState?.key || isInitializing) return null;
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <>
+      <StatusBar
+        style={theme.mode === "dark" ? "light" : "dark"}
+        backgroundColor={theme.colors.background}
+      />
+      <Stack screenOptions={{ headerShown: false }} />
+    </>
+  );
 }
