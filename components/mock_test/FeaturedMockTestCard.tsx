@@ -29,7 +29,11 @@ export function FeaturedMockTestCard({ onStart }: FeaturedMockTestCardProps) {
           </ThemedText>
         </View>
         <View style={styles.tag}>
-          <Ionicons name="layers" size={14} color={theme.colors.textOnPrimary} />
+          <Ionicons
+            name="layers"
+            size={14}
+            color={theme.colors.textOnPrimary}
+          />
           <ThemedText variant="caption" style={styles.tagText}>
             4 sections
           </ThemedText>
@@ -37,7 +41,7 @@ export function FeaturedMockTestCard({ onStart }: FeaturedMockTestCardProps) {
       </View>
 
       <View style={styles.copy}>
-        <ThemedText variant="button" style={styles.title}>
+        <ThemedText variant="xs" style={styles.title}>
           SAMPLE PTE-ACAD TEST 1
         </ThemedText>
         <ThemedText variant="bodySmall" style={styles.description}>
@@ -48,7 +52,6 @@ export function FeaturedMockTestCard({ onStart }: FeaturedMockTestCardProps) {
       <ThemedButton
         title="Start Test"
         onPress={() => onStart?.()}
-        variant="secondary"
         size="small"
       />
     </View>

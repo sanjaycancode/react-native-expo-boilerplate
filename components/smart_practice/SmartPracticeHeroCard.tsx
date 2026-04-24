@@ -37,7 +37,6 @@ export function SmartPracticeHeroCard({ onStart }: SmartPracticeHeroCardProps) {
         <ThemedButton
           title="Start smart session"
           onPress={() => onStart?.()}
-          variant="secondary"
           size="small"
           style={styles.startButton}
         />

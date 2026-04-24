@@ -21,7 +21,7 @@ export function MockTestSectionSetCard({
   return (
     <ThemedCard style={styles.card}>
       <IconBadge name={sectionSet.iconName} />
-      <ThemedText variant="button">{sectionSet.title}</ThemedText>
+      <ThemedText variant="xs">{sectionSet.title}</ThemedText>
       <ThemedText variant="caption">
         {sectionSet.practiceSetCount} practice sets
       </ThemedText>
