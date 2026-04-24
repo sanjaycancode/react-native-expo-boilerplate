@@ -126,7 +126,7 @@ export default function MyBookingsScreen() {
         coachName: "Lily",
         coachTitle: "IELTS Speaking ● Fluency",
         status: "cancelled",
-        dateLabel: "Apr 015 ● 7:15 PM",
+        dateLabel: "Apr 15 ● 7:15 PM",
         durationMinutes: 30,
         meetingType: "Chat",
       },
