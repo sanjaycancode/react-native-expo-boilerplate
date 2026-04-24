@@ -14,7 +14,7 @@ import { useTheme } from "@/context/ThemeContext";
 
 import { formTextInputHelper } from "@/utils";
 
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "@/context/AuthContext";
 
 type LoginFormValues = {
   email: string;
