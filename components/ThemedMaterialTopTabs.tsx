@@ -37,6 +37,11 @@ export function ThemedMaterialTopTabs<TValue extends string>({
             <Pressable
               key={tab}
               onPress={() => onSelectTab(tab)}
+              accessibilityRole="tab"
+              accessibilityState={{ selected: isSelected }}
+              accessibilityLabel={
+                metaLabel ? `${getLabel(tab)} ${metaLabel}` : getLabel(tab)
+              }
               style={({ pressed }) => [
                 styles.tab,
                 isSelected && styles.selectedTab,
