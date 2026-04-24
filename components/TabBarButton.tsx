@@ -51,7 +51,7 @@ export function TabBarButton({
             },
           ]}
         >
-          <FontAwesome size={22} color={color} name={iconName} />
+          <FontAwesome size={24} color={color} name={iconName} />
         </View>
         <ThemedText variant="xs" semantic={focused ? "primary" : "muted"}>
           {label}
