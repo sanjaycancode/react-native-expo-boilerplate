@@ -1,9 +1,9 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": true,
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit",
     "source.sortMembers": "explicit",
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "cSpell.words": ["Pressable"]
 }

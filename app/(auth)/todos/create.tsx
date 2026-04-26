@@ -10,7 +10,7 @@ import { ThemedTextInput } from "@/components/ThemedTextInput";
 
 import { useTheme } from "@/context/ThemeContext";
 
-import { formTextInputHelper } from "@/utils";
+import { formTextInputHelper, getErrorMessage } from "@/utils";
 
 import { useCreateTodoMutation } from "@/hooks/api";
 
@@ -19,17 +19,6 @@ type CreateTodoFormValues = {
   userId: string;
   title: string;
 };
-
-function getErrorMessage(error: unknown) {
-  if (typeof error === "object" && error !== null && "message" in error) {
-    const { message } = error as { message?: unknown };
-    if (typeof message === "string") {
-      return message;
-    }
-  }
-
-  return "Something went wrong.";
-}
 
 export default function CreateTodoScreen() {
   const { theme } = useTheme();
@@ -69,9 +58,12 @@ export default function CreateTodoScreen() {
       <Stack.Screen options={{ title: "Create Todo" }} />
 
       <View style={styles.container}>
-        <ThemedText variant="body" semantic="muted">
-          Add a demo todo using JSONPlaceholder.
-        </ThemedText>
+        <View>
+          <ThemedText variant="heading2">Create Todo</ThemedText>
+          <ThemedText variant="body" semantic="muted">
+            Add a demo todo using JSONPlaceholder.
+          </ThemedText>
+        </View>
 
         <Controller
           control={control}
@@ -168,7 +160,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       padding: theme.spacing.lg,
-      gap: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
     toggleSection: {
       gap: theme.spacing.sm,
