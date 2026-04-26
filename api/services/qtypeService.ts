@@ -9,19 +9,11 @@ interface GetQtypesParams {
 export async function getQtypes(
   params: GetQtypesParams = {},
 ): Promise<GetQtypesResponse> {
-  const url = apiClient.getUri({
-    url: "/api/qtypes",
-    params,
-  });
-
-  console.log("GET qtypes", url);
   const response = await apiClient.get<GetQtypesResponse>(
     "/api/practice/question_types",
     {
       params,
     },
   );
-
-  console.log(response.data);
   return response.data;
 }

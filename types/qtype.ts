@@ -19,5 +19,6 @@ export interface Qtype {
 export type QtypesBySection = Partial<Record<QtypeSection, Qtype[]>>;
 
 export interface GetQtypesResponse {
-  qtypes: QtypesBySection;
+  success: boolean;
+  data: QtypesBySection;
 }
