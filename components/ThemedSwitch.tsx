@@ -2,7 +2,7 @@ import { Switch, SwitchProps } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
 
-export type ThemeSwitchProps = Omit<
+export type ThemedSwitchProps = Omit<
   SwitchProps,
   "trackColor" | "thumbColor" | "ios_backgroundColor"
 > & {
@@ -22,7 +22,7 @@ export function ThemedSwitch({
   thumbOffColor,
   iosBackgroundColor,
   ...otherProps
-}: ThemeSwitchProps) {
+}: ThemedSwitchProps) {
   const { theme } = useTheme();
 
   const resolvedTrackFalseColor = trackFalseColor ?? theme.colors.border;
