@@ -20,8 +20,6 @@ export type SettingProps = {
 };
 
 export default function SettingsScreen() {
-  // const router = useRouter();
-
   const { theme } = useTheme();
   const { toggleTheme } = useThemeMode();
   const styles = createStyles(theme);

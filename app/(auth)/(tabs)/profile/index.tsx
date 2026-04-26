@@ -74,7 +74,7 @@ export default function ProfileScreen() {
           meta: "Manage notifications and preferences",
           icon: "settings",
           iconFamily: MaterialIcons,
-          href: "/(auth)/(tabs)/profile/settings",
+          href: "/settings",
         },
       ],
     },
