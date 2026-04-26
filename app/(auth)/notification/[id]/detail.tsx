@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router";
 
 import { ThemedText } from "@/components/ThemedText";
 
