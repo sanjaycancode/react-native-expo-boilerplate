@@ -316,9 +316,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     container: {
       flexGrow: 1,
-      paddingHorizontal: theme.spacing.md,
-      paddingVertical: theme.spacing.md,
-      paddingBottom: theme.spacing.xl,
+      padding: theme.spacing.lg,
+      // paddingBottom: theme.spacing.xl,
       gap: theme.spacing.md,
     },
     sectionCard: {
