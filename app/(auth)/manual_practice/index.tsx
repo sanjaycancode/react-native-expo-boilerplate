@@ -13,6 +13,8 @@ import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 
 import { useTheme } from "@/context/ThemeContext";
 
+import { useQtypesQuery } from "@/hooks/api";
+
 const ALL_TYPES_PREVIEW_LIMIT = 2;
 
 function getVisibleSections(selectedType: ManualPracticeType) {
@@ -44,6 +46,7 @@ function getTypeCount(type: ManualPracticeType) {
 
 export default function ManualPracticeScreen() {
   const { theme } = useTheme();
+  const questions = useQtypesQuery();
   const styles = createStyles(theme);
   const [selectedType, setSelectedType] =
     useState<ManualPracticeType>("All types");
@@ -89,5 +92,9 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     content: {
       gap: theme.spacing.lg,
       padding: theme.spacing.md,
+    },
+    debugText: {
+      color: theme.colors.text,
+      fontSize: 12,
     },
   });

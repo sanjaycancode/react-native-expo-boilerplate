@@ -27,7 +27,7 @@ export function ManualPracticeSection({
     <View style={styles.section}>
       <View style={styles.sectionHeader}>
         <View style={styles.sectionTitle}>
-          <ThemedText variant="button">{section.type}</ThemedText>
+          <ThemedText variant="bodySmall">{section.type}</ThemedText>
         </View>
         {showViewAll ? (
           <TouchableOpacity
