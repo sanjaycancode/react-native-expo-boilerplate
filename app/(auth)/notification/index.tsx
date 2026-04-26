@@ -231,7 +231,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: 10,
+      padding: theme.spacing.md,
       gap: 12,
       backgroundColor: theme.colors.background,
     },
