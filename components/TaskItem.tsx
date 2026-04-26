@@ -46,6 +46,7 @@ export function TaskItem({
   icon,
   iconFamily,
   meta,
+  tone = "tertiary",
   onPress,
   disabled = false,
   style,
@@ -55,7 +56,7 @@ export function TaskItem({
   const { theme } = useTheme();
   const colors = theme.colors;
   const styles = createStyles(theme);
-  const iconColor = colors.primary;
+  const iconColor = tone === "primary" ? colors.primary : colors.accent;
   const IconComponent = iconFamily ?? Ionicons;
   const resolvedIconName = (iconName ?? icon ?? "ellipse") as string;
 
