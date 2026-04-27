@@ -79,12 +79,12 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="me"
+          name="profile"
           options={{
             headerShown: false,
-            title: "Me",
+            title: "Profile",
             tabBarButton: (props) => (
-              <TabBarButton {...props} iconName="user" label="Me" />
+              <TabBarButton {...props} iconName="user" label="Profile" />
             ),
           }}
         />
