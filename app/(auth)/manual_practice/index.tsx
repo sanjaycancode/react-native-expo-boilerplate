@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 
 import { Stack } from "expo-router";
 
@@ -24,7 +29,7 @@ import type { Qtype, QtypesBySection, QtypeSection } from "@/types";
 const ALL_TYPES_PREVIEW_LIMIT = 2;
 
 const typeToSectionMap: Record<
-  Exclude<ManualPracticeType, "All types">,
+  Exclude<ManualPracticeType, "All">,
   QtypeSection
 > = {
   Listening: "listening",
@@ -42,10 +47,10 @@ const sectionIcons: Record<QtypeSection, ManualPracticeTask["iconName"]> = {
 
 function toDisplayType(
   section: QtypeSection,
-): Exclude<ManualPracticeType, "All types"> {
+): Exclude<ManualPracticeType, "All"> {
   return (section.charAt(0).toUpperCase() + section.slice(1)) as Exclude<
     ManualPracticeType,
-    "All types"
+    "All"
   >;
 }
 
@@ -90,11 +95,11 @@ function getVisibleSections(
   qtypesBySection: QtypesBySection,
   selectedType: ManualPracticeType,
 ) {
-  if (selectedType === "All types") {
+  if (selectedType === "All") {
     return manualPracticeTypes
       .filter(
-        (type): type is Exclude<ManualPracticeType, "All types"> =>
-          type !== "All types",
+        (type): type is Exclude<ManualPracticeType, "All"> =>
+          type !== "All",
       )
       .map((type) => {
         const section = typeToSectionMap[type];
@@ -117,7 +122,7 @@ function getTypeCount(
   qtypesBySection: QtypesBySection,
   type: ManualPracticeType,
 ) {
-  if (type === "All types") {
+  if (type === "All") {
     return Object.values(qtypesBySection).reduce(
       (total, items) => total + (items?.length ?? 0),
       0,
@@ -125,15 +130,13 @@ function getTypeCount(
   }
 
   return qtypesBySection[typeToSectionMap[type]]?.length ?? 0;
- x;
 }
 
 export default function ManualPracticeScreen() {
   const { theme } = useTheme();
   const qtypesQuery = useQtypesQuery();
   const styles = createStyles(theme);
-  const [selectedType, setSelectedType] =
-    useState<ManualPracticeType>("All types");
+  const [selectedType, setSelectedType] = useState<ManualPracticeType>("All");
   const qtypesBySection = qtypesQuery.data?.data ?? {};
   const visibleSections = getVisibleSections(qtypesBySection, selectedType);
 
@@ -175,12 +178,22 @@ export default function ManualPracticeScreen() {
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={qtypesQuery.isRefetching}
+            onRefresh={() => {
+              void qtypesQuery.refetch();
+            }}
+            tintColor={theme.colors.primary}
+            colors={[theme.colors.primary]}
+          />
+        }
       >
         <ThemedMaterialTopTabs
           tabs={manualPracticeTypes}
           selectedTab={selectedType}
           onSelectTab={setSelectedType}
-          getMetaLabel={(type) => String(getTypeCount(qtypesBySection, type))}
+          getMetaLabel={(type) => `(${getTypeCount(qtypesBySection, type)})`}
         />
 
         {qtypesQuery.isLoading
@@ -193,7 +206,7 @@ export default function ManualPracticeScreen() {
                   <ManualPracticeSection
                     key={section.type}
                     section={section}
-                    showViewAll={selectedType === "All types"}
+                    showViewAll={selectedType === "All"}
                     onViewAll={(selectedSection) =>
                       setSelectedType(selectedSection.type)
                     }
@@ -212,6 +225,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     content: {
       gap: theme.spacing.lg,
       padding: theme.spacing.md,
+      paddingBottom: theme.spacing.xl + 20,
     },
     header: {
       gap: theme.spacing.xs,

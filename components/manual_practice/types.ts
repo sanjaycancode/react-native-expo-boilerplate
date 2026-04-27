@@ -1,5 +1,5 @@
 export const manualPracticeTypes = [
-  "All types",
+  "All",
   "Listening",
   "Reading",
   "Writing",
