@@ -98,8 +98,7 @@ function getVisibleSections(
   if (selectedType === "All") {
     return manualPracticeTypes
       .filter(
-        (type): type is Exclude<ManualPracticeType, "All"> =>
-          type !== "All",
+        (type): type is Exclude<ManualPracticeType, "All"> => type !== "All",
       )
       .map((type) => {
         const section = typeToSectionMap[type];

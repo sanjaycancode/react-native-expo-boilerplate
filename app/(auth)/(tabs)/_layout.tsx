@@ -2,19 +2,10 @@ import React from "react";
 
 import { Stack, Tabs } from "expo-router";
 
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-
+import { TabBarButton } from "@/components/TabBarButton";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
 import { useThemeColors } from "@/context/ThemeContext";
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
 
 export default function TabLayout() {
   const colors = useThemeColors();
@@ -26,6 +17,7 @@ export default function TabLayout() {
         initialRouteName="dashboard"
         screenOptions={{
           tabBarActiveTintColor: colors.primary,
+          tabBarShowLabel: false,
           // Disable the static render of the header on sweb
           // to prevent a hydration error in React Navigation v6.
           headerShown: useClientOnlyValue(false, true),
@@ -43,8 +35,8 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Dashboard",
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="th-large" color={color} />
+            tabBarButton: (props) => (
+              <TabBarButton {...props} iconName="th-large" label="Dashboard" />
             ),
           }}
         />
@@ -53,8 +45,12 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Practice",
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="pencil-square-o" color={color} />
+            tabBarButton: (props) => (
+              <TabBarButton
+                {...props}
+                iconName="pencil-square-o"
+                label="Practice"
+              />
             ),
           }}
         />
@@ -63,7 +59,9 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Learn",
-            tabBarIcon: ({ color }) => <TabBarIcon name="book" color={color} />,
+            tabBarButton: (props) => (
+              <TabBarButton {...props} iconName="book" label="Learn" />
+            ),
           }}
         />
         <Tabs.Screen
@@ -71,8 +69,12 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Coaching",
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="graduation-cap" color={color} />
+            tabBarButton: (props) => (
+              <TabBarButton
+                {...props}
+                iconName="graduation-cap"
+                label="Coaching"
+              />
             ),
           }}
         />
@@ -81,7 +83,9 @@ export default function TabLayout() {
           options={{
             headerShown: false,
             title: "Me",
-            tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+            tabBarButton: (props) => (
+              <TabBarButton {...props} iconName="user" label="Me" />
+            ),
           }}
         />
       </Tabs>

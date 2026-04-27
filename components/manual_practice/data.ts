@@ -1,7 +1,7 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import type Ionicons from "@expo/vector-icons/Ionicons";
 import type { ComponentProps } from "react";
 
-import { ManualPracticeType } from "./types";
+import type { ManualPracticeType } from "./types";
 
 export type ManualPracticeTask = {
   id: string;
@@ -107,7 +107,7 @@ export const manualPracticeSections: ManualPracticeSectionData[] = [
       },
       {
         id: "flow-chart-completion-reading",
-        title: "Flow-chart completion",
+        title: "Flow-chart Completion",
         questionCount: 9,
         completedQuestionCount: 0,
         iconName: "book-outline",
@@ -187,7 +187,7 @@ export const manualPracticeSections: ManualPracticeSectionData[] = [
       },
       {
         id: "table-completion-reading",
-        title: "Table completion",
+        title: "Table Completion",
         questionCount: 8,
         completedQuestionCount: 2,
         iconName: "book-outline",

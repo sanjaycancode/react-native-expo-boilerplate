@@ -60,41 +60,41 @@ english_charlie_mobile_app/
 │   ├── _layout.tsx               # Root layout: fonts, providers, splash screen
 │   ├── +html.tsx                 # Web-only HTML shell
 │   ├── +not-found.tsx            # 404 fallback screen
-│   ├── appearance.tsx            # Appearance settings screen
+│   ├── index.tsx                 # Root entry / redirect
+│   ├── login.tsx                 # Login screen
 │   ├── modal.tsx                 # Global modal screen
-│   ├── (tabs)/                   # Tab group (bottom tab navigator)
-│   │   ├── _layout.tsx           # Tab bar setup, icon mapping, active tint
-│   │   ├── index.tsx             # Hidden redirect → /dashboard
-│   │   ├── dashboard/
-│   │   │   ├── _layout.tsx
-│   │   │   └── index.tsx
-│   │   ├── practice/             # Nested tab screens
-│   │   │   ├── _layout.tsx
-│   │   │   ├── index.tsx
-│   │   │   ├── mock-test.tsx
-│   │   │   ├── manual-practice.tsx
-│   │   │   └── smart-practice.tsx
-│   │   ├── learn/
-│   │   │   ├── _layout.tsx
-│   │   │   └── index.tsx
-│   │   ├── coaching/
-│   │   │   ├── _layout.tsx
-│   │   │   └── index.tsx
-│   │   └── me/
-│   │       ├── _layout.tsx
-│   │       └── index.tsx
-│   ├── todos/                    # Nested section (outside tabs)
-│   │   ├── _layout.tsx
-│   │   ├── index.tsx
-│   │   └── create.tsx
-│   ├── courses/                  # Nested section with dynamic routes
-│   │   ├── _layout.tsx
-│   │   ├── index.tsx
-│   │   └── [id]/
-│   │       └── detail.tsx
-│   └── classes/                  # Nested section
+│   └── (auth)/                   # Authenticated area
 │       ├── _layout.tsx
-│       └── index.tsx
+│       ├── appearance.tsx        # Appearance settings screen
+│       ├── (tabs)/               # Bottom tab navigator
+│       │   ├── _layout.tsx
+│       │   ├── index.tsx         # Redirect tab entry
+│       │   ├── dashboard/
+│       │   ├── practice/
+│       │   ├── learn/
+│       │   ├── coaching/
+│       │   └── me/
+│       ├── todos/                # Nested section
+│       │   ├── _layout.tsx
+│       │   ├── index.tsx
+│       │   └── create.tsx
+│       ├── courses/              # Nested section with dynamic route
+│       │   ├── _layout.tsx
+│       │   ├── index.tsx
+│       │   └── [id]/detail.tsx
+│       ├── classes/              # Nested section with dynamic route
+│       │   ├── _layout.tsx
+│       │   ├── index.tsx
+│       │   └── [id]/detail.tsx
+│       ├── book_coach/           # Nested section with dynamic route
+│       │   ├── index.tsx
+│       │   └── [id]/detail.tsx
+│       ├── manual_practice/
+│       ├── mock_test/
+│       ├── smart_practice/
+│       └── my_bookings/
+│           ├── index.tsx
+│           └── [id]/details.tsx
 │
 ├── api/                          # API layer — no React, no hooks
 │   ├── client.ts                 # Axios instance, error types, normalizeApiError
@@ -478,7 +478,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
 
 ### Tab Navigation
 
-Tabs are defined in `app/(tabs)/_layout.tsx`. Tab configuration:
+Tabs are defined in `app/(auth)/(tabs)/_layout.tsx`. Tab configuration:
 
 - **5 tabs:** Dashboard, Practice, Learn, Coaching, Me
 - **Initial tab:** `dashboard`
@@ -496,7 +496,7 @@ import { Pressable } from "react-native";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-<Link href="/practice/mock-test" asChild>
+<Link href="/mock_test" asChild>
   <Pressable>
     <ThemedCard variant="outlined">
       <ThemedText variant="heading5">Mock Test</ThemedText>
@@ -536,7 +536,7 @@ export default function MyScreen() {
 Use `useLocalSearchParams` to access URL parameters in dynamic routes:
 
 ```tsx
-// Screen: app/courses/[id]/detail.tsx
+// Screen: app/(auth)/courses/[id]/detail.tsx
 import { useLocalSearchParams } from "expo-router";
 
 export default function CourseDetail() {
@@ -570,11 +570,11 @@ import { HeaderBackButton } from "@/components/HeaderBackButton";
 
 ## Nested Screen Structure
 
-Beyond the main `(tabs)` group, the app has several nested screen sections that follow the same patterns:
+Beyond the main `(auth)/(tabs)` group, the app has several nested screen sections that follow the same patterns:
 
 ### `todos` Section
 
-Todos feature accessible outside tabs. Structure: `app/todos/`
+Todos feature accessible outside tabs. Structure: `app/(auth)/todos/`
 
 - `index.tsx` — List of todos (with React Query integration)
 - `create.tsx` — Form to create a new todo
@@ -597,7 +597,7 @@ router.replace("../todos"); // or router.back()
 
 ### `courses` Section with Dynamic Routes
 
-Courses section with dynamic course details. Structure: `app/courses/`
+Courses section with dynamic course details. Structure: `app/(auth)/courses/`
 
 - `index.tsx` — List of courses
 - `[id]/detail.tsx` — Dynamic course detail page
@@ -615,14 +615,14 @@ const { id } = useLocalSearchParams<{ id?: string }>();
 
 ### `classes` Section
 
-Classes section (similar to courses). Structure: `app/classes/`
+Classes section (similar to courses). Structure: `app/(auth)/classes/`
 
 - `index.tsx` — List of classes
 - `_layout.tsx` — Layout configuration
 
 ### `appearance` Screen
 
-Settings screen for theme/appearance preferences at `app/appearance.tsx`.
+Settings screen for theme/appearance preferences at `app/(auth)/appearance.tsx`.
 
 **Navigation:**
 
@@ -1258,6 +1258,6 @@ import { ThemedText } from "../../components/ThemedText";
 | Keep `api/services/` pure (no React imports)                | Import hooks or context in service files        |
 | Export a barrel `index.ts` from every folder                | Use deep relative imports across folders        |
 | Add new screens inside `app/` using Expo Router conventions | Create screens outside `app/`                   |
-| Wrap all screens in `ThemedSafeAreaView`                    | Use `SafeAreaView` from `react-native` directly |
+| Use `ThemedSafeAreaView` when safe area handling is needed  | Use `SafeAreaView` from `react-native` directly |
 | Use `@/` alias for all imports                              | Use relative `../../` imports                   |
 | Access env vars via `env.*` from `@/lib/config/env`         | Read `process.env` directly in feature code     |

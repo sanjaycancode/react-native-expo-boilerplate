@@ -1,4 +1,4 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import type Ionicons from "@expo/vector-icons/Ionicons";
 import type { ComponentProps } from "react";
 
 export type SmartPracticeHeatmapItem = {

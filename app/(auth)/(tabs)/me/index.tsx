@@ -56,7 +56,8 @@ export default function MeScreen() {
 
         <ThemedButton
           title="Logout"
-          variant="danger"
+          variant="accent"
+          color="danger"
           onPress={signOut}
           style={styles.logoutButton}
         />
@@ -73,6 +74,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       gap: theme.spacing.md,
     },
     logoutButton: {
-      marginTop: theme.spacing.sm,
+      marginTop: "auto",
     },
   });

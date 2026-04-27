@@ -158,6 +158,12 @@ export const Typography = {
     lineHeight: 16,
     fontFamily: "Lexend",
   },
+  xs: {
+    fontSize: 10,
+    fontWeight: "400",
+    lineHeight: 14,
+    fontFamily: "Lexend",
+  },
   mono: {
     fontSize: 14,
     fontWeight: "400",

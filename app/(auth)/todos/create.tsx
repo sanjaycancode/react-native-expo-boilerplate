@@ -10,7 +10,7 @@ import { ThemedTextInput } from "@/components/ThemedTextInput";
 
 import { useTheme } from "@/context/ThemeContext";
 
-import { formTextInputHelper } from "@/utils";
+import { formTextInputHelper, getErrorMessage } from "@/utils";
 
 import { useCreateTodoMutation } from "@/hooks/api";
 
@@ -19,17 +19,6 @@ type CreateTodoFormValues = {
   userId: string;
   title: string;
 };
-
-function getErrorMessage(error: unknown) {
-  if (typeof error === "object" && error !== null && "message" in error) {
-    const { message } = error as { message?: unknown };
-    if (typeof message === "string") {
-      return message;
-    }
-  }
-
-  return "Something went wrong.";
-}
 
 export default function CreateTodoScreen() {
   const { theme } = useTheme();
@@ -69,9 +58,12 @@ export default function CreateTodoScreen() {
       <Stack.Screen options={{ title: "Create Todo" }} />
 
       <View style={styles.container}>
-        <ThemedText variant="body" semantic="muted">
-          Add a demo todo using JSONPlaceholder.
-        </ThemedText>
+        <View>
+          <ThemedText variant="heading2">Create Todo</ThemedText>
+          <ThemedText variant="body" semantic="muted">
+            Add a demo todo using JSONPlaceholder.
+          </ThemedText>
+        </View>
 
         <Controller
           control={control}
@@ -116,7 +108,8 @@ export default function CreateTodoScreen() {
                   <ThemedButton
                     title="Pending"
                     size="small"
-                    variant={field.value ? "secondary" : "primary"}
+                    variant={field.value ? "outlined" : "filled"}
+                    color="primary"
                     onPress={() => field.onChange(false)}
                     disabled={createTodoMutation.isPending}
                     style={styles.toggleButton}
@@ -124,7 +117,8 @@ export default function CreateTodoScreen() {
                   <ThemedButton
                     title="Completed"
                     size="small"
-                    variant={field.value ? "primary" : "secondary"}
+                    variant={field.value ? "filled" : "outlined"}
+                    color="success"
                     onPress={() => field.onChange(true)}
                     disabled={createTodoMutation.isPending}
                     style={styles.toggleButton}
@@ -150,9 +144,11 @@ export default function CreateTodoScreen() {
         ) : null}
 
         <ThemedButton
-          title={createTodoMutation.isPending ? "Creating..." : "Create Todo"}
+          title="Create Todo"
           onPress={handleSubmit(onSubmit)}
           disabled={isSubmitDisabled}
+          loading={createTodoMutation.isPending}
+          loadingText="Creating..."
         />
       </View>
     </>
@@ -164,7 +160,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       padding: theme.spacing.lg,
-      gap: theme.spacing.lg,
+      gap: theme.spacing.md,
     },
     toggleSection: {
       gap: theme.spacing.sm,

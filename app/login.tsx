@@ -10,11 +10,10 @@ import { ThemedKeyboardAvoidingView } from "@/components/ThemedKeyboardAvoidingV
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedTextInput } from "@/components/ThemedTextInput";
 
+import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 
 import { formTextInputHelper } from "@/utils";
-
-import { useAuth } from "@/context/AuthContext";
 
 type LoginFormValues = {
   email: string;
@@ -100,7 +99,11 @@ export default function LoginScreen() {
               )}
             />
 
-            <ThemedButton title="Sign In" onPress={handleSubmit(onSubmit)} />
+            <ThemedButton
+              title="Sign In"
+              variant="accent"
+              onPress={handleSubmit(onSubmit)}
+            />
           </ThemedCard>
 
           <View>
@@ -122,6 +125,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       padding: theme.spacing.lg,
       gap: theme.spacing.lg,
     },
-    headerContainer: { gap: theme.spacing.md },
+    headerContainer: { gap: theme.spacing.sm },
     formContainer: { gap: theme.spacing.lg, padding: theme.spacing.lg },
   });
