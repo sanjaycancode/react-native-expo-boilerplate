@@ -8,10 +8,11 @@ import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Spacing } from "@/constants/Themes";
 import { useThemeColors } from "@/context/ThemeContext";
-import { Lesson } from "@/data/courses";
+import { Lesson } from "@/types/lessons";
 
 interface CourseSectionCardProps {
   title: string;
+  sectionNumber: number;
   goal: string;
   lessons: Lesson[];
   isExpanded: boolean;
@@ -20,6 +21,7 @@ interface CourseSectionCardProps {
 
 export function CourseSectionCard({
   title,
+  sectionNumber,
   goal,
   lessons,
   isExpanded,
@@ -31,12 +33,10 @@ export function CourseSectionCard({
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "VIDEO":
+      case "video_embed":
         return "play-circle";
-      case "READING":
+      case "text":
         return "book";
-      case "QUIZ":
-        return "question-circle";
       default:
         return "file";
     }
@@ -44,11 +44,9 @@ export function CourseSectionCard({
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "VIDEO":
-        return colors.primary;
-      case "READING":
+      case "video_embed":
         return colors.accent;
-      case "QUIZ":
+      case "text":
         return colors.warning;
       default:
         return colors.textSecondary;
@@ -69,8 +67,9 @@ export function CourseSectionCard({
             <ThemedText
               variant="body"
               semantic={isExpanded ? "primary" : "default"}
+
             >
-              {title}
+              Section {sectionNumber}: {title}
             </ThemedText>
             {sectionCompleted && (
               <FontAwesome
@@ -148,7 +147,7 @@ export function CourseSectionCard({
                   color={getTypeColor(lesson.type)}
                 />
                 <ThemedText variant="caption" semantic="muted">
-                  {lesson.duration}
+                  ~{lesson.duration} minutes
                 </ThemedText>
               </View>
             </View>

@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getCourseById, getCourses } from "@/api/services/courseService";
-
 import type { Course } from "@/types/course";
+import type { CourseDetail } from "@/types/courseDetail";
 
 // Query keys (VERY IMPORTANT)
 export const courseKeys = {
@@ -18,7 +18,7 @@ export function useCoursesQuery() {
 }
 
 export function useCourseQuery(id: number) {
-  return useQuery<Course>({
+  return useQuery<CourseDetail>({
     queryKey: courseKeys.detail(id),
     queryFn: () => getCourseById(id),
     enabled: id > 0, // prevents API call if id is invalid

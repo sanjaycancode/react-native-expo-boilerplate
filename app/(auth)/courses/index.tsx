@@ -26,12 +26,8 @@ export default function CoursesScreen() {
 if (coursesQuery.isError) {
   return <ThemedText>Failed to load courses</ThemedText>;
 
-
-  
   
 }
-
-
   return (
     <>
       <Stack.Screen
