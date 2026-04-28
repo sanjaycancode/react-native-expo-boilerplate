@@ -6,8 +6,11 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { BorderRadius, Spacing } from "@/constants/Themes";
+
 import { useThemeColors } from "@/context/ThemeContext";
+
 import { Lesson } from "@/data/courses";
 
 interface CourseSectionCardProps {

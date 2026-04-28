@@ -1,3 +1,3 @@
 export * from "./auth";
-export * from "./qtype";
+export * from "./question";
 export * from "./todo";
