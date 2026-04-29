@@ -24,3 +24,24 @@ export interface GetQuestionTypesResponse {
   success: boolean;
   data: QuestionTypesBySection;
 }
+
+export interface Question {
+  id: number;
+  title: string;
+  section: QuestionSection;
+  difficulty: number | null;
+  has_done: boolean;
+  is_new: boolean;
+}
+
+export interface QuestionsMeta {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export interface GetQuestionsResponse {
+  success: boolean;
+  data: Question[];
+  meta: QuestionsMeta;
+}

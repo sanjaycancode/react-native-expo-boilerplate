@@ -37,7 +37,7 @@ function getProgressLabel(task: ManualPracticeTask) {
   return `${task.completedQuestionCount}/${task.questionCount} done`;
 }
 
-export function ManualPracticeTaskCard({
+export function  ManualPracticeTaskCard({
   task,
   onPress,
 }: ManualPracticeTaskCardProps) {

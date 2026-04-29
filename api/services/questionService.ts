@@ -1,10 +1,20 @@
 import { apiClient } from "@/api/client";
 
-import type { GetQuestionTypesResponse, QuestionSection } from "@/types";
+import type {
+  GetQuestionsResponse,
+  GetQuestionTypesResponse,
+  QuestionSection,
+} from "@/types";
 
-interface GetQuestionTypesParams {
+type GetQuestionTypesParams = {
   section?: QuestionSection;
-}
+};
+
+type GetQuestionsParams = {
+  questionType: string;
+  page?: number;
+  limit?: number;
+};
 
 export async function getQuestionTypes(
   params: GetQuestionTypesParams = {},
@@ -13,6 +23,22 @@ export async function getQuestionTypes(
     "/api/practice/question_types",
     {
       params,
+    },
+  );
+  return response.data;
+}
+
+export async function getQuestions(
+  params: GetQuestionsParams,
+): Promise<GetQuestionsResponse> {
+  const response = await apiClient.get<GetQuestionsResponse>(
+    "/api/practice/questions/",
+    {
+      params: {
+        question_type: params.questionType,
+        page: params.page,
+        limit: params.limit,
+      },
     },
   );
   return response.data;
