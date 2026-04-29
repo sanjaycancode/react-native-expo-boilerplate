@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { AboutCard } from "@/components/courses/AboutCard";
 import { CourseSectionCard } from "@/components/courses/CourseSectionCard";
@@ -19,6 +19,7 @@ export default function CourseDetail() {
   
   const styles = createStyles();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const router = useRouter();
 
   if (isLoading) {
   return (
@@ -157,7 +158,7 @@ if (error || !data) {
                   ? "Start Course"
                   : "Start Learning"
             }
-            onPress={() => {}}
+            onPress={() => router.push(`/courses/${courseId}/module`)}
             size="medium"
           />
         </View>
