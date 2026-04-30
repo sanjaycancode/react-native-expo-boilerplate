@@ -126,15 +126,14 @@ export default function ProfileScreen() {
         options={{
           title: "Profile",
           headerRight: () => (
-            <ThemedCard>
-              <TouchableOpacity
-                onPress={() => {
-                  router.push("/notification");
-                }}
-              >
-                <FontAwesome name="bell" size={18} color={theme.colors.text} />
-              </TouchableOpacity>
-            </ThemedCard>
+            <TouchableOpacity
+              style={styles.headerRightButton}
+              onPress={() => {
+                router.push("/notification");
+              }}
+            >
+              <FontAwesome name="bell" size={18} color={theme.colors.text} />
+            </TouchableOpacity>
           ),
         }}
       />
@@ -240,7 +239,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       gap: theme.spacing.sm + 2,
-      padding: theme.spacing.md,
+      padding: theme.spacing.lg,
     },
     content: {
       paddingTop: theme.spacing.sm,
@@ -286,6 +285,13 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       alignItems: "center",
       justifyContent: "center",
       gap: theme.spacing.sm,
+    },
+    headerRightButton: {
+      width: 36,
+      height: 36,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 18,
     },
   });
 
