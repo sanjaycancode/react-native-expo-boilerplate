@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 
 import { Controller, useForm } from "react-hook-form";
 
@@ -23,19 +24,27 @@ type LoginFormValues = {
 export default function LoginScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  const router = useRouter();
   const { signIn } = useAuth();
+  const [loginError, setLoginError] = useState<string | null>(null);
 
-  const { control, handleSubmit } = useForm<LoginFormValues>({
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = () => {
-    signIn();
-    router.replace("/(auth)/(tabs)");
+  const onSubmit = async (values: LoginFormValues) => {
+    try {
+      setLoginError(null);
+      await signIn(values);
+    } catch (error) {
+      setLoginError(getErrorMessage(error));
+    }
   };
 
   return (
@@ -66,6 +75,7 @@ export default function LoginScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
+                  editable={!isSubmitting}
                   {...formTextInputHelper({ field, fieldState })}
                   helperText={
                     fieldState.error?.message ??
@@ -90,18 +100,27 @@ export default function LoginScreen() {
                   label="Password"
                   placeholder="Enter your password"
                   secureTextEntry
+                  editable={!isSubmitting}
                   {...formTextInputHelper({ field, fieldState })}
                   helperText={
                     fieldState.error?.message ??
-                    "Authentication wiring will be added next."
+                    "Enter the password for your account."
                   }
                 />
               )}
             />
 
+            {loginError ? (
+              <ThemedText variant="bodySmall" semantic="error">
+                {loginError}
+              </ThemedText>
+            ) : null}
+
             <ThemedButton
               title="Sign In"
               variant="accent"
+              loading={isSubmitting}
+              disabled={isSubmitting}
               onPress={handleSubmit(onSubmit)}
             />
           </ThemedCard>
@@ -115,6 +134,17 @@ export default function LoginScreen() {
       </ThemedKeyboardAvoidingView>
     </>
   );
+}
+
+function getErrorMessage(error: unknown): string {
+  if (typeof error === "object" && error !== null && "message" in error) {
+    const { message } = error as { message?: unknown };
+    if (typeof message === "string") {
+      return message;
+    }
+  }
+
+  return "Unable to sign in.";
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>

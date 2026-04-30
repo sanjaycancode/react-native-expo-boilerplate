@@ -1,6 +1,10 @@
 import axios, { AxiosError } from "axios";
 
+import { getAsyncStorageItem } from "@/utils/asyncStorage";
+
 import { env } from "@/lib/config/env";
+
+export const ACCESS_TOKEN_KEY = "accessToken";
 
 export interface ApiError {
   message: string;
@@ -9,22 +13,74 @@ export interface ApiError {
   details?: unknown;
 }
 
+function extractMessageFromPayload(payload: unknown): string | undefined {
+  if (typeof payload === "string" && payload.trim().length > 0) {
+    return payload;
+  }
+
+  if (typeof payload !== "object" || payload === null) {
+    return undefined;
+  }
+
+  if ("message" in payload && typeof payload.message === "string") {
+    return payload.message;
+  }
+
+  if ("error" in payload && typeof payload.error === "string") {
+    return payload.error;
+  }
+
+  if ("errors" in payload && typeof payload.errors === "object") {
+    const errorValues = Object.values(
+      payload.errors as Record<string, unknown>,
+    );
+
+    for (const value of errorValues) {
+      if (typeof value === "string" && value.trim().length > 0) {
+        return value;
+      }
+
+      if (Array.isArray(value)) {
+        const firstString = value.find(
+          (item): item is string =>
+            typeof item === "string" && item.trim().length > 0,
+        );
+
+        if (firstString) {
+          return firstString;
+        }
+      }
+    }
+  }
+
+  return undefined;
+}
+
 export function normalizeApiError(error: unknown): ApiError {
   if (axios.isAxiosError(error)) {
     const axiosError = error as AxiosError<{
       message?: string;
+      error?: string;
       code?: string;
       details?: unknown;
+      errors?: Record<string, string | string[]>;
     }>;
+    const responseData = axiosError.response?.data;
+    const extractedMessage = extractMessageFromPayload(responseData);
+    const statusCode = axiosError.response?.status;
+
+    const message =
+      extractedMessage ??    
+      (statusCode === 401
+        ? "Invalid email or password."
+        : (axiosError.message ??
+          "Something went wrong while communicating with the server."));
 
     return {
-      message:
-        axiosError.response?.data?.message ??
-        axiosError.message ??
-        "Something went wrong while communicating with the server.",
-      statusCode: axiosError.response?.status,
-      code: axiosError.response?.data?.code,
-      details: axiosError.response?.data?.details,
+      message,
+      statusCode,
+      code: responseData?.code,
+      details: responseData?.details,
     };
   }
 
@@ -44,8 +100,13 @@ export const apiClient = axios.create({
   },
 });
 
-apiClient.interceptors.request.use((config) => {
-  // Reserved for auth token injection when authentication is added.
+apiClient.interceptors.request.use(async (config) => {
+  const token = await getAsyncStorageItem<string>(ACCESS_TOKEN_KEY);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    delete config.headers.Authorization;
+  }
   return config;
 });
 

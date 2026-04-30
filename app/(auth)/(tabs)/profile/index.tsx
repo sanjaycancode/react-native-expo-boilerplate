@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import {
+  Alert,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -12,6 +13,7 @@ import { Stack, useRouter } from "expo-router";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 import { Avatar } from "@/components/Avatar";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { TaskItem } from "@/components/TaskItem";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
@@ -20,23 +22,62 @@ import { ThemedText } from "@/components/ThemedText";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
 
-const PROFILE = {
-  name: "System User",
-  email: "systemuser@gmail.com",
-  avatarUri: null as string | null,
-};
-
 export default function ProfileScreen() {
   const { theme } = useTheme();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const [isLogoutConfirmationVisible, setIsLogoutConfirmationVisible] =
+    useState(false);
+  const { signOut, loggedInUser, refreshSession } = useAuth();
 
   const styles = createStyles(theme);
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 800);
+  const onRefresh = useCallback(async () => {
+    try {
+      setRefreshing(true);
+      await refreshSession();
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshSession]);
+
+  const PROFILE = {
+    name: loggedInUser
+      ? `${loggedInUser.firstName} ${loggedInUser.lastName}`.trim()
+      : "User",
+    email: loggedInUser?.email || "",
+    avatarUri: null as string | null,
+  };
+
+  const handleLogout = useCallback(async () => {
+    try {
+      setIsSigningOut(true);
+      const response = await signOut();
+
+      if (response.message) {
+        Alert.alert("Logout", response.message);
+      }
+    } catch (error) {
+      Alert.alert("Logout Error", getErrorMessage(error));
+    } finally {
+      setIsSigningOut(false);
+    }
+  }, [signOut, router]);
+
+  const openLogoutConfirmation = useCallback(() => {
+    setIsLogoutConfirmationVisible(true);
   }, []);
-  const { signOut } = useAuth();
+
+  const closeLogoutConfirmation = useCallback(() => {
+    if (!isSigningOut) {
+      setIsLogoutConfirmationVisible(false);
+    }
+  }, [isSigningOut]);
+
+  const confirmLogout = useCallback(async () => {
+    setIsLogoutConfirmationVisible(false);
+    await handleLogout();
+  }, [handleLogout]);
 
   const MENU_SECTIONS = [
     {
@@ -174,9 +215,22 @@ export default function ProfileScreen() {
           title="Logout"
           variant="accent"
           color="danger"
-          onPress={signOut}
+          loading={isSigningOut}
+          disabled={isSigningOut}
+          onPress={openLogoutConfirmation}
         />
       </ScrollView>
+      <ConfirmationModal
+        visible={isLogoutConfirmationVisible}
+        title="Log out?"
+        message="You will need to sign in again to access your account."
+        confirmLabel="Log out"
+        cancelLabel="Cancel"
+        confirmColor="danger"
+        loading={isSigningOut}
+        onConfirm={confirmLogout}
+        onCancel={closeLogoutConfirmation}
+      />
     </View>
   );
 }
@@ -227,4 +281,21 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     sectionList: {
       gap: theme.spacing.sm,
     },
+    refreshStatus: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: theme.spacing.sm,
+    },
   });
+
+function getErrorMessage(error: unknown): string {
+  if (typeof error === "object" && error !== null && "message" in error) {
+    const { message } = error as { message?: unknown };
+    if (typeof message === "string") {
+      return message;
+    }
+  }
+
+  return "Unable to log out.";
+}

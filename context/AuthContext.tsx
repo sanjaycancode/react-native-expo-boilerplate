@@ -1,42 +1,103 @@
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import type { AuthenticatedUser } from "@/types";
+import { ACCESS_TOKEN_KEY, login, logout } from "@/api";
+
+import { getAsyncStorageItem, setAsyncStorageItem } from "@/utils/asyncStorage";
+
+import type {
+  AuthenticatedUser,
+  AuthResponse,
+  AuthSession,
+  LoginPayload,
+  LogoutResponse,
+} from "@/types";
 
 interface AuthContextValue {
+  session: AuthSession | null;
   loggedInUser: AuthenticatedUser | null;
   isAuthenticated: boolean;
   isInitializing: boolean;
-  signIn: () => void;
-  signOut: () => void;
+  refreshSession: () => Promise<void>;
+  signIn: (payload: LoginPayload) => Promise<AuthResponse>;
+  signOut: () => Promise<LogoutResponse>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const mockAuthenticatedUser: AuthenticatedUser = {
-  id: "demo-user",
-  email: "demo@englishcharlie.app",
-  firstName: "Demo",
-  lastName: "User",
-};
+const AUTH_SESSION_STORAGE_KEY = "auth_session";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [loggedInUser, setLoggedInUser] = useState<AuthenticatedUser | null>(
-    null,
-  );
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  const refreshSession = useCallback(async () => {
+    const savedSession = await getAsyncStorageItem<AuthSession>(
+      AUTH_SESSION_STORAGE_KEY,
+    );
+
+    if (savedSession?.user) {
+      setSession(savedSession);
+      return;
+    }
+
+    setSession(null);
+  }, []);
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        await refreshSession();
+      } catch {
+        // Silently fail on init
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    initializeAuth();
+  }, [refreshSession]);
+
+  const signIn = useCallback(async (payload: LoginPayload) => {
+    const response = await login(payload);
+
+    const nextSession: AuthSession = {
+      user: response.user,
+      accessToken: response.accessToken,
+    };
+
+    await setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, nextSession);
+    await setAsyncStorageItem(ACCESS_TOKEN_KEY, response.accessToken ?? null);
+
+    setSession(nextSession);
+    return response;
+  }, []);
+
+  const signOut = useCallback(async () => {
+    const response = await logout();
+    await setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, null);
+    await setAsyncStorageItem(ACCESS_TOKEN_KEY, null);
+    setSession(null);
+    return response;
+  }, []);
 
   const value = useMemo<AuthContextValue>(
     () => ({
-      loggedInUser,
-      isAuthenticated: loggedInUser !== null,
-      isInitializing: false,
-      signIn: () => {
-        setLoggedInUser(mockAuthenticatedUser);
-      },
-      signOut: () => {
-        setLoggedInUser(null);
-      },
+      session,
+      loggedInUser: session?.user ?? null,
+      isAuthenticated: session !== null,
+      isInitializing,
+      refreshSession,
+      signIn,
+      signOut,
     }),
-    [loggedInUser],
+    [isInitializing, refreshSession, session, signIn, signOut],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
