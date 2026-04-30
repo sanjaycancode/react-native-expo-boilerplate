@@ -1,8 +1,10 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Stack, useLocalSearchParams } from "expo-router";
 
 import { InfoBadge } from "@/components/InfoBadge";
+import { SearchBar } from "@/components/SearchBar";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedFlatList } from "@/components/ThemedFlatList";
@@ -12,6 +14,7 @@ import { useTheme } from "@/context/ThemeContext";
 
 import { getErrorMessage } from "@/utils";
 
+import { useDebouncedValue } from "@/hooks";
 import { useQuestionsInfiniteQuery } from "@/hooks/api";
 import type { Question } from "@/types";
 
@@ -34,14 +37,29 @@ export default function ManualPracticeQuestionsScreen() {
   const styles = createStyles(theme);
   const { questionTypeCode, questionTypeLabel } =
     useLocalSearchParams<QuestionListParams>();
+  const [search, setSearch] = useState("");
+  const [settledSearch, setSettledSearch] = useState("");
+  const debouncedSearch = useDebouncedValue(search, 300);
   const resolvedQuestionTypeCode =
     typeof questionTypeCode === "string" && questionTypeCode.length > 0
       ? questionTypeCode
       : undefined;
-  const questionsQuery = useQuestionsInfiniteQuery(
-    resolvedQuestionTypeCode,
-    QUESTIONS_PAGE_SIZE,
-  );
+  const questionsQuery = useQuestionsInfiniteQuery({
+    questionType: resolvedQuestionTypeCode,
+    search: debouncedSearch,
+    limit: QUESTIONS_PAGE_SIZE,
+  });
+  const normalizedSearch = debouncedSearch.trim();
+  const isSearchLoading =
+    normalizedSearch !== settledSearch &&
+    questionsQuery.isFetching &&
+    !questionsQuery.isFetchingNextPage;
+
+  useEffect(() => {
+    if (!questionsQuery.isFetching) {
+      setSettledSearch(normalizedSearch);
+    }
+  }, [normalizedSearch, questionsQuery.isFetching]);
 
   const resolvedTitle =
     typeof questionTypeLabel === "string" && questionTypeLabel.length > 0
@@ -121,10 +139,27 @@ export default function ManualPracticeQuestionsScreen() {
             void questionsQuery.fetchNextPage();
           }}
           error={errorMessage}
-          emptyMessage="No questions available for this question type yet."
+          emptyMessage={
+            search.trim().length > 0
+              ? "No questions matched your search."
+              : "No questions available for this question type yet."
+          }
           contentContainerStyle={styles.listContent}
           style={styles.list}
           onEndReachedThreshold={0.3}
+          ListHeaderComponent={
+            <View style={styles.header}>
+              <SearchBar
+                value={search}
+                onChangeText={setSearch}
+                placeholder="Search questions..."
+                onClear={() => setSearch("")}
+                isLoading={isSearchLoading}
+                accessibilityLabel="Search questions"
+                accessibilityHint="Search by question id or title"
+              />
+            </View>
+          }
         />
       </View>
     </>
@@ -139,7 +174,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       padding: theme.spacing.md,
     },
     header: {
-      gap: theme.spacing.xs,
+      gap: theme.spacing.md,
+      marginBottom: theme.spacing.md,
     },
     list: {
       flex: 1,

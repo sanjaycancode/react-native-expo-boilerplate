@@ -7,12 +7,18 @@ import {
 import { getQuestions, getQuestionTypes } from "@/api/services";
 
 import type {
+  GetQuestionsParams,
   GetQuestionsResponse,
   GetQuestionTypesResponse,
   QuestionSection,
 } from "@/types";
 
-export type { GetQuestionsResponse, GetQuestionTypesResponse, QuestionSection };
+export type {
+  GetQuestionsParams,
+  GetQuestionsResponse,
+  GetQuestionTypesResponse,
+  QuestionSection,
+};
 
 export const questionKeys = {
   all: ["questions"] as const,
@@ -22,10 +28,18 @@ export const questionKeys = {
       ? ([...questionKeys.types(), section] as const)
       : questionKeys.types(),
   list: () => [...questionKeys.all, "list"] as const,
-  listByType: (questionType?: string, limit?: number) =>
-    questionType
-      ? ([...questionKeys.list(), questionType, limit] as const)
-      : questionKeys.list(),
+  listByFilters: (params: Partial<GetQuestionsParams> = {}) =>
+    [
+      ...questionKeys.list(),
+      params.questionType ?? null,
+      params.questionTypes?.join(",") ?? null,
+      params.search?.trim() ?? null,
+      params.difficultyMin ?? null,
+      params.difficultyMax ?? null,
+      params.sortBy ?? null,
+      params.sortDir ?? null,
+      params.limit ?? DEFAULT_QUESTIONS_LIMIT,
+    ] as const,
 };
 
 const DEFAULT_QUESTIONS_LIMIT = 10;
@@ -60,22 +74,31 @@ export function useQuestionTypesQuery(section?: QuestionSection) {
 }
 
 export function useQuestionsInfiniteQuery(
-  questionType?: string,
-  limit = DEFAULT_QUESTIONS_LIMIT,
+  params: Partial<GetQuestionsParams> = {},
 ) {
   const queryClient = useQueryClient();
-  const queryKey = questionKeys.listByType(questionType, limit);
+  const normalizedParams: GetQuestionsParams = {
+    ...params,
+    search:
+      typeof params.search === "string" && params.search.trim().length > 0
+        ? params.search.trim()
+        : undefined,
+    limit: params.limit ?? DEFAULT_QUESTIONS_LIMIT,
+  };
+  const queryKey = questionKeys.listByFilters(normalizedParams);
   const query = useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) =>
       getQuestions({
-        questionType: questionType ?? "",
+        ...normalizedParams,
         page: pageParam,
-        limit,
       }),
     initialPageParam: 1,
     getNextPageParam: getNextQuestionsPageParam,
-    enabled: Boolean(questionType),
+    enabled: Boolean(
+      normalizedParams.questionType ||
+        (normalizedParams.questionTypes?.length ?? 0) > 0,
+    ),
   });
 
   async function refreshFirstPage() {
@@ -87,6 +110,7 @@ export function useQuestionsInfiniteQuery(
 
   return {
     ...query,
+    queryKey,
     refreshFirstPage,
   };
 }

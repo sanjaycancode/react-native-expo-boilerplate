@@ -45,3 +45,18 @@ export interface GetQuestionsResponse {
   data: Question[];
   meta: QuestionsMeta;
 }
+
+export type QuestionSortBy = "id" | "difficulty";
+export type QuestionSortDir = "asc" | "desc";
+
+export interface GetQuestionsParams {
+  questionType?: string;
+  questionTypes?: string[];
+  search?: string;
+  difficultyMin?: number;
+  difficultyMax?: number;
+  sortBy?: QuestionSortBy;
+  sortDir?: QuestionSortDir;
+  page?: number;
+  limit?: number;
+}
