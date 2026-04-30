@@ -4,7 +4,10 @@ import { StyleSheet, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 
 import { InfoBadge } from "@/components/InfoBadge";
-import { SearchBar } from "@/components/SearchBar";
+import {
+  type ManualPracticeQuestionDifficulty,
+  QuestionsFilter,
+} from "@/components/manual_practice";
 import { StatusBadge } from "@/components/StatusBadge";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedFlatList } from "@/components/ThemedFlatList";
@@ -16,7 +19,7 @@ import { getErrorMessage } from "@/utils";
 
 import { useDebouncedValue } from "@/hooks";
 import { useQuestionsInfiniteQuery } from "@/hooks/api";
-import type { Question } from "@/types";
+import type { Question, QuestionSortDir } from "@/types";
 
 type QuestionListParams = {
   section?: string;
@@ -32,6 +35,20 @@ function getQuestionTitle(question: Question) {
     : `Question #${question.id}`;
 }
 
+function getDifficultyRange(difficulty: ManualPracticeQuestionDifficulty) {
+  switch (difficulty) {
+    case "easy":
+      return { min: 1, max: 3 };
+    case "medium":
+      return { min: 4, max: 7 };
+    case "hard":
+      return { min: 8, max: 10 };
+    case "all":
+    default:
+      return { min: undefined, max: undefined };
+  }
+}
+
 export default function ManualPracticeQuestionsScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -39,17 +56,27 @@ export default function ManualPracticeQuestionsScreen() {
     useLocalSearchParams<QuestionListParams>();
   const [search, setSearch] = useState("");
   const [settledSearch, setSettledSearch] = useState("");
+  const [difficulty, setDifficulty] =
+    useState<ManualPracticeQuestionDifficulty>("all");
+  const [sortDir, setSortDir] = useState<QuestionSortDir>("asc");
   const debouncedSearch = useDebouncedValue(search, 300);
   const resolvedQuestionTypeCode =
     typeof questionTypeCode === "string" && questionTypeCode.length > 0
       ? questionTypeCode
       : undefined;
+  const difficultyRange = getDifficultyRange(difficulty);
   const questionsQuery = useQuestionsInfiniteQuery({
     questionType: resolvedQuestionTypeCode,
     search: debouncedSearch,
+    difficultyMin: difficultyRange.min,
+    difficultyMax: difficultyRange.max,
+    sortBy: difficulty === "all" ? undefined : "difficulty",
+    sortDir: difficulty === "all" ? undefined : sortDir,
     limit: QUESTIONS_PAGE_SIZE,
   });
   const normalizedSearch = debouncedSearch.trim();
+  const hasActiveFilters = difficulty !== "all";
+  const hasActiveControls = normalizedSearch.length > 0 || hasActiveFilters;
   const isSearchLoading =
     normalizedSearch !== settledSearch &&
     questionsQuery.isFetching &&
@@ -72,6 +99,22 @@ export default function ManualPracticeQuestionsScreen() {
     : questionsQuery.isError
       ? getErrorMessage(questionsQuery.error)
       : null;
+
+  function handleDifficultyPress(nextDifficulty: ManualPracticeQuestionDifficulty) {
+    if (nextDifficulty === "all") {
+      setDifficulty("all");
+      setSortDir("asc");
+      return;
+    }
+
+    if (difficulty !== nextDifficulty) {
+      setDifficulty(nextDifficulty);
+      setSortDir("asc");
+      return;
+    }
+
+    setSortDir((currentValue) => (currentValue === "asc" ? "desc" : "asc"));
+  }
 
   function renderQuestionItem({ item }: { item: Question }) {
     return (
@@ -118,6 +161,24 @@ export default function ManualPracticeQuestionsScreen() {
       />
 
       <View style={styles.container}>
+        <View style={styles.header}>
+          <QuestionsFilter
+            search={search}
+            onChangeSearch={setSearch}
+            onClearSearch={() => setSearch("")}
+            isSearchLoading={isSearchLoading}
+            difficulty={difficulty}
+            sortDir={sortDir}
+            onPressDifficulty={handleDifficultyPress}
+            onReset={() => {
+              setSearch("");
+              setDifficulty("all");
+              setSortDir("asc");
+            }}
+            showReset={hasActiveControls}
+          />
+        </View>
+
         <ThemedFlatList
           data={questions}
           renderItem={renderQuestionItem}
@@ -140,26 +201,13 @@ export default function ManualPracticeQuestionsScreen() {
           }}
           error={errorMessage}
           emptyMessage={
-            search.trim().length > 0
-              ? "No questions matched your search."
+            hasActiveControls
+              ? "No questions matched your current filters."
               : "No questions available for this question type yet."
           }
           contentContainerStyle={styles.listContent}
           style={styles.list}
           onEndReachedThreshold={0.3}
-          ListHeaderComponent={
-            <View style={styles.header}>
-              <SearchBar
-                value={search}
-                onChangeText={setSearch}
-                placeholder="Search questions..."
-                onClear={() => setSearch("")}
-                isLoading={isSearchLoading}
-                accessibilityLabel="Search questions"
-                accessibilityHint="Search by question id or title"
-              />
-            </View>
-          }
         />
       </View>
     </>
@@ -174,8 +222,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       padding: theme.spacing.md,
     },
     header: {
-      gap: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+      gap: theme.spacing.sm,
     },
     list: {
       flex: 1,
