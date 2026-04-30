@@ -67,7 +67,7 @@ if (error || !data) {
       <Stack.Screen options={{ title: courseData.title }} />
       <ScrollView style={styles.container}>
         <Image
-          // source={{ uri: courseData.image }}
+          source={{ uri: courseData.image }}
           style={styles.image}
           resizeMode="cover"
         />
@@ -128,7 +128,7 @@ if (error || !data) {
           />
 
           <ThemedText variant="heading6" semantic="default">
-            Course Content
+            Curriculum
           </ThemedText>
 
           {courseData.modules.map((module, index) => (

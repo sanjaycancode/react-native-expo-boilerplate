@@ -34,17 +34,20 @@ export function ModuleCard({
   return (
     <ThemedCard variant="outlined" style={styles.card}>
       <View style={styles.titleRow}>
-        <FontAwesome name="book" size={18} color={theme.colors.primary} />
+        <View style={styles.iconWrapper}>
+          <FontAwesome name="book" size={18} color={theme.colors.primary} />
+        </View>
         <ThemedText
           variant="heading6"
           semantic={isComplete ? "success" : "default"}
+          style={styles.titleText}
         >
           Module {moduleNumber}: {title}
         </ThemedText>
       </View>
 
       <ThemedText variant="caption" semantic="muted">
-        {totalLessons} lessons · {completedLessons}/{totalLessons} completed
+        {totalLessons} lessons
       </ThemedText>
 
       <ThemedText variant="bodySmall" semantic="muted">
@@ -80,8 +83,14 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     titleRow: {
       flexDirection: "row",
-      alignItems: "center",
+      alignItems: "flex-start",
       gap: theme.spacing.sm,
+    },
+    iconWrapper: {
+      paddingTop: 3,
+    },
+    titleText: {
+      flex: 1,
     },
     progressSection: {
       gap: theme.spacing.xs,

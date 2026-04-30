@@ -4,6 +4,8 @@ export interface Lesson {
   type: string;
   is_completed: boolean;
   duration_minutes: number;
+  embed_url: string;
+  body_text: string;
 }
 
 export interface Module {

@@ -12,8 +12,8 @@ export async function getCourses(): Promise<Course[]>  {
 }
 
 export async function getCourseById(id: number):Promise<CourseDetail>{
-  const response = await apiClient.get<CourseDetail>(`/courses/${id}/`);
-  return response.data;
+  const response = await apiClient.get<ApiResponse<CourseDetail>>(`/courses/${id}/`);
+  return response.data.data;
 }
 
 

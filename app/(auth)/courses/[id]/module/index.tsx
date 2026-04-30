@@ -64,7 +64,7 @@ export default function CourseModulesScreen() {
                 totalLessons={totalLessons}
                 completedLessons={completedLessons}
                 onPress={() =>
-                  router.push(`/courses/${courseId}/module/lesson`)
+                  router.push(`/courses/${courseId}/module/lesson?moduleId=${module.id}`)
                 }
               />
             );

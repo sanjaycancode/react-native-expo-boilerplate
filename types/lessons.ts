@@ -4,4 +4,6 @@ export interface Lesson {
   type: string;
   completed: boolean;
   duration: number;
+  embed_url: string;
+  body_text: string;
 }
