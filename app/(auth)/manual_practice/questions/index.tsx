@@ -136,7 +136,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       gap: theme.spacing.md,
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
     },
     header: {
       gap: theme.spacing.xs,

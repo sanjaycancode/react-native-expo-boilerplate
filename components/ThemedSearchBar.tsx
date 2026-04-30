@@ -1,48 +1,33 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-import { Ionicons } from "@expo/vector-icons";
+import type {
+  ReturnKeyTypeOptions,
+  StyleProp,
+  TextInput,
+  TextStyle,
+  ViewStyle,
+} from "react-native";
 
-import {
-  ThemedTextInput,
-  type ThemedTextInputProps,
-} from "@/components/ThemedTextInput";
+import { SearchBar } from "@/components/SearchBar";
 
-export type ThemedSearchBarProps = Omit<
-  ThemedTextInputProps,
-  "label" | "startIcon" | "endIcon" | "onEndIconPress"
-> & {
+export interface ThemedSearchBarProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder?: string;
+  onSubmit?: () => void;
   onClear?: () => void;
-};
-
-export function ThemedSearchBar({
-  value,
-  onChangeText,
-  placeholder = "Search...",
-  onClear,
-  ...props
-}: ThemedSearchBarProps) {
-  const showClear = typeof value === "string" && value.length > 0;
-
-  return (
-    <ThemedTextInput
-      value={value}
-      onChangeText={onChangeText}
-      placeholder={placeholder}
-      variant="accent"
-      color="primary"
-      startIcon={<Ionicons name="search-outline" size={18} />}
-      endIcon={
-        showClear ? <Ionicons name="close-circle" size={18} /> : undefined
-      }
-      onEndIconPress={
-        showClear
-          ? () => {
-              if (onClear) onClear();
-              else onChangeText?.("");
-            }
-          : undefined
-      }
-      {...props}
-    />
-  );
+  isLoading?: boolean;
+  disabled?: boolean;
+  autoFocus?: boolean;
+  containerStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  returnKeyType?: ReturnKeyTypeOptions;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 }
+
+export const ThemedSearchBar = forwardRef<TextInput, ThemedSearchBarProps>(
+  (props, ref) => <SearchBar ref={ref} {...props} />,
+);
+
+ThemedSearchBar.displayName = "ThemedSearchBar";
