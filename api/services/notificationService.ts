@@ -1,6 +1,10 @@
 import { apiClient } from "@/api/client";
 
-import type { ApiNotification, Notification } from "@/types/notification";
+import type {
+  ApiNotification,
+  Notification,
+  NotificationTab,
+} from "@/types/notification";
 
 type ApiNotificationsResponse =
   | ApiNotification[]
@@ -17,10 +21,12 @@ type ApiNotificationsResponse =
     };
 
 const NOTIFICATIONS_ENDPOINT = "/notifications";
+const NOTIFICATIONS_READ_ALL_ENDPOINT = "/notifications/read-all";
+const NOTIFICATIONS_READ_ENDPOINT = (id: string) => `/notifications/${id}/read`;
 
 function isWrappedNotificationsResponse(
   payload: ApiNotificationsResponse,
-): payload is {   
+): payload is {
   success?: boolean;
   data?:
     | ApiNotification[]
@@ -164,14 +170,34 @@ function normalizeNotificationsResponse(
   });
 }
 
-export async function getNotifications(page = 1, limit = 20) {
+export type NotificationQueryTab = "all" | NotificationTab;
+
+export async function getNotificationsByTab(
+  tab: NotificationQueryTab,
+  page = 1,
+  limit = 20,
+) {
+  const params: Record<string, string | number> = {
+    page,
+    limit,
+  };
+
+  if (tab === "unread") {
+    params.status = "unread";
+  }
+
+  if (tab === "booking") {
+    params.type = "booking";
+  }
+
+  if (tab === "result") {
+    params.type = "result";
+  }
+
   const response = await apiClient.get<ApiNotificationsResponse>(
     NOTIFICATIONS_ENDPOINT,
     {
-      params: {
-        page,
-        limit,
-      },
+      params,
     },
   );
 
@@ -182,4 +208,14 @@ export async function getNotifications(page = 1, limit = 20) {
   }
 
   return normalizeNotificationsResponse(response.data);
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  await apiClient.post(NOTIFICATIONS_READ_ALL_ENDPOINT);
+}
+
+export async function markNotificationRead(
+  notificationId: string,
+): Promise<void> {
+  await apiClient.post(NOTIFICATIONS_READ_ENDPOINT(notificationId));
 }

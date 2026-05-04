@@ -2,6 +2,7 @@ import React from "react";
 import {
   ActivityIndicator,
   Alert,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -60,10 +61,20 @@ export default function SettingsScreen() {
   const styles = createStyles(theme);
   const preferencesQuery = useNotificationPreferencesQuery();
   const updatePreferencesMutation = useUpdateNotificationPreferencesMutation();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [settings, setSettings] = React.useState<NotificationPreferences>(
     DEFAULT_NOTIFICATION_PREFERENCES,
   );
   const notificationControlsDisabled = preferencesQuery.isLoading;
+
+  const handleRefresh = React.useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await preferencesQuery.refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [preferencesQuery]);
 
   React.useEffect(() => {
     if (preferencesQuery.data && !updatePreferencesMutation.isPending) {
@@ -214,6 +225,13 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         style={styles.scroll}
         contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary}
+          />
+        }
       >
         <View>
           <ThemedText variant="heading3">Settings</ThemedText>
@@ -424,9 +442,7 @@ function getErrorMessage(error: unknown): string {
 
 function normalizeTimeInput(value: string): string | null {
   const trimmedValue = value.trim();
-  const match = /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/.exec(
-    trimmedValue,
-  );
+  const match = /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/.exec(trimmedValue);
 
   if (!match) return null;
 

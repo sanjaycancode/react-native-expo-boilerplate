@@ -7,11 +7,12 @@ import {
   View,
 } from "react-native";
 
-import { Link, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { IconBadge } from "@/components/IconBadge";
+import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -23,7 +24,10 @@ import type { Notification, NotificationKind } from "@/types/notification";
 
 import { formatTimeAgo } from "@/utils";
 
-import { useNotificationsQuery } from "@/hooks/api/useNotificationApi";
+import {
+  useMarkAllNotificationsReadMutation,
+  useNotificationsQuery,
+} from "@/hooks/api/useNotificationApi";
 
 export default function NotificationScreen() {
   const { theme } = useTheme();
@@ -31,28 +35,30 @@ export default function NotificationScreen() {
 
   type TabKey = "all" | "unread" | "booking" | "result";
   const [activeTab, setActiveTab] = useState<TabKey>("all");
-  const notificationsQuery = useNotificationsQuery();
+  const router = useRouter();
+  const notificationsQuery = useNotificationsQuery(activeTab);
+  const allNotificationsQuery = useNotificationsQuery("all");
+  const markAllReadMutation = useMarkAllNotificationsReadMutation();
 
   const notifications: Notification[] = notificationsQuery.data ?? [];
+  const allNotifications: Notification[] = allNotificationsQuery.data ?? [];
 
   const unreadCount = useMemo(
-    () => notifications.filter((n) => n.unread).length,
-    [notifications],
+    () => allNotifications.filter((n) => n.unread).length,
+    [allNotifications],
   );
 
   const bookingCount = useMemo(
-    () => notifications.filter((n) => n.tab === "booking").length,
-    [notifications],
+    () => allNotifications.filter((n) => n.tab === "booking").length,
+    [allNotifications],
   );
-
-  const filtered = useMemo(() => {
-    if (activeTab === "all") return notifications;
-    return notifications.filter((n) => n.tab === activeTab);
-  }, [notifications, activeTab]);
 
   const onRefresh = useCallback(() => {
     void notificationsQuery.refetch();
-  }, [notificationsQuery]);
+    if (activeTab !== "all") {
+      void allNotificationsQuery.refetch();
+    }
+  }, [activeTab, allNotificationsQuery, notificationsQuery]);
 
   const tabKeys = useMemo(
     () => ["all", "unread", "booking", "result"] as const,
@@ -95,7 +101,10 @@ export default function NotificationScreen() {
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl
-            refreshing={notificationsQuery.isRefetching}
+            refreshing={
+              notificationsQuery.isRefetching ||
+              allNotificationsQuery.isRefetching
+            }
             onRefresh={onRefresh}
             tintColor={theme.colors.primary}
           />
@@ -116,12 +125,21 @@ export default function NotificationScreen() {
               color={theme.colors.textSecondary}
             />
             <ThemedText variant="bodySmall" style={styles.sectionTitle}>
-              Recent Notifications
+              Recent
             </ThemedText>
           </View>
+          <ThemedButton
+            title="Mark all read"
+            size="small"
+            variant="outlined"
+            color="primary"
+            startIcon={<Ionicons name="checkmark-done-outline" />}
+            loading={markAllReadMutation.isPending}
+            onPress={() => markAllReadMutation.mutate()}
+          />
         </View>
 
-        {!notificationsQuery.isLoading && filtered.length === 0 ? (
+        {!notificationsQuery.isLoading && notifications.length === 0 ? (
           <ThemedText
             variant="bodySmall"
             semantic="muted"
@@ -131,51 +149,53 @@ export default function NotificationScreen() {
           </ThemedText>
         ) : null}
 
-        {filtered.map((item) => {
+        {notifications.map((item) => {
           const config = notificationConfig[item.kind];
           const iconColor = resolveIconColor(item.kind);
 
           return (
             <View key={item.id} style={styles.itemWrap}>
-              <Link href={`/notification/${item.id}/detail`} asChild>
-                <TouchableOpacity activeOpacity={0.86} style={styles.itemCard}>
-                  <IconBadge
-                    name={config.icon}
-                    size={18}
-                    color={iconColor}
-                    badgeSize={theme.spacing.xl + theme.spacing.xs}
-                    borderRadius={theme.borderRadius.medium}
+              <TouchableOpacity
+                activeOpacity={0.86}
+                style={styles.itemCard}
+                onPress={() => router.push(`/notification/${item.id}/detail`)}
+              >
+                <IconBadge
+                  name={config.icon}
+                  size={18}
+                  color={iconColor}
+                  badgeSize={theme.spacing.xl + theme.spacing.xs}
+                  borderRadius={theme.borderRadius.medium}
+                />
+
+                <View style={styles.itemCopy}>
+                  <ThemedText
+                    variant="bodySmall"
+                    style={styles.itemTitle}
+                    numberOfLines={1}
+                  >
+                    {item.title}
+                  </ThemedText>
+                  <ThemedText
+                    variant="caption"
+                    style={styles.itemSubtitle}
+                    numberOfLines={1}
+                  >
+                    {item.description}
+                  </ThemedText>
+                  <ThemedText variant="caption" semantic="muted">
+                    {formatTimeAgo(item.timeAgo)}
+                  </ThemedText>
+                </View>
+
+                <View>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color={theme.colors.textSecondary}
                   />
-
-                  <View style={styles.itemCopy}>
-                    <ThemedText
-                      variant="bodySmall"
-                      style={styles.itemTitle}
-                      numberOfLines={1}
-                    >
-                      {item.title}
-                    </ThemedText>
-                    <ThemedText
-                      variant="caption"
-                      style={styles.itemSubtitle}
-                      numberOfLines={1}
-                    >
-                      {item.description}
-                    </ThemedText>
-                    <ThemedText variant="caption" semantic="muted">
-                      {formatTimeAgo(item.timeAgo)}
-                    </ThemedText>
-                  </View>
-
-                  <View>
-                    <Ionicons
-                      name="chevron-forward"
-                      size={20}
-                      color={theme.colors.textSecondary}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </Link>
+                </View>
+              </TouchableOpacity>
             </View>
           );
         })}
