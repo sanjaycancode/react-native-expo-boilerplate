@@ -223,9 +223,8 @@ export default function ManualPracticeScreen() {
                     }
                     onPressTask={(task) => {
                       router.push({
-                        pathname: "/manual_practice/questions",
+                        pathname: "/manual_practice/questions/[questionTypeCode]",
                         params: {
-                          section: section.type,
                           questionTypeCode: task.id,
                           questionTypeLabel: task.title,
                         },

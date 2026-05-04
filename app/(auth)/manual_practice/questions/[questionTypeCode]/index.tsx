@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { InfoBadge } from "@/components/InfoBadge";
 import {
@@ -22,7 +22,6 @@ import { useQuestionsInfiniteQuery } from "@/hooks/api";
 import type { Question, QuestionSortDir } from "@/types";
 
 type QuestionListParams = {
-  section?: string;
   questionTypeCode?: string;
   questionTypeLabel?: string;
 };
@@ -52,6 +51,7 @@ function getDifficultyRange(difficulty: ManualPracticeQuestionDifficulty) {
 export default function ManualPracticeQuestionsScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
+  const router = useRouter();
   const { questionTypeCode, questionTypeLabel } =
     useLocalSearchParams<QuestionListParams>();
   const [search, setSearch] = useState("");
@@ -100,7 +100,9 @@ export default function ManualPracticeQuestionsScreen() {
       ? getErrorMessage(questionsQuery.error)
       : null;
 
-  function handleDifficultyPress(nextDifficulty: ManualPracticeQuestionDifficulty) {
+  function handleDifficultyPress(
+    nextDifficulty: ManualPracticeQuestionDifficulty,
+  ) {
     if (nextDifficulty === "all") {
       setDifficulty("all");
       setSortDir("asc");
@@ -118,35 +120,63 @@ export default function ManualPracticeQuestionsScreen() {
 
   function renderQuestionItem({ item }: { item: Question }) {
     return (
-      <ThemedCard variant="outlined" style={styles.questionCard}>
-        <View style={styles.content}>
-          <View style={styles.headerRow}>
-            <ThemedText variant="body" style={styles.questionTitle}>
-              {getQuestionTitle(item)}
-            </ThemedText>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`Open ${getQuestionTitle(item)}`}
+        onPress={() => {
+          router.push({
+            pathname:
+              "/manual_practice/questions/[questionTypeCode]/[questionId]",
+            params: {
+              questionTypeCode: resolvedQuestionTypeCode || "",
+              questionId: item.id.toString(),
+              questionTypeLabel:
+                typeof questionTypeLabel === "string"
+                  ? questionTypeLabel
+                  : undefined,
+              questionTitle: getQuestionTitle(item),
+            },
+          });
+        }}
+        style={({ pressed }) => [
+          styles.questionPressable,
+          pressed ? styles.questionPressablePressed : null,
+        ]}
+      >
+        <ThemedCard variant="outlined" style={styles.questionCard}>
+          <View style={styles.content}>
+            <View style={styles.headerRow}>
+              <ThemedText variant="body" style={styles.questionTitle}>
+                {getQuestionTitle(item)}
+              </ThemedText>
 
-            <View style={styles.statusBadges}>
-              {item.is_new ? (
-                <StatusBadge label="New" variant="primary" />
-              ) : null}
-              {item.has_done ? (
-                <StatusBadge label="Done" variant="neutral" />
-              ) : null}
+              <View style={styles.statusBadges}>
+                {item.is_new ? (
+                  <StatusBadge label="New" variant="primary" />
+                ) : null}
+                {item.has_done ? (
+                  <StatusBadge label="Done" variant="neutral" />
+                ) : null}
+              </View>
             </View>
-          </View>
 
-          <View style={styles.metaRow}>
-            <InfoBadge label={`#${item.id}`} tone="default" bordered={false} />
-            {item.difficulty ? (
+            <View style={styles.metaRow}>
               <InfoBadge
-                label={`Difficulty ${item.difficulty}`}
+                label={`#${item.id}`}
                 tone="default"
                 bordered={false}
               />
-            ) : null}
+              {item.difficulty ? (
+                <InfoBadge
+                  label={`Difficulty ${item.difficulty}`}
+                  tone="default"
+                  bordered={false}
+                />
+              ) : null}
+            </View>
           </View>
-        </View>
-      </ThemedCard>
+        </ThemedCard>
+      </Pressable>
     );
   }
 
@@ -233,6 +263,12 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     questionCard: {
       padding: theme.spacing.md,
+    },
+    questionPressable: {
+      borderRadius: theme.borderRadius.large,
+    },
+    questionPressablePressed: {
+      opacity: 0.72,
     },
     content: {
       gap: theme.spacing.sm,
