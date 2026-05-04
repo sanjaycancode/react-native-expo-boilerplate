@@ -7,6 +7,7 @@ import { CourseCard } from "@/components/courses/CourseCard";
 import { HeaderBackButton } from "@/components/HeaderBackButton";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
+
 import { Spacing } from "@/constants/Themes";
 
 import { useCoursesQuery } from "@/hooks/useCourseApi";
