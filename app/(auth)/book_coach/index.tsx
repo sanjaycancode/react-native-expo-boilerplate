@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -10,15 +10,34 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
 
+import { useCoachingTeachersQuery } from "@/hooks/api";
+
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 type Coach = {
   id: string;
-  name: string;
-  title: string;
-  pricePerSession: number;
-  nextAvailable: string;
+  name?: string | null;
+  title?: string | null;
 };
+
+function useDebouncedValue<T>(value: T, delayMs: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handle = setTimeout(() => setDebouncedValue(value), delayMs);
+    return () => clearTimeout(handle);
+  }, [value, delayMs]);
+
+  return debouncedValue;
+}
+
+function getErrorMessage(error: unknown) {
+  if (error && typeof error === "object" && "message" in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === "string" && message.trim()) return message;
+  }
+  return "Please try again.";
+}
 
 export default function BookCoachScreen() {
   const { theme } = useTheme();
@@ -27,77 +46,30 @@ export default function BookCoachScreen() {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
+  const debouncedQuery = useDebouncedValue(query, 300);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const coaches: Coach[] = useMemo(
-    () => [
-      {
-        id: "1",
-        name: "Sophia Lee",
-        title: "IELTS Speaking ● Pronunciation",
-        pricePerSession: 15.75,
-        nextAvailable: "Today ● 6:30 PM",
-      },
-      {
-        id: "2",
-        name: "Michael Chen",
-        title: "IELTS Writing ● Structure",
-        pricePerSession: 20.22,
-        nextAvailable: "Mon ● 8:00 AM",
-      },
-      {
-        id: "3",
-        name: "Emily Davis",
-        title: "IELTS Listening ● Strategy",
-        pricePerSession: 22.8,
-        nextAvailable: "Tue ● 7:15 PM",
-      },
-      {
-        id: "4",
-        name: "Daniel Kim",
-        title: "IELTS Reading ● Time Management",
-        pricePerSession: 17.5,
-        nextAvailable: "Tue ● 7:15 PM",
-      },
-      {
-        id: "5",
-        name: "Olivia Martinez",
-        title: "IELTS Interview ● Confidence",
-        pricePerSession: 18.49,
-        nextAvailable: "Wed ● 7:15 PM",
-      },
-      {
-        id: "6",
-        name: "Charlie Alvarez",
-        title: "English Speaking ● Confidence",
-        pricePerSession: 12.75,
-        nextAvailable: "Sat ● 7:15 PM",
-      },
-      {
-        id: "7",
-        name: "Zoe Smith",
-        title: "IELTS Speaking ● Pronunciation",
-        pricePerSession: 19.745,
-        nextAvailable: "Sat ● 7:15 PM",
-      },
-      {
-        id: "8",
-        name: "Katherine Davis",
-        title: "Speaking Practice ● Fluency",
-        pricePerSession: 0.0,
-        nextAvailable: "Sat ● 7:15 PM",
-      },
-    ],
-    [],
+  const { data: teachers = [], isPending, isError, error, refetch } =
+    useCoachingTeachersQuery();
+
+  const coaches = useMemo<Coach[]>(
+    () =>
+      teachers.map((t, index) => ({
+        id: String(t.id ?? index),
+        name: t.display_name ?? "",
+        title: t.bio ?? "",
+      })),
+    [teachers],
   );
 
   const filteredCoaches = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = debouncedQuery.trim().toLowerCase();
     if (!q) return coaches;
 
     return coaches.filter((c) =>
-      `${c.name} ${c.title}`.toLowerCase().includes(q),
+      `${c.name ?? ""} ${c.title ?? ""}`.toLowerCase().includes(q),
     );
-  }, [query, coaches]);
+  }, [debouncedQuery, coaches]);
 
   useFocusEffect(
     useCallback(() => {
@@ -119,6 +91,15 @@ export default function BookCoachScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
+        refreshing={isRefreshing}
+        onRefresh={async () => {
+          setIsRefreshing(true);
+          try {
+            await refetch();
+          } finally {
+            setIsRefreshing(false);
+          }
+        }}
         ListHeaderComponent={
           <View style={styles.headerBlock}>
             <ThemedSearchBar
@@ -126,6 +107,25 @@ export default function BookCoachScreen() {
               onChangeText={setQuery}
               placeholder="Search coaches..."
             />
+
+            {isPending ? (
+              <ThemedText variant="bodySmall" semantic="muted">
+                Loading coaches...
+              </ThemedText>
+            ) : isError ? (
+              <TouchableOpacity
+                accessibilityRole="button"
+                activeOpacity={0.8}
+                onPress={() => refetch()}
+              >
+                <ThemedText variant="bodySmall">
+                  Failed to load coaches. Tap to retry.
+                </ThemedText>
+                <ThemedText variant="bodySmall" semantic="muted">
+                  {getErrorMessage(error)}
+                </ThemedText>
+              </TouchableOpacity>
+            ) : null}
           </View>
         }
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -138,10 +138,8 @@ export default function BookCoachScreen() {
                 pathname: "/book_coach/[id]/detail",
                 params: {
                   id: item.id,
-                  name: item.name,
-                  title: item.title,
-                  nextAvailable: item.nextAvailable,
-                  pricePerSession: String(item.pricePerSession),
+                  name: item.name ?? "",
+                  title: item.title ?? "",
                   fromBookCoach: "true",
                 },
               })
@@ -152,9 +150,11 @@ export default function BookCoachScreen() {
         )}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <ThemedText variant="bodySmall">No results</ThemedText>
+            <ThemedText variant="bodySmall">
+              {isPending ? "Loading..." : "No results"}
+            </ThemedText>
             <ThemedText variant="bodySmall" semantic="muted">
-              Try a different search term.
+              {isPending ? "Please wait." : "Try a different search term."}
             </ThemedText>
           </View>
         }

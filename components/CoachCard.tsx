@@ -11,10 +11,10 @@ type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 type Coach = {
   id: string;
-  name: string;
-  title: string;
-  pricePerSession: number;
-  nextAvailable: string;
+  name?: string | null;
+  title?: string | null;
+  pricePerSession?: number | null;
+  nextAvailable?: string | null;
 };
 
 type Props = {
@@ -26,14 +26,23 @@ export function CoachCard({ coach }: Props) {
   const styles = createStyles(theme);
   const colors = useThemeColors();
 
-  const getAvatarInitials = useCallback((name: string) => {
-    const nameParts = name.trim().split(/\s+/).filter(Boolean);
+  const getAvatarInitials = useCallback((name: unknown) => {
+    const safeName = typeof name === "string" ? name.trim() : "";
+    const nameParts = safeName.split(/\s+/).filter(Boolean);
     const initials = nameParts
       .slice(0, 2)
       .map((part) => part[0].toUpperCase())
       .join("");
-    return initials || name[0]?.toUpperCase() || "";
+    return initials || safeName[0]?.toUpperCase() || "?";
   }, []);
+
+  const showAvailability =
+    typeof coach.nextAvailable === "string" && coach.nextAvailable.trim();
+  const priceLabel =
+    typeof coach.pricePerSession === "number"
+      ? `$${coach.pricePerSession.toFixed(2)}/session`
+      : null;
+  const showPrice = priceLabel !== null;
 
   return (
     <ThemedCard style={styles.card}>
@@ -52,39 +61,45 @@ export function CoachCard({ coach }: Props) {
         </View>
 
         <View style={styles.cardMain}>
-          <ThemedText variant="bodySmall">{coach.name}</ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            {coach.title}
+          <ThemedText variant="bodySmall">{coach.name || "Unknown"}</ThemedText>
+          <ThemedText variant="bodySmall" semantic="muted" numberOfLines={2}>
+            {coach.title || ""}
           </ThemedText>
         </View>
       </View>
 
       {/* Meta info */}
-      <View style={styles.metaRow}>
-        <View style={styles.metaItem}>
-          <IconBadge
-            name="calendar-outline"
-            size={18}
-            badgeSize={18}
-            backgroundColor="transparent"
-          />
-          <ThemedText variant="bodySmall" semantic="muted">
-            {coach.nextAvailable}
-          </ThemedText>
-        </View>
+      {showAvailability || showPrice ? (
+        <View style={styles.metaRow}>
+          {showAvailability ? (
+            <View style={styles.metaItem}>
+              <IconBadge
+                name="calendar-outline"
+                size={18}
+                badgeSize={18}
+                backgroundColor="transparent"
+              />
+              <ThemedText variant="bodySmall" semantic="muted">
+                {coach.nextAvailable}
+              </ThemedText>
+            </View>
+          ) : null}
 
-        <View style={styles.metaItem}>
-          <IconBadge
-            name="pricetag-outline"
-            size={18}
-            badgeSize={18}
-            backgroundColor="transparent"
-          />
-          <ThemedText variant="bodySmall" semantic="muted">
-            ${coach.pricePerSession.toFixed(2)}/session
-          </ThemedText>
+          {showPrice ? (
+            <View style={styles.metaItem}>
+              <IconBadge
+                name="pricetag-outline"
+                size={18}
+                badgeSize={18}
+                backgroundColor="transparent"
+              />
+              <ThemedText variant="bodySmall" semantic="muted">
+                {priceLabel}
+              </ThemedText>
+            </View>
+          ) : null}
         </View>
-      </View>
+      ) : null}
     </ThemedCard>
   );
 }
@@ -100,8 +115,8 @@ const createStyles = (theme: AppTheme) =>
       gap: theme.spacing.md,
     },
     avatar: {
-      width: theme.spacing.lg*2,
-      height: theme.spacing.lg*2,
+      width: theme.spacing.lg * 2,
+      height: theme.spacing.lg * 2,
       borderRadius: theme.borderRadius.full,
       alignItems: "center",
       justifyContent: "center",
