@@ -6,7 +6,11 @@ export default function ManualPracticeLayout() {
   return (
     <>
       <Stack.Screen
-        options={{ title: "Manual Practice", headerBackTitle: "Practice" }}
+        options={{
+          // title: "Manual Practice",
+          // headerBackTitle: "Practice",
+          headerShown: false,
+        }}
       />
       <Stack />
     </>

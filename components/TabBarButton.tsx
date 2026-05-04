@@ -1,5 +1,5 @@
-import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 import { Pressable, StyleSheet, View } from "react-native";
+import type { BottomTabBarButtonProps } from "@react-navigation/bottom-tabs";
 
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import type { ComponentProps } from "react";
