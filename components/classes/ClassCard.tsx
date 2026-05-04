@@ -4,6 +4,7 @@ import { Image, Pressable, StyleSheet, View } from "react-native";
 import { StatusBadge } from "@/components/classes/StatusBadgeClass";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { BorderRadius, Spacing } from "@/constants/Themes";
 
 interface ClassCardProps {

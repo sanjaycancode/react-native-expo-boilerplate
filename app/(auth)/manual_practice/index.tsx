@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 import type {
   ManualPracticeSectionData,
@@ -23,14 +23,18 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
 
-import { useQtypesQuery } from "@/hooks/api";
-import type { Qtype, QtypesBySection, QtypeSection } from "@/types";
+import { useQuestionTypesQuery } from "@/hooks/api";
+import type {
+  QuestionSection,
+  QuestionType,
+  QuestionTypesBySection,
+} from "@/types";
 
 const ALL_TYPES_PREVIEW_LIMIT = 2;
 
 const typeToSectionMap: Record<
   Exclude<ManualPracticeType, "All">,
-  QtypeSection
+  QuestionSection
 > = {
   Listening: "listening",
   Reading: "reading",
@@ -38,7 +42,7 @@ const typeToSectionMap: Record<
   Speaking: "speaking",
 };
 
-const sectionIcons: Record<QtypeSection, ManualPracticeTask["iconName"]> = {
+const sectionIcons: Record<QuestionSection, ManualPracticeTask["iconName"]> = {
   listening: "headset-outline",
   reading: "book-outline",
   writing: "list-outline",
@@ -46,7 +50,7 @@ const sectionIcons: Record<QtypeSection, ManualPracticeTask["iconName"]> = {
 };
 
 function toDisplayType(
-  section: QtypeSection,
+  section: QuestionSection,
 ): Exclude<ManualPracticeType, "All"> {
   return (section.charAt(0).toUpperCase() + section.slice(1)) as Exclude<
     ManualPracticeType,
@@ -55,8 +59,8 @@ function toDisplayType(
 }
 
 function toManualPracticeTask(
-  item: Qtype,
-  section: QtypeSection,
+  item: QuestionType,
+  section: QuestionSection,
 ): ManualPracticeTask {
   return {
     id: item.code,
@@ -69,8 +73,8 @@ function toManualPracticeTask(
 }
 
 function toManualPracticeSection(
-  section: QtypeSection,
-  items: Qtype[],
+  section: QuestionSection,
+  items: QuestionType[],
 ): ManualPracticeSectionData {
   return {
     type: toDisplayType(section),
@@ -92,7 +96,7 @@ function getErrorMessage(error: unknown): string {
 }
 
 function getVisibleSections(
-  qtypesBySection: QtypesBySection,
+  questionTypesBySection: QuestionTypesBySection,
   selectedType: ManualPracticeType,
 ) {
   if (selectedType === "All") {
@@ -102,7 +106,7 @@ function getVisibleSections(
       )
       .map((type) => {
         const section = typeToSectionMap[type];
-        const items = qtypesBySection[section] ?? [];
+        const items = questionTypesBySection[section] ?? [];
 
         return {
           ...toManualPracticeSection(section, items),
@@ -114,30 +118,37 @@ function getVisibleSections(
   }
 
   const section = typeToSectionMap[selectedType];
-  return [toManualPracticeSection(section, qtypesBySection[section] ?? [])];
+  return [
+    toManualPracticeSection(section, questionTypesBySection[section] ?? []),
+  ];
 }
 
 function getTypeCount(
-  qtypesBySection: QtypesBySection,
+  questionTypesBySection: QuestionTypesBySection,
   type: ManualPracticeType,
 ) {
   if (type === "All") {
-    return Object.values(qtypesBySection).reduce(
+    return Object.values(questionTypesBySection).reduce(
       (total, items) => total + (items?.length ?? 0),
       0,
     );
   }
 
-  return qtypesBySection[typeToSectionMap[type]]?.length ?? 0;
+  return questionTypesBySection[typeToSectionMap[type]]?.length ?? 0;
 }
 
 export default function ManualPracticeScreen() {
   const { theme } = useTheme();
-  const qtypesQuery = useQtypesQuery();
+  const questionTypesQuery = useQuestionTypesQuery();
   const styles = createStyles(theme);
+  const router = useRouter();
   const [selectedType, setSelectedType] = useState<ManualPracticeType>("All");
-  const qtypesBySection = qtypesQuery.data?.data ?? {};
-  const visibleSections = getVisibleSections(qtypesBySection, selectedType);
+  const questionTypesBySection: QuestionTypesBySection =
+    questionTypesQuery.data?.data ?? {};
+  const visibleSections = getVisibleSections(
+    questionTypesBySection,
+    selectedType,
+  );
 
   function renderLoadingState() {
     return (
@@ -152,7 +163,8 @@ export default function ManualPracticeScreen() {
     return (
       <ThemedCard variant="outlined" style={styles.stateCard}>
         <ThemedText variant="bodySmall" semantic="error">
-          Failed to load question types: {getErrorMessage(qtypesQuery.error)}
+          Failed to load question types:{" "}
+          {getErrorMessage(questionTypesQuery.error)}
         </ThemedText>
       </ThemedCard>
     );
@@ -170,18 +182,16 @@ export default function ManualPracticeScreen() {
 
   return (
     <>
-      <Stack.Screen
-        options={{ title: "Manual Practice", headerShown: false }}
-      />
+      <Stack.Screen options={{ title: "Manual Practice", headerShown: true }} />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
-            refreshing={qtypesQuery.isRefetching}
+            refreshing={questionTypesQuery.isRefetching}
             onRefresh={() => {
-              void qtypesQuery.refetch();
+              void questionTypesQuery.refetch();
             }}
             tintColor={theme.colors.primary}
             colors={[theme.colors.primary]}
@@ -192,12 +202,14 @@ export default function ManualPracticeScreen() {
           tabs={manualPracticeTypes}
           selectedTab={selectedType}
           onSelectTab={setSelectedType}
-          getMetaLabel={(type) => `(${getTypeCount(qtypesBySection, type)})`}
+          getMetaLabel={(type) =>
+            `(${getTypeCount(questionTypesBySection, type)})`
+          }
         />
 
-        {qtypesQuery.isLoading
+        {questionTypesQuery.isLoading
           ? renderLoadingState()
-          : qtypesQuery.isError
+          : questionTypesQuery.isError
             ? renderErrorState()
             : visibleSections.every((section) => section.tasks.length === 0)
               ? renderEmptyState()
@@ -209,9 +221,20 @@ export default function ManualPracticeScreen() {
                     onViewAll={(selectedSection) =>
                       setSelectedType(selectedSection.type)
                     }
+                    onPressTask={(task) => {
+                      router.push({
+                        pathname: "/manual_practice/questions",
+                        params: {
+                          section: section.type,
+                          questionTypeCode: task.id,
+                          questionTypeLabel: task.title,
+                        },
+                      });
+                    }}
                   />
                 ))}
-      </ScrollView>
+      </ScrollView>    
+      
     </>
   );
 }

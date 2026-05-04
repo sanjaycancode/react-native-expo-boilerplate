@@ -1,8 +1,8 @@
-import type { ComponentProps } from "react";
 import { StyleSheet, View } from "react-native";
-import type { StyleProp, ViewProps, ViewStyle } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
+import type { ComponentProps } from "react";
+import type { StyleProp, ViewProps, ViewStyle } from "react-native";
 
 import { useTheme } from "@/context/ThemeContext";
 
