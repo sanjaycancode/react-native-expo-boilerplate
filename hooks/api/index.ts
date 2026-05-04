@@ -1,3 +1,3 @@
 export * from "./useCoachingApi";
-export * from "./useQtypeApi";
+export * from "./useQuestionApi";
 export * from "./useTodoApi";
