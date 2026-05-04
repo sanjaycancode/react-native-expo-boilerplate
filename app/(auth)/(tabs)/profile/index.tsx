@@ -221,8 +221,11 @@ export default function ProfileScreen() {
       </ScrollView>
       <ConfirmationModal
         visible={isLogoutConfirmationVisible}
-        title="Log out?"
-        message="You will need to sign in again to access your account."
+        title="Log out"
+        message="Are you sure you want to logout."
+        iconName="log-out-outline"
+        iconBackgroundColor="rgba(239, 68, 68, 0.12)"
+        iconColor={theme.colors.error}
         confirmLabel="Log out"
         cancelLabel="Cancel"
         confirmColor="danger"

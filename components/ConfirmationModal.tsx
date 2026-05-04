@@ -1,6 +1,8 @@
-import React from "react";
 import { Modal, Pressable, StyleSheet, View } from "react-native";
 
+import type { ComponentProps } from "react";
+
+import { IconBadge } from "@/components/IconBadge";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
@@ -11,6 +13,9 @@ interface ConfirmationModalProps {
   visible: boolean;
   title: string;
   message: string;
+  iconName?: ComponentProps<typeof IconBadge>["name"];
+  iconBackgroundColor?: string;
+  iconColor?: string;
   confirmLabel?: string;
   cancelLabel?: string;
   confirmColor?: "primary" | "success" | "danger" | "default";
@@ -23,6 +28,9 @@ export function ConfirmationModal({
   visible,
   title,
   message,
+  iconName = "help-circle-outline",
+  iconBackgroundColor,
+  iconColor,
   confirmLabel = "Confirm",
   cancelLabel = "Cancel",
   confirmColor = "primary",
@@ -45,8 +53,16 @@ export function ConfirmationModal({
         <Pressable style={styles.backdrop} onPress={onCancel} />
         <ThemedCard variant="elevated" style={styles.modalCard}>
           <View style={styles.content}>
+            <IconBadge
+              name={iconName}
+              badgeSize={56}
+              size={26}
+              color={iconColor}
+              backgroundColor={iconBackgroundColor ?? colors.background}
+              style={styles.iconBadge}
+            />
             <ThemedText variant="heading6">{title}</ThemedText>
-            <ThemedText variant="body" semantic="muted">
+            <ThemedText variant="body" semantic="muted" style={styles.message}>
               {message}
             </ThemedText>
           </View>
@@ -97,6 +113,13 @@ const createStyles = (
     },
     content: {
       gap: theme.spacing.sm,
+      alignItems: "center",
+    },
+    iconBadge: {
+      marginBottom: theme.spacing.xs,
+    },
+    message: {
+      textAlign: "center",
     },
     actions: {
       flexDirection: "row",

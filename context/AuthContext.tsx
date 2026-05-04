@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 
-import { ACCESS_TOKEN_KEY, login, logout } from "@/api";
+import { ACCESS_TOKEN_KEY, login, logout, onUnauthorized } from "@/api";
 
 import { getAsyncStorageItem, setAsyncStorageItem } from "@/utils/asyncStorage";
 
@@ -64,6 +64,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     initializeAuth();
   }, [refreshSession]);
 
+  useEffect(() => {
+    const unsubscribe = onUnauthorized(() => {
+      void setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, null);
+      void setAsyncStorageItem(ACCESS_TOKEN_KEY, null);
+      setSession(null);
+    });
+
+    return unsubscribe;
+  }, []);
+
   const signIn = useCallback(async (payload: LoginPayload) => {
     const response = await login(payload);
 
@@ -80,11 +90,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signOut = useCallback(async () => {
-    const response = await logout();
-    await setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, null);
-    await setAsyncStorageItem(ACCESS_TOKEN_KEY, null);
-    setSession(null);
-    return response;
+    try {
+      return await logout();
+    } finally {
+      await setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, null);
+      await setAsyncStorageItem(ACCESS_TOKEN_KEY, null);
+      setSession(null);
+    }
   }, []);
 
   const value = useMemo<AuthContextValue>(

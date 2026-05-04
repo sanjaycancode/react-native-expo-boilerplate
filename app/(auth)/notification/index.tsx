@@ -15,7 +15,15 @@ import { IconBadge } from "@/components/IconBadge";
 import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
+import { notificationConfig } from "@/constants/notificationConfig";
+
 import { useTheme } from "@/context/ThemeContext";
+
+import type { Notification, NotificationKind } from "@/types/notification";
+
+import { formatTimeAgo } from "@/utils";
+
+import { useNotificationsQuery } from "@/hooks/api/useNotificationApi";
 
 export default function NotificationScreen() {
   const { theme } = useTheme();
@@ -23,79 +31,9 @@ export default function NotificationScreen() {
 
   type TabKey = "all" | "unread" | "booking" | "result";
   const [activeTab, setActiveTab] = useState<TabKey>("all");
-  const [refreshing, setRefreshing] = useState(false);
+  const notificationsQuery = useNotificationsQuery();
 
-  type NotificationRow = {
-    id: string;
-    title: string;
-    description: string;
-    timeAgo: string;
-    iconName: React.ComponentProps<typeof Ionicons>["name"];
-    tab: Exclude<TabKey, "all">;
-    unread?: boolean;
-  };
-
-  const notifications = useMemo<NotificationRow[]>(() => {
-    const base: NotificationRow[] = [
-      {
-        id: "1",
-        title: "Almost Gone",
-        description:
-          "Limited-time offer! Enjoy up to 40% off on selected furniture. Don't miss out! shop now before it's too late!",
-        timeAgo: "2h ago",
-        iconName: "time-outline",
-        tab: "unread",
-        unread: true,
-      },
-      {
-        id: "2",
-        title: "Limited Offer! Claim $50.00 voucher",
-        description:
-          "Sign up now and enjoy a $50.00 voucher on your first purchase! Don't miss out.",
-        timeAgo: "2h ago",
-        iconName: "gift-outline",
-        tab: "result",
-      },
-      {
-        id: "3",
-        title: "Unlock Your Exclusive Gift",
-        description:
-          "Sign up now and enjoy a $50.00 voucher on your first purchase! Don't miss out.",
-        timeAgo: "2h ago",
-        iconName: "bag-handle-outline",
-        tab: "booking",
-      },
-      {
-        id: "4",
-        title: "Order Confirmed",
-        description:
-          "We're preparing your order and will notify you once it's shipped. Track your order status anytime through the app.",
-        timeAgo: "2h ago",
-        iconName: "receipt-outline",
-        tab: "booking",
-      },
-      {
-        id: "5",
-        title: "Order Shipped",
-        description:
-          "Great news! Your order has been shipped and is on its way to you. Expected delivery by 3 days.",
-        timeAgo: "2h ago",
-        iconName: "cube-outline",
-        tab: "booking",
-      },
-      {
-        id: "6",
-        title: "Payment Received",
-        description:
-          "Great news! The payment for your recent sale has been successfully processed. You can now check your balance.",
-        timeAgo: "2h ago",
-        iconName: "wallet-outline",
-        tab: "result",
-      },
-    ];
-
-    return base;
-  }, []);
+  const notifications: Notification[] = notificationsQuery.data ?? [];
 
   const unreadCount = useMemo(
     () => notifications.filter((n) => n.unread).length,
@@ -113,9 +51,8 @@ export default function NotificationScreen() {
   }, [notifications, activeTab]);
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 700);
-  }, []);
+    void notificationsQuery.refetch();
+  }, [notificationsQuery]);
 
   const tabKeys = useMemo(
     () => ["all", "unread", "booking", "result"] as const,
@@ -140,6 +77,11 @@ export default function NotificationScreen() {
     [bookingCount, unreadCount],
   );
 
+  function resolveIconColor(kind: NotificationKind) {
+    const config = notificationConfig[kind];
+    return theme.colors[config.colorToken];
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -153,7 +95,7 @@ export default function NotificationScreen() {
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={notificationsQuery.isRefetching}
             onRefresh={onRefresh}
             tintColor={theme.colors.primary}
           />
@@ -179,49 +121,64 @@ export default function NotificationScreen() {
           </View>
         </View>
 
-        {filtered.map((item) => (
-          <View key={item.id} style={styles.itemWrap}>
-            <Link href={`/notification/${item.id}/detail`} asChild>
-              <TouchableOpacity activeOpacity={0.86} style={styles.itemCard}>
-                <IconBadge
-                  name={item.iconName}
-                  size={18}
-                  color={theme.colors.primary}
-                  badgeSize={theme.spacing.xl + theme.spacing.xs}
-                  borderRadius={theme.borderRadius.medium}
-                />
+        {!notificationsQuery.isLoading && filtered.length === 0 ? (
+          <ThemedText
+            variant="bodySmall"
+            semantic="muted"
+            style={styles.emptyText}
+          >
+            No notifications available right now.
+          </ThemedText>
+        ) : null}
 
-                <View style={styles.itemCopy}>
-                  <ThemedText
-                    variant="bodySmall"
-                    style={styles.itemTitle}
-                    numberOfLines={1}
-                  >
-                    {item.title}
-                  </ThemedText>
-                  <ThemedText
-                    variant="caption"
-                    style={styles.itemSubtitle}
-                    numberOfLines={1}
-                  >
-                    {item.description}
-                  </ThemedText>
-                  <ThemedText variant="caption" semantic="muted">
-                    {item.timeAgo}
-                  </ThemedText>
-                </View>
+        {filtered.map((item) => {
+          const config = notificationConfig[item.kind];
+          const iconColor = resolveIconColor(item.kind);
 
-                <View>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color={theme.colors.textSecondary}
+          return (
+            <View key={item.id} style={styles.itemWrap}>
+              <Link href={`/notification/${item.id}/detail`} asChild>
+                <TouchableOpacity activeOpacity={0.86} style={styles.itemCard}>
+                  <IconBadge
+                    name={config.icon}
+                    size={18}
+                    color={iconColor}
+                    badgeSize={theme.spacing.xl + theme.spacing.xs}
+                    borderRadius={theme.borderRadius.medium}
                   />
-                </View>
-              </TouchableOpacity>
-            </Link>
-          </View>
-        ))}
+
+                  <View style={styles.itemCopy}>
+                    <ThemedText
+                      variant="bodySmall"
+                      style={styles.itemTitle}
+                      numberOfLines={1}
+                    >
+                      {item.title}
+                    </ThemedText>
+                    <ThemedText
+                      variant="caption"
+                      style={styles.itemSubtitle}
+                      numberOfLines={1}
+                    >
+                      {item.description}
+                    </ThemedText>
+                    <ThemedText variant="caption" semantic="muted">
+                      {formatTimeAgo(item.timeAgo)}
+                    </ThemedText>
+                  </View>
+
+                  <View>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={20}
+                      color={theme.colors.textSecondary}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </Link>
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -232,7 +189,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       padding: theme.spacing.md,
-      gap: 12,
+      gap: theme.spacing.md,
       backgroundColor: theme.colors.background,
     },
     sectionHeader: {
@@ -278,5 +235,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     itemSubtitle: {
       color: theme.colors.textSecondary,
+    },
+    emptyText: {
+      paddingHorizontal: theme.spacing.md,
     },
   });

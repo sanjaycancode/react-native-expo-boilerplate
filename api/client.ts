@@ -1,5 +1,7 @@
 import axios, { AxiosError } from "axios";
 
+import { emitUnauthorized } from "@/api/authEvents";
+
 import { getAsyncStorageItem } from "@/utils/asyncStorage";
 
 import { env } from "@/lib/config/env";
@@ -70,7 +72,7 @@ export function normalizeApiError(error: unknown): ApiError {
     const statusCode = axiosError.response?.status;
 
     const message =
-      extractedMessage ??    
+      extractedMessage ??
       (statusCode === 401
         ? "Invalid email or password."
         : (axiosError.message ??
@@ -112,5 +114,11 @@ apiClient.interceptors.request.use(async (config) => {
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error: unknown) => Promise.reject(normalizeApiError(error)),
+  (error: unknown) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      emitUnauthorized();
+    }
+
+    return Promise.reject(normalizeApiError(error));
+  },
 );

@@ -7,7 +7,7 @@ export interface AuthenticatedUser {
 }
 
 export interface LoginPayload {
-  email: string;
+  username: string;
   password: string;
 }
 

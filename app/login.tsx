@@ -17,7 +17,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { formTextInputHelper } from "@/utils";
 
 type LoginFormValues = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -33,7 +33,7 @@ export default function LoginScreen() {
     formState: { isSubmitting },
   } = useForm<LoginFormValues>({
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -62,24 +62,22 @@ export default function LoginScreen() {
           <ThemedCard style={styles.formContainer}>
             <Controller
               control={control}
-              name="email"
+              name="username"
               rules={{
-                required: "Enter your email address.",
-                validate: (value) =>
-                  value.includes("@") || "Enter a valid email address.",
+                required: "Enter your username.",
               }}
               render={({ field, fieldState }) => (
                 <ThemedTextInput
-                  label="Email"
-                  placeholder="you@example.com"
-                  keyboardType="email-address"
+                  label="username"
+                  placeholder="Enter your valid username"
+                  // keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
                   editable={!isSubmitting}
                   {...formTextInputHelper({ field, fieldState })}
                   helperText={
                     fieldState.error?.message ??
-                    "Use the email tied to your account."
+                    "Use the username tied to your account."
                   }
                 />
               )}
