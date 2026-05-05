@@ -180,6 +180,40 @@ export default function ManualPracticeScreen() {
     );
   }
 
+  function handlePressTask(task: ManualPracticeTask) {
+    router.push({
+      pathname: "/manual_practice/questions/[questionTypeCode]",
+      params: {
+        questionTypeCode: task.id,
+        questionTypeLabel: task.title,
+      },
+    });
+  }
+
+  function renderContent() {
+    if (questionTypesQuery.isLoading) {
+      return renderLoadingState();
+    }
+
+    if (questionTypesQuery.isError) {
+      return renderErrorState();
+    }
+
+    if (visibleSections.every((section) => section.tasks.length === 0)) {
+      return renderEmptyState();
+    }
+
+    return visibleSections.map((section) => (
+      <ManualPracticeSection
+        key={section.type}
+        section={section}
+        showViewAll={selectedType === "All"}
+        onViewAll={(selectedSection) => setSelectedType(selectedSection.type)}
+        onPressTask={handlePressTask}
+      />
+    ));
+  }
+
   return (
     <>
       <Stack.Screen options={{ title: "Manual Practice", headerShown: true }} />
@@ -207,33 +241,8 @@ export default function ManualPracticeScreen() {
           }
         />
 
-        {questionTypesQuery.isLoading
-          ? renderLoadingState()
-          : questionTypesQuery.isError
-            ? renderErrorState()
-            : visibleSections.every((section) => section.tasks.length === 0)
-              ? renderEmptyState()
-              : visibleSections.map((section) => (
-                  <ManualPracticeSection
-                    key={section.type}
-                    section={section}
-                    showViewAll={selectedType === "All"}
-                    onViewAll={(selectedSection) =>
-                      setSelectedType(selectedSection.type)
-                    }
-                    onPressTask={(task) => {
-                      router.push({
-                        pathname: "/manual_practice/questions/[questionTypeCode]",
-                        params: {
-                          questionTypeCode: task.id,
-                          questionTypeLabel: task.title,
-                        },
-                      });
-                    }}
-                  />
-                ))}
-      </ScrollView>    
-      
+        {renderContent()}
+      </ScrollView>
     </>
   );
 }
