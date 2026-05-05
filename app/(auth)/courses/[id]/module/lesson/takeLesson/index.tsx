@@ -144,7 +144,7 @@ export default function TakeLessonScreen() {
             </View>
 
             {isVideo ? (
-              <LessonVideoPlayer durationMinutes={lesson.duration_minutes} />
+              <LessonVideoPlayer videoUrl={lesson.embed_url} durationMinutes={lesson.duration_minutes} />
             ) : (
               <LessonTextContent title={lesson.title} content={lesson.body_text} />
             )}

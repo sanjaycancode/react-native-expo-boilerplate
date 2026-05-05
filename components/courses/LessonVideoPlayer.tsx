@@ -1,24 +1,30 @@
+import { useTheme } from "@/context/ThemeContext";
+import { useVideoPlayer, VideoView } from "expo-video";
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-
-import { useTheme, useThemeColors } from "@/context/ThemeContext";
+import { StyleSheet, View } from "react-native";
 
 interface LessonVideoPlayerProps {
+  videoUrl: string;
   durationMinutes: number;
 }
 
-export function LessonVideoPlayer({ durationMinutes }: LessonVideoPlayerProps) {
+export function LessonVideoPlayer({ videoUrl, durationMinutes }: LessonVideoPlayerProps) {
   const { theme } = useTheme();
-  const colors = useThemeColors();
   const styles = createStyles(theme);
 
+  const player = useVideoPlayer(videoUrl, (p) => {
+    p.loop = false;
+  });
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.text }]}>
-      <Pressable style={styles.playButton}>
-        <FontAwesome name="play" size={48} color={colors.textOnPrimary} />
-      </Pressable>
+    <View style={styles.container}>
+      <VideoView
+        player={player}
+        style={styles.video}
+        nativeControls
+        contentFit="cover"
+        surfaceType="textureView"
+      />
     </View>
   );
 }
@@ -29,16 +35,11 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       width: "100%",
       height: 220,
       borderRadius: theme.borderRadius.large,
-      justifyContent: "center",
-      alignItems: "center",
       overflow: "hidden",
+      backgroundColor: "#000",
     },
-    playButton: {
-      width: 64,
-      height: 64,
-      borderRadius: 32,
-      backgroundColor: "rgba(255,255,255,0.2)",
-      justifyContent: "center",
-      alignItems: "center",
+    video: {
+      width: "100%",
+      height: "100%",
     },
   });

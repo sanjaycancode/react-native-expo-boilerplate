@@ -41,5 +41,6 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     body: {
       lineHeight: 24,
+      textAlign: "justify",
     },
   });
