@@ -12,7 +12,9 @@ import { ProgressTrack } from "@/components/ProgressTrack";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
+
 import { useCourseQuery } from "@/hooks/useCourseApi";
 
 export default function TakeLessonScreen() {

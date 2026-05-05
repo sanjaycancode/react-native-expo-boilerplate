@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import React from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import { Stack } from "expo-router";
 
@@ -8,8 +15,36 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedSwitch } from "@/components/ThemedSwitch";
 import { ThemedText } from "@/components/ThemedText";
+import { ThemedTextInput } from "@/components/ThemedTextInput";
 
 import { useTheme, useThemeMode } from "@/context/ThemeContext";
+
+import {
+  useNotificationPreferencesQuery,
+  useUpdateNotificationPreferencesMutation,
+} from "@/hooks/api";
+import type { NotificationPreferences } from "@/types";
+
+const DEFAULT_NOTIFICATION_PREFERENCES: NotificationPreferences = {
+  emailNotifications: true,
+  pushNotifications: false,
+  bookingReminders: true,
+  reviewPrompts: true,
+  weeklySummary: true,
+  inactivityNudge: true,
+  quietHoursEnabled: false,
+  quietHoursFrom: "09:00",
+  quietHoursTo: "17:00",
+  timezone: "UTC",
+  frequency: "normal",
+};
+
+type BooleanNotificationPreferenceKey = {
+  [Key in keyof NotificationPreferences]: NotificationPreferences[Key] extends boolean
+    ? Key
+    : never;
+}[keyof NotificationPreferences];
+type TimeNotificationPreferenceKey = "quietHoursFrom" | "quietHoursTo";
 
 export type SettingProps = {
   title: string;
@@ -17,27 +52,35 @@ export type SettingProps = {
   value: boolean;
   onValueChange: () => void;
   isLast: boolean;
+  disabled?: boolean;
 };
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
   const { toggleTheme } = useThemeMode();
   const styles = createStyles(theme);
+  const preferencesQuery = useNotificationPreferencesQuery();
+  const updatePreferencesMutation = useUpdateNotificationPreferencesMutation();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [settings, setSettings] = React.useState<NotificationPreferences>(
+    DEFAULT_NOTIFICATION_PREFERENCES,
+  );
+  const notificationControlsDisabled = preferencesQuery.isLoading;
 
-  const initialState = {
-    emailNotifications: true,
-    pushNotifications: false,
-    bookingReminders: true,
-    reviewPrompts: true,
-    weeklySummary: true,
-    inactivityNudge: true,
-    celebrationSound: true,
-    quietHoursEnabled: false,
-    quietHoursFrom: "09:00",
-    quietHoursTo: "17:00",
-  };
+  const handleRefresh = React.useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      await preferencesQuery.refetch();
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [preferencesQuery]);
 
-  const [settings, setSettings] = useState(initialState);
+  React.useEffect(() => {
+    if (preferencesQuery.data && !updatePreferencesMutation.isPending) {
+      setSettings(preferencesQuery.data);
+    }
+  }, [preferencesQuery.data, updatePreferencesMutation.isPending]);
 
   const SECTIONS = [
     {
@@ -52,12 +95,12 @@ export default function SettingsScreen() {
       ),
       items: [
         {
-          key: "emailNotifications" as const,
+          key: "emailNotifications",
           title: "Email Notifications",
           description: "Receive notifications via email for important updates",
         },
         {
-          key: "pushNotifications" as const,
+          key: "pushNotifications",
           title: "Push Notifications",
           description:
             "Receive push notifications in app/browser for real time alerts",
@@ -76,12 +119,12 @@ export default function SettingsScreen() {
       ),
       items: [
         {
-          key: "bookingReminders" as const,
+          key: "bookingReminders",
           title: "Booking Reminders",
           description: "Remind me 1 hour before class starts",
         },
         {
-          key: "reviewPrompts" as const,
+          key: "reviewPrompts",
           title: "Review Prompts",
           description: "Ask me to review classes I attended",
         },
@@ -99,39 +142,76 @@ export default function SettingsScreen() {
       ),
       items: [
         {
-          key: "weeklySummary" as const,
+          key: "weeklySummary",
           title: "Weekly Summary",
           description: "Send me weekly learning progress summary",
         },
         {
-          key: "inactivityNudge" as const,
+          key: "inactivityNudge",
           title: "Inactivity Nudge",
           description: "Remind me if I haven't been active for a while",
         },
       ],
     },
-    {
-      key: "celebrations",
-      title: "Celebrations",
-      icon: (
-        <MaterialCommunityIcons
-          name="party-popper"
-          size={16}
-          color={theme.colors.text}
-        />
-      ),
-      items: [
-        {
-          key: "celebrationSound" as const,
-          title: "Celebration Sound",
-          description: "Play a short chime for milestones and achievements",
-        },
-      ],
-    },
-  ];
+  ] as const;
 
-  const handleToggle = (key: keyof typeof settings) => {
-    setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleToggle = (key: BooleanNotificationPreferenceKey) => {
+    const previousPreferences = settings;
+    const nextPreferences = {
+      ...settings,
+      [key]: !settings[key],
+    };
+
+    setSettings(nextPreferences);
+
+    updatePreferencesMutation.mutate(nextPreferences, {
+      onSuccess: (preferences) => {
+        setSettings(preferences);
+      },
+      onError: (error) => {
+        setSettings(previousPreferences);
+        Alert.alert("Settings", getErrorMessage(error));
+      },
+    });
+  };
+
+  const handleTimeChange = (
+    key: TimeNotificationPreferenceKey,
+    value: string,
+  ) => {
+    setSettings((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleTimeCommit = (key: TimeNotificationPreferenceKey) => {
+    const normalizedTime = normalizeTimeInput(settings[key]);
+    const previousPreferences =
+      preferencesQuery.data ?? DEFAULT_NOTIFICATION_PREFERENCES;
+
+    if (!normalizedTime) {
+      setSettings(previousPreferences);
+      Alert.alert("Settings", "Enter time in HH:MM or HH:MM:SS format.");
+      return;
+    }
+
+    const nextPreferences = {
+      ...settings,
+      [key]: normalizedTime,
+    };
+
+    setSettings(nextPreferences);
+
+    updatePreferencesMutation.mutate(nextPreferences, {
+      onSuccess: (preferences) => {
+        setSettings(preferences);
+      },
+      onError: (error) => {
+        setSettings(previousPreferences);
+        Alert.alert("Settings", getErrorMessage(error));
+      },
+    });
   };
 
   return (
@@ -145,6 +225,13 @@ export default function SettingsScreen() {
         showsVerticalScrollIndicator={false}
         style={styles.scroll}
         contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary}
+          />
+        }
       >
         <View>
           <ThemedText variant="heading3">Settings</ThemedText>
@@ -153,6 +240,15 @@ export default function SettingsScreen() {
             updates
           </ThemedText>
         </View>
+
+        {preferencesQuery.isLoading ? (
+          <View style={styles.loadingRow}>
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+            <ThemedText variant="caption" semantic="muted">
+              Loading notification preferences...
+            </ThemedText>
+          </View>
+        ) : null}
 
         <ThemedCard variant="outlined" style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
@@ -207,6 +303,7 @@ export default function SettingsScreen() {
                 value={settings[item.key]}
                 onValueChange={() => handleToggle(item.key)}
                 isLast={idx === section.items.length - 1}
+                disabled={notificationControlsDisabled}
               />
             ))}
           </ThemedCard>
@@ -236,22 +333,42 @@ export default function SettingsScreen() {
             </View>
 
             <View style={styles.quietRight}>
-              <View style={styles.timePills}>
-                <View style={styles.timePill}>
-                  <ThemedText variant="caption" semantic="muted">
-                    From
-                  </ThemedText>
-                  <ThemedText variant="body">
-                    {settings.quietHoursFrom}
-                  </ThemedText>
+              <View style={styles.timeInputs}>
+                <View style={styles.timeInput}>
+                  <ThemedTextInput
+                    label="From"
+                    value={settings.quietHoursFrom}
+                    placeholder="09:00"
+                    keyboardType="numbers-and-punctuation"
+                    maxLength={8}
+                    size="sm"
+                    editable={
+                      settings.quietHoursEnabled &&
+                      !notificationControlsDisabled
+                    }
+                    onChangeText={(value) =>
+                      handleTimeChange("quietHoursFrom", value)
+                    }
+                    onBlur={() => handleTimeCommit("quietHoursFrom")}
+                  />
                 </View>
-                <View style={styles.timePill}>
-                  <ThemedText variant="caption" semantic="muted">
-                    To
-                  </ThemedText>
-                  <ThemedText variant="body">
-                    {settings.quietHoursTo}
-                  </ThemedText>
+                <View style={styles.timeInput}>
+                  <ThemedTextInput
+                    label="To"
+                    value={settings.quietHoursTo}
+                    placeholder="17:00"
+                    keyboardType="numbers-and-punctuation"
+                    maxLength={8}
+                    size="sm"
+                    editable={
+                      settings.quietHoursEnabled &&
+                      !notificationControlsDisabled
+                    }
+                    onChangeText={(value) =>
+                      handleTimeChange("quietHoursTo", value)
+                    }
+                    onBlur={() => handleTimeCommit("quietHoursTo")}
+                  />
                 </View>
               </View>
 
@@ -262,6 +379,7 @@ export default function SettingsScreen() {
                 <ThemedSwitch
                   value={settings.quietHoursEnabled}
                   onValueChange={() => handleToggle("quietHoursEnabled")}
+                  disabled={notificationControlsDisabled}
                 />
               </View>
             </View>
@@ -289,6 +407,7 @@ function SettingRow({
   value,
   onValueChange,
   isLast,
+  disabled = false,
 }: SettingProps) {
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -301,9 +420,34 @@ function SettingRow({
           {description}
         </ThemedText>
       </View>
-      <ThemedSwitch value={value} onValueChange={onValueChange} />
+      <ThemedSwitch
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+      />
     </View>
   );
+}
+
+function getErrorMessage(error: unknown): string {
+  if (typeof error === "object" && error !== null && "message" in error) {
+    const { message } = error as { message?: unknown };
+    if (typeof message === "string") {
+      return message;
+    }
+  }
+
+  return "Unable to update notification preferences.";
+}
+
+function normalizeTimeInput(value: string): string | null {
+  const trimmedValue = value.trim();
+  const match = /^([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?$/.exec(trimmedValue);
+
+  if (!match) return null;
+
+  const [, hours, minutes, seconds = "00"] = match;
+  return `${hours}:${minutes}:${seconds}`;
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
@@ -352,6 +496,13 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
       gap: 2,
     },
+    loadingRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: theme.spacing.sm,
+      paddingVertical: theme.spacing.sm,
+    },
     quietRow: {
       flexDirection: "column",
       alignItems: "stretch",
@@ -367,19 +518,12 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       alignItems: "stretch",
       gap: theme.spacing.md,
     },
-    timePills: {
-      flexDirection: "column",
+    timeInputs: {
+      flexDirection: "row",
       gap: theme.spacing.sm,
     },
-    timePill: {
-      borderWidth: 1,
-      borderColor: theme.colors.border,
-      backgroundColor: theme.colors.overlay,
-      borderRadius: theme.borderRadius.medium,
-      paddingHorizontal: theme.spacing.sm,
-      paddingVertical: theme.spacing.xs,
-      alignItems: "flex-start",
-      gap: 2,
+    timeInput: {
+      flex: 1,
     },
     quietToggleRow: {
       flexDirection: "row",

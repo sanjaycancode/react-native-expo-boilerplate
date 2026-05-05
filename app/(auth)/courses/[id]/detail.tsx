@@ -11,6 +11,7 @@ import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
 import { BorderRadius, Spacing } from "@/constants/Themes";
+
 import { useCourseQuery } from "@/hooks/useCourseApi";
 
 export default function CourseDetail() {

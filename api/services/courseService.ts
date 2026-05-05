@@ -1,5 +1,6 @@
 import type { Course } from "@/types/course";
 import type { CourseDetail } from "@/types/courseDetail";
+
 import { apiClient } from "../client";
 
 type ApiResponse<T> = {

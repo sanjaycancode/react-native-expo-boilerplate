@@ -6,6 +6,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleCard } from "@/components/courses/ModuleCard";
 import { ThemedFlatList } from "@/components/ThemedFlatList";
 import { useTheme } from "@/context/ThemeContext";
+
 import { useCourseQuery } from "@/hooks/useCourseApi";
 import type { Module } from "@/types/courseDetail";
 

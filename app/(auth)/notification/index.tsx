@@ -7,15 +7,27 @@ import {
   View,
 } from "react-native";
 
-import { Link, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { IconBadge } from "@/components/IconBadge";
+import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedMaterialTopTabs } from "@/components/ThemedMaterialTopTabs";
 import { ThemedText } from "@/components/ThemedText";
 
+import { notificationConfig } from "@/constants/notificationConfig";
+
 import { useTheme } from "@/context/ThemeContext";
+
+import type { Notification, NotificationKind } from "@/types/notification";
+
+import { formatTimeAgo } from "@/utils";
+
+import {
+  useMarkAllNotificationsReadMutation,
+  useNotificationsQuery,
+} from "@/hooks/api/useNotificationApi";
 
 export default function NotificationScreen() {
   const { theme } = useTheme();
@@ -23,99 +35,30 @@ export default function NotificationScreen() {
 
   type TabKey = "all" | "unread" | "booking" | "result";
   const [activeTab, setActiveTab] = useState<TabKey>("all");
-  const [refreshing, setRefreshing] = useState(false);
+  const router = useRouter();
+  const notificationsQuery = useNotificationsQuery(activeTab);
+  const allNotificationsQuery = useNotificationsQuery("all");
+  const markAllReadMutation = useMarkAllNotificationsReadMutation();
 
-  type NotificationRow = {
-    id: string;
-    title: string;
-    description: string;
-    timeAgo: string;
-    iconName: React.ComponentProps<typeof Ionicons>["name"];
-    tab: Exclude<TabKey, "all">;
-    unread?: boolean;
-  };
-
-  const notifications = useMemo<NotificationRow[]>(() => {
-    const base: NotificationRow[] = [
-      {
-        id: "1",
-        title: "Almost Gone",
-        description:
-          "Limited-time offer! Enjoy up to 40% off on selected furniture. Don't miss out! shop now before it's too late!",
-        timeAgo: "2h ago",
-        iconName: "time-outline",
-        tab: "unread",
-        unread: true,
-      },
-      {
-        id: "2",
-        title: "Limited Offer! Claim $50.00 voucher",
-        description:
-          "Sign up now and enjoy a $50.00 voucher on your first purchase! Don't miss out.",
-        timeAgo: "2h ago",
-        iconName: "gift-outline",
-        tab: "result",
-      },
-      {
-        id: "3",
-        title: "Unlock Your Exclusive Gift",
-        description:
-          "Sign up now and enjoy a $50.00 voucher on your first purchase! Don't miss out.",
-        timeAgo: "2h ago",
-        iconName: "bag-handle-outline",
-        tab: "booking",
-      },
-      {
-        id: "4",
-        title: "Order Confirmed",
-        description:
-          "We're preparing your order and will notify you once it's shipped. Track your order status anytime through the app.",
-        timeAgo: "2h ago",
-        iconName: "receipt-outline",
-        tab: "booking",
-      },
-      {
-        id: "5",
-        title: "Order Shipped",
-        description:
-          "Great news! Your order has been shipped and is on its way to you. Expected delivery by 3 days.",
-        timeAgo: "2h ago",
-        iconName: "cube-outline",
-        tab: "booking",
-      },
-      {
-        id: "6",
-        title: "Payment Received",
-        description:
-          "Great news! The payment for your recent sale has been successfully processed. You can now check your balance.",
-        timeAgo: "2h ago",
-        iconName: "wallet-outline",
-        tab: "result",
-      },
-    ];
-
-    return base;
-  }, []);
+  const notifications: Notification[] = notificationsQuery.data ?? [];
+  const allNotifications: Notification[] = allNotificationsQuery.data ?? [];
 
   const unreadCount = useMemo(
-    () => notifications.filter((n) => n.unread).length,
-    [notifications],
+    () => allNotifications.filter((n) => n.unread).length,
+    [allNotifications],
   );
 
   const bookingCount = useMemo(
-    () => notifications.filter((n) => n.tab === "booking").length,
-    [notifications],
+    () => allNotifications.filter((n) => n.tab === "booking").length,
+    [allNotifications],
   );
 
-  const filtered = useMemo(() => {
-    if (activeTab === "all") return notifications;
-    return notifications.filter((n) => n.tab === activeTab);
-  }, [notifications, activeTab]);
-
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 700);
-  }, []);
+    void notificationsQuery.refetch();
+    if (activeTab !== "all") {
+      void allNotificationsQuery.refetch();
+    }
+  }, [activeTab, allNotificationsQuery, notificationsQuery]);
 
   const tabKeys = useMemo(
     () => ["all", "unread", "booking", "result"] as const,
@@ -140,6 +83,11 @@ export default function NotificationScreen() {
     [bookingCount, unreadCount],
   );
 
+  function resolveIconColor(kind: NotificationKind) {
+    const config = notificationConfig[kind];
+    return theme.colors[config.colorToken];
+  }
+
   return (
     <View style={styles.container}>
       <Stack.Screen
@@ -153,7 +101,10 @@ export default function NotificationScreen() {
         contentContainerStyle={styles.listContent}
         refreshControl={
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={
+              notificationsQuery.isRefetching ||
+              allNotificationsQuery.isRefetching
+            }
             onRefresh={onRefresh}
             tintColor={theme.colors.primary}
           />
@@ -174,19 +125,45 @@ export default function NotificationScreen() {
               color={theme.colors.textSecondary}
             />
             <ThemedText variant="bodySmall" style={styles.sectionTitle}>
-              Recent Notifications
+              Recent
             </ThemedText>
           </View>
+          <ThemedButton
+            title="Mark all read"
+            size="small"
+            variant="outlined"
+            color="primary"
+            startIcon={<Ionicons name="checkmark-done-outline" />}
+            loading={markAllReadMutation.isPending}
+            onPress={() => markAllReadMutation.mutate()}
+          />
         </View>
 
-        {filtered.map((item) => (
-          <View key={item.id} style={styles.itemWrap}>
-            <Link href={`/notification/${item.id}/detail`} asChild>
-              <TouchableOpacity activeOpacity={0.86} style={styles.itemCard}>
+        {!notificationsQuery.isLoading && notifications.length === 0 ? (
+          <ThemedText
+            variant="bodySmall"
+            semantic="muted"
+            style={styles.emptyText}
+          >
+            No notifications available right now.
+          </ThemedText>
+        ) : null}
+
+        {notifications.map((item) => {
+          const config = notificationConfig[item.kind];
+          const iconColor = resolveIconColor(item.kind);
+
+          return (
+            <View key={item.id} style={styles.itemWrap}>
+              <TouchableOpacity
+                activeOpacity={0.86}
+                style={styles.itemCard}
+                onPress={() => router.push(`/notification/${item.id}/detail`)}
+              >
                 <IconBadge
-                  name={item.iconName}
+                  name={config.icon}
                   size={18}
-                  color={theme.colors.primary}
+                  color={iconColor}
                   badgeSize={theme.spacing.xl + theme.spacing.xs}
                   borderRadius={theme.borderRadius.medium}
                 />
@@ -207,7 +184,7 @@ export default function NotificationScreen() {
                     {item.description}
                   </ThemedText>
                   <ThemedText variant="caption" semantic="muted">
-                    {item.timeAgo}
+                    {formatTimeAgo(item.timeAgo)}
                   </ThemedText>
                 </View>
 
@@ -219,9 +196,9 @@ export default function NotificationScreen() {
                   />
                 </View>
               </TouchableOpacity>
-            </Link>
-          </View>
-        ))}
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -232,7 +209,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     container: {
       flex: 1,
       padding: theme.spacing.md,
-      gap: 12,
+      gap: theme.spacing.md,
       backgroundColor: theme.colors.background,
     },
     sectionHeader: {
@@ -278,5 +255,8 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
     },
     itemSubtitle: {
       color: theme.colors.textSecondary,
+    },
+    emptyText: {
+      paddingHorizontal: theme.spacing.md,
     },
   });

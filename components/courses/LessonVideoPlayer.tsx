@@ -1,7 +1,9 @@
-import { useTheme } from "@/context/ThemeContext";
-import { useVideoPlayer, VideoView } from "expo-video";
 import React from "react";
 import { StyleSheet, View } from "react-native";
+
+import { useVideoPlayer, VideoView } from "expo-video";
+
+import { useTheme } from "@/context/ThemeContext";
 
 interface LessonVideoPlayerProps {
   videoUrl: string;
