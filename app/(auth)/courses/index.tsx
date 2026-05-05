@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { router, Stack } from "expo-router";
 
 import { CourseCard } from "@/components/courses/CourseCard";
 import { HeaderBackButton } from "@/components/HeaderBackButton";
+import { ThemedFlatList } from "@/components/ThemedFlatList";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
 
@@ -20,15 +21,6 @@ export default function CoursesScreen() {
 
   const coursesQuery = useCoursesQuery();
 
-  if (coursesQuery.isLoading) {
-  return <ThemedText>Loading courses...</ThemedText>;
-}
-
-if (coursesQuery.isError) {
-  return <ThemedText>Failed to load courses</ThemedText>;
-
-  
-}
   return (
     <>
       <Stack.Screen
@@ -38,9 +30,8 @@ if (coursesQuery.isError) {
           headerLeft: HeaderBackButton,
         }}
       />
-      
 
-      <FlatList
+      <ThemedFlatList
         key="courseGrid"
         data={coursesQuery.data ?? []}
         keyExtractor={(item) => item.id.toString()}
@@ -58,24 +49,26 @@ if (coursesQuery.isError) {
             />
           </View>
         )}
+        isLoading={coursesQuery.isLoading}
+        error={coursesQuery.error ? "Failed to load courses" : null}
+        isRefreshing={coursesQuery.isFetching && !coursesQuery.isLoading}
+        onRefresh={() => coursesQuery.refetch()}
         contentContainerStyle={styles.scrollContent}
         ListHeaderComponent={
           <View style={styles.header}>
-            
-  
             <ThemedSearchBar
               value={searchText}
               onChangeText={setSearchText}
               placeholder="Search courses..."
+              disabled= {true}
+              
             />
-            
             <ThemedText variant="body" semantic="muted">
-              Curate your learning journey and prepare for IELTS and PTE
-              with structured lessons, guided practice, and clear progress every step of the way.
+              Prepare for IELTS & PTE with structured lessons, guided practice, and step-by-step progress.
             </ThemedText>
           </View>
         }
-        ListEmptyComponent={null}
+        emptyMessage="No courses available yet."
       />
     </>
   );

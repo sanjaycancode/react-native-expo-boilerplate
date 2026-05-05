@@ -1,15 +1,14 @@
 import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { ModuleCard } from "@/components/courses/ModuleCard";
-import { ThemedCard } from "@/components/ThemedCard";
-import { ThemedText } from "@/components/ThemedText";
-
+import { ThemedFlatList } from "@/components/ThemedFlatList";
 import { useTheme } from "@/context/ThemeContext";
 
 import { useCourseQuery } from "@/hooks/useCourseApi";
+import type { Module } from "@/types/courseDetail";
 
 export default function CourseModulesScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
@@ -20,74 +19,46 @@ export default function CourseModulesScreen() {
 
   const { data, isLoading, error } = useCourseQuery(courseId);
 
-  if (isLoading) {
-    return (
-      <>
-        <Stack.Screen options={{ title: "Modules" }} />
-        <View style={styles.container}>
-          <ThemedText>Loading...</ThemedText>
-        </View>
-      </>
-    );
-  }
+  const renderModule = ({ item, index }: { item: Module; index: number }) => {
+    const totalLessons = item.lessons.length;
+    const completedLessons = item.lessons.filter(
+      (l) => l.is_completed
+    ).length;
 
-  if (error || !data) {
     return (
-      <>
-        <Stack.Screen options={{ title: "Error" }} />
-        <View style={styles.container}>
-          <ThemedCard>
-            <ThemedText semantic="error">Failed to load modules.</ThemedText>
-          </ThemedCard>
-        </View>
-      </>
+      <ModuleCard
+        moduleNumber={index + 1}
+        title={item.title}
+        summary={item.summary}
+        totalLessons={totalLessons}
+        completedLessons={completedLessons}
+        onPress={() =>
+          router.push(`/courses/${courseId}/module/lesson?moduleId=${item.id}`)
+        }
+      />
     );
-  }
+  };
 
   return (
     <>
       <Stack.Screen options={{ title: "Modules" }} />
-      <ScrollView style={styles.container}>
-       
-
-        <View style={styles.moduleList}>
-          {data.modules.map((module, index) => {
-            const totalLessons = module.lessons.length;
-            const completedLessons = module.lessons.filter(
-              (l) => l.is_completed
-            ).length;
-
-            return (
-              <ModuleCard
-                key={module.id}
-                moduleNumber={index + 1}
-                title={module.title}
-                summary={module.summary}
-                totalLessons={totalLessons}
-                completedLessons={completedLessons}
-                onPress={() =>
-                  router.push(`/courses/${courseId}/module/lesson?moduleId=${module.id}`)
-                }
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
+      <ThemedFlatList
+        data={data?.modules ?? []}
+        keyExtractor={(module) => String(module.id)}
+        renderItem={renderModule}
+        isLoading={isLoading}
+        error={error ? "Failed to load modules." : null}
+        contentContainerStyle={styles.listContent}
+        emptyMessage="No modules in this course."
+      />
     </>
   );
 }
 
 const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-    header: {
-      padding: theme.spacing.lg,
-      gap: theme.spacing.xs,
-    },
-    moduleList: {
-      padding: theme.spacing.lg,
+    listContent: {
+      padding: theme.spacing.md,
       gap: theme.spacing.md,
     },
   });

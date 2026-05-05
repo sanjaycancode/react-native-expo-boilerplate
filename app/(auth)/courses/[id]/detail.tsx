@@ -139,13 +139,7 @@ if (error || !data) {
               sectionNumber={index + 1}
               title={module.title}
               goal={module.summary}
-              lessons={module.lessons.map((lesson) => ({
-                id: String(lesson.id),
-                title: lesson.title,
-                type: lesson.type,
-                completed: lesson.is_completed,
-                duration: lesson.duration_minutes,
-                }))}
+              lessons={module.lessons}
               isExpanded={expandedSection === String(module.id)}
               onToggle={() => toggleSection(String(module.id))}
             />
