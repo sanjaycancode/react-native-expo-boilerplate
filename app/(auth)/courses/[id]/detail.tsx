@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { AboutCard } from "@/components/courses/AboutCard";
 import { CourseSectionCard } from "@/components/courses/CourseSectionCard";
@@ -11,40 +11,51 @@ import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
 import { BorderRadius, Spacing } from "@/constants/Themes";
-
-import { COURSES } from "@/data/courses";
+import { useCourseQuery } from "@/hooks/useCourseApi";
 
 export default function CourseDetail() {
   const { id } = useLocalSearchParams<{ id?: string }>();
+  const courseId = Number(id);
+  const {data, isLoading, error} = useCourseQuery(courseId);
+  
   const styles = createStyles();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const router = useRouter();
 
-  const courseData =
-    typeof id === "string" ? COURSES.find((c) => c.id === id) : undefined;
+  if (isLoading) {
+  return (
+    <View style={styles.container}>
+      <ThemedText>Loading...</ThemedText>
+    </View>
+  );
+}
 
-  if (!courseData) {
-    return (
-      <>
-        <Stack.Screen options={{ title: "Course not found" }} />
-        <View style={styles.container}>
-          <ThemedCard>
-            <ThemedText>Course not found.</ThemedText>
-          </ThemedCard>
-        </View>
-      </>
-    );
-  }
+if (error || !data) {
+  return (
+    <>
+      <Stack.Screen options={{ title: "Course not found" }} />
+      <View style={styles.container}>
+        <ThemedCard>
+          <ThemedText>Failed to load course.</ThemedText>
+        </ThemedCard>
+      </View>
+    </>
+  );
+}
 
-  const totalLessons = courseData.sections.reduce(
-    (sum, s) => sum + s.lessons.length,
+  
+
+  const courseData = data;
+
+  const totalLessons = courseData.modules.reduce(
+    (sum, m) => sum + m.lessons.length,
     0
   );
-  const completedLessons = courseData.sections.reduce(
-    (sum, s) => sum + s.lessons.filter((l) => l.completed).length,
+  const completedLessons = courseData.modules.reduce(
+    (sum,m ) => sum + m.lessons.filter((l) => l.is_completed).length,
     0
   );
-  const progressPercent =
-    totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+  const progressPercent = courseData.progress;
 
   const toggleSection = (sectionId: string) => {
     setExpandedSection(
@@ -66,9 +77,7 @@ export default function CourseDetail() {
           <ThemedText variant="heading5" semantic="default">
             {courseData.title}
           </ThemedText>
-          <ThemedText variant="body" semantic="muted">
-            {courseData.subtitle}
-          </ThemedText>
+          
 
           
 
@@ -90,7 +99,7 @@ export default function CourseDetail() {
           <View style={styles.statsRow}>
             <ThemedCard variant="outlined" style={styles.statCard}>
               <ThemedText variant="heading3" semantic="primary">
-                {courseData.sections.length}
+                {courseData.modules.length}
               </ThemedText>
               <ThemedText variant="caption" semantic="muted">
                 Sections
@@ -115,22 +124,29 @@ export default function CourseDetail() {
           </View>
 
           <AboutCard 
-          description={courseData.description}
+          description={courseData.short_description}
           title="About This Course"
           />
 
           <ThemedText variant="heading6" semantic="default">
-            Course Content
+            Curriculum
           </ThemedText>
 
-          {courseData.sections.map((section) => (
+          {courseData.modules.map((module, index) => (
             <CourseSectionCard
-              key={section.id}
-              title={section.title}
-              goal={section.goal}
-              lessons={section.lessons}
-              isExpanded={expandedSection === section.id}
-              onToggle={() => toggleSection(section.id)}
+              key={module.id}
+              sectionNumber={index + 1}
+              title={module.title}
+              goal={module.summary}
+              lessons={module.lessons.map((lesson) => ({
+                id: String(lesson.id),
+                title: lesson.title,
+                type: lesson.type,
+                completed: lesson.is_completed,
+                duration: lesson.duration_minutes,
+                }))}
+              isExpanded={expandedSection === String(module.id)}
+              onToggle={() => toggleSection(String(module.id))}
             />
           ))}
 
@@ -143,7 +159,7 @@ export default function CourseDetail() {
                   ? "Start Course"
                   : "Start Learning"
             }
-            onPress={() => {}}
+            onPress={() => router.push(`/courses/${courseId}/module`)}
             size="medium"
           />
         </View>

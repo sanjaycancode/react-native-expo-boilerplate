@@ -10,12 +10,25 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { Spacing } from "@/constants/Themes";
 
-import { COURSES } from "@/data/courses";
+import { useCoursesQuery } from "@/hooks/useCourseApi";
+
+
 
 export default function CoursesScreen() {
   const styles = createStyles();
   const [searchText, setSearchText] = useState("");
 
+  const coursesQuery = useCoursesQuery();
+
+  if (coursesQuery.isLoading) {
+  return <ThemedText>Loading courses...</ThemedText>;
+}
+
+if (coursesQuery.isError) {
+  return <ThemedText>Failed to load courses</ThemedText>;
+
+  
+}
   return (
     <>
       <Stack.Screen
@@ -25,19 +38,20 @@ export default function CoursesScreen() {
           headerLeft: HeaderBackButton,
         }}
       />
+      
 
       <FlatList
         key="courseGrid"
-        data={COURSES}
-        keyExtractor={(item) => item.id}
+        data={coursesQuery.data ?? []}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         columnWrapperStyle={styles.row}
         renderItem={({ item }) => (
           <View style={styles.cardWrapper}>
             <CourseCard
               title={item.title}
-              modules={item.sections.length}
-              lessons={item.sections.reduce((sum, s) => sum + s.lessons.length, 0)}
+              modules={item.modules}
+              lessons={item.lessons}
               progress={item.progress}
               image={item.image}
               onPress={() => router.push(`/courses/${item.id}/detail`)}
