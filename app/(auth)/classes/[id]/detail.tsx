@@ -10,8 +10,11 @@ import { AboutCard } from "@/components/courses/AboutCard";
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { BorderRadius, Spacing } from "@/constants/Themes";
+
 import { useThemeColors } from "@/context/ThemeContext";
+
 import { CLASSES } from "@/data/classes";
 
 export default function ClassDetail() {

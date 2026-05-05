@@ -211,6 +211,13 @@ export const Shadows = {
     elevation: 8,
   },
 } as const;
+export const AvatarSizes = {
+  xs: 32,
+  sm: 44,
+  md: 54,
+  lg: 72,
+} as const;
 
+export type AvatarSize = keyof typeof AvatarSizes;
 export type Theme = typeof Colors.light;
 export type ColorName = keyof Theme;

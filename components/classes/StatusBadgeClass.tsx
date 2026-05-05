@@ -2,7 +2,9 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
+
 import { BorderRadius, Spacing } from "@/constants/Themes";
+
 import { useThemeColors } from "@/context/ThemeContext";
 
 interface StatusBadgeProps {
