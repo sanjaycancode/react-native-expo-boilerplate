@@ -15,11 +15,12 @@ import { ThemedText } from "@/components/ThemedText";
 
 import { useTheme } from "@/context/ThemeContext";
 
+import { isQuestionTypeCode, type Question, type QuestionSortDir } from "@/types";
+
 import { getErrorMessage } from "@/utils";
 
 import { useDebouncedValue } from "@/hooks";
 import { useQuestionsInfiniteQuery } from "@/hooks/api";
-import type { Question, QuestionSortDir } from "@/types";
 
 type QuestionListParams = {
   questionTypeCode?: string;
@@ -61,7 +62,7 @@ export default function ManualPracticeQuestionsScreen() {
   const [sortDir, setSortDir] = useState<QuestionSortDir>("asc");
   const debouncedSearch = useDebouncedValue(search, 300);
   const resolvedQuestionTypeCode =
-    typeof questionTypeCode === "string" && questionTypeCode.length > 0
+    typeof questionTypeCode === "string" && isQuestionTypeCode(questionTypeCode)
       ? questionTypeCode
       : undefined;
   const difficultyRange = getDifficultyRange(difficulty);

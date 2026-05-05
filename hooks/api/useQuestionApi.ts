@@ -4,19 +4,27 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-import { getQuestions, getQuestionTypes } from "@/api/services";
+import {
+  getQuestionDetail,
+  getQuestions,
+  getQuestionTypes,
+} from "@/api/services";
 
 import type {
+  GetQuestionDetailResponse,
   GetQuestionsParams,
   GetQuestionsResponse,
   GetQuestionTypesResponse,
+  QuestionDetail,
   QuestionSection,
 } from "@/types";
 
 export type {
+  GetQuestionDetailResponse,
   GetQuestionsParams,
   GetQuestionsResponse,
   GetQuestionTypesResponse,
+  QuestionDetail,
   QuestionSection,
 };
 
@@ -40,6 +48,8 @@ export const questionKeys = {
       params.sortDir ?? null,
       params.limit ?? DEFAULT_QUESTIONS_LIMIT,
     ] as const,
+  detail: (questionId: number | string) =>
+    [...questionKeys.all, "detail", questionId] as const,
 };
 
 const DEFAULT_QUESTIONS_LIMIT = 10;
@@ -70,6 +80,16 @@ export function useQuestionTypesQuery(section?: QuestionSection) {
   return useQuery({
     queryKey: questionKeys.typesBySection(section),
     queryFn: () => getQuestionTypes({ section }),
+  });
+}
+
+export function useQuestionDetailQuery(questionId?: number | string) {
+  const normalizedQuestionId = normalizeQuestionId(questionId);
+
+  return useQuery<GetQuestionDetailResponse>({
+    queryKey: questionKeys.detail(normalizedQuestionId ?? "unknown"),
+    queryFn: () => getQuestionDetail(normalizedQuestionId as number | string),
+    enabled: normalizedQuestionId !== undefined,
   });
 }
 
@@ -113,4 +133,24 @@ export function useQuestionsInfiniteQuery(
     queryKey,
     refreshFirstPage,
   };
+}
+
+function normalizeQuestionId(questionId?: number | string) {
+  if (
+    typeof questionId === "number" &&
+    Number.isFinite(questionId) &&
+    questionId > 0
+  ) {
+    return questionId;
+  }
+
+  if (typeof questionId === "string") {
+    const normalizedQuestionId = questionId.trim();
+
+    if (normalizedQuestionId.length > 0) {
+      return normalizedQuestionId;
+    }
+  }
+
+  return undefined;
 }
