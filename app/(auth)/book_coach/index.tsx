@@ -1,24 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { Stack, useRouter } from "expo-router";
 
 import { CoachCard } from "@/components/CoachCard";
+import { ThemedFlatList } from "@/components/ThemedFlatList";
 import { ThemedSearchBar } from "@/components/ThemedSearchBar";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useTheme } from "@/context/ThemeContext";
+import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 import { useCoachingTeachersQuery } from "@/hooks/api";
+import type { Coach } from "@/types";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
-
-type Coach = {
-  id: string;
-  name?: string | null;
-  title?: string | null;
-};
 
 function useDebouncedValue<T>(value: T, delayMs: number) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -41,7 +37,8 @@ function getErrorMessage(error: unknown) {
 
 export default function BookCoachScreen() {
   const { theme } = useTheme();
-  const styles = createStyles(theme);
+  const colors = useThemeColors();
+  const styles = createStyles(theme, colors);
   const navigation = useNavigation();
   const router = useRouter();
 
@@ -86,29 +83,31 @@ export default function BookCoachScreen() {
     <>
       <Stack.Screen options={{ title: "Book Coach" }} />
 
-      <FlatList
-        data={filteredCoaches}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-        refreshing={isRefreshing}
-        onRefresh={async () => {
-          setIsRefreshing(true);
-          try {
-            await refetch();
-          } finally {
-            setIsRefreshing(false);
-          }
-        }}
-        ListHeaderComponent={
-          <View style={styles.headerBlock}>
-            <ThemedSearchBar
-              value={query}
-              onChangeText={setQuery}
-              placeholder="Search coaches..."
-            />
+      <View style={styles.screen}>
+        <View style={styles.searchHeader}>
+          <ThemedSearchBar
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search coaches..."
+          />
+        </View>
 
-            {isPending ? (
+        <ThemedFlatList
+          data={filteredCoaches}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled"
+          isRefreshing={isRefreshing}
+          onRefresh={async () => {
+            setIsRefreshing(true);
+            try {
+              await refetch();
+            } finally {
+              setIsRefreshing(false);
+            }
+          }}
+          ListHeaderComponent={
+            isPending ? (
               <ThemedText variant="bodySmall" semantic="muted">
                 Loading coaches...
               </ThemedText>
@@ -125,52 +124,66 @@ export default function BookCoachScreen() {
                   {getErrorMessage(error)}
                 </ThemedText>
               </TouchableOpacity>
-            ) : null}
-          </View>
-        }
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            accessibilityRole="button"
-            activeOpacity={0.8}
-            onPress={() =>
-              router.push({
-                pathname: "/book_coach/[id]/detail",
-                params: {
-                  id: item.id,
-                  name: item.name ?? "",
-                  title: item.title ?? "",
-                  fromBookCoach: "true",
-                },
-              })
-            }
-          >
-            <CoachCard coach={item} />
-          </TouchableOpacity>
-        )}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            <ThemedText variant="bodySmall">
-              {isPending ? "Loading..." : "No results"}
-            </ThemedText>
-            <ThemedText variant="bodySmall" semantic="muted">
-              {isPending ? "Please wait." : "Try a different search term."}
-            </ThemedText>
-          </View>
-        }
-      />
+            ) : (
+              <View style={styles.listHeaderSpacer} />
+            )
+          }
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              accessibilityRole="button"
+              activeOpacity={0.8}
+              onPress={() =>
+                router.push({
+                  pathname: "/book_coach/[id]/detail",
+                  params: {
+                    id: item.id,
+                    name: item.name ?? "",
+                    title: item.title ?? "",
+                    fromBookCoach: "true",
+                  },
+                })
+              }
+            >
+              <CoachCard coach={item} />
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            <View style={styles.empty}>
+              <ThemedText variant="bodySmall">
+                {isPending ? "Loading..." : "No results"}
+              </ThemedText>
+              <ThemedText variant="bodySmall" semantic="muted">
+                {isPending ? "Please wait." : "Try a different search term."}
+              </ThemedText>
+            </View>
+          }
+        />
+      </View>
     </>
   );
 }
 
-const createStyles = (theme: AppTheme) =>
+const createStyles = (
+  theme: AppTheme,
+  colors: ReturnType<typeof useThemeColors>,
+) =>
   StyleSheet.create({
+    screen: {
+      flex: 1,
+    },
+    searchHeader: {
+      paddingHorizontal: theme.spacing.lg,
+      paddingTop: theme.spacing.lg,
+      paddingBottom: theme.spacing.md,
+      backgroundColor: colors.background,
+    },
     container: {
       padding: theme.spacing.lg,
+      paddingTop: theme.spacing.sm,
     },
-    headerBlock: {
-      gap: theme.spacing.md,
-      marginBottom: theme.spacing.md,
+    listHeaderSpacer: {
+      height: theme.spacing.xs,
     },
     header: {
       gap: theme.spacing.sm,

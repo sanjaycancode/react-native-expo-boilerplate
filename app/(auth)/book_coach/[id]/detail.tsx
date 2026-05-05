@@ -93,6 +93,8 @@ export default function CoachDetail() {
                 setIsRefreshing(false);
               }
             }}
+            colors={[colors.primary]}
+            tintColor={colors.primary}
           />
         }
       >
@@ -104,21 +106,14 @@ export default function CoachDetail() {
                 { backgroundColor: colors.overlay, borderColor: colors.border },
               ]}
             >
-              <ThemedText variant="bodySmall">{initials}</ThemedText>
+              <ThemedText variant="heading5">{initials}</ThemedText>
             </View>
 
             <View style={styles.profileMain}>
-              <ThemedText variant="heading2">{name ?? "Coach"}</ThemedText>
+              <ThemedText variant="heading5">{name ?? "Coach"}</ThemedText>
             </View>
           </View>
         </ThemedCard>
-
-        <View style={styles.section}>
-          <ThemedText variant="heading3">About Coach</ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            Details about the coach.
-          </ThemedText>
-        </View>
 
         <ThemedCard variant="outlined" style={styles.detailsCard}>
           {title ? (
@@ -167,13 +162,8 @@ export default function CoachDetail() {
         </ThemedCard>
 
         <View style={styles.section}>
-          <ThemedText variant="heading3">Offerings</ThemedText>
-          <ThemedText variant="bodySmall" semantic="muted">
-            Choose a session that fits your goals.
-          </ThemedText>
+          <ThemedText variant="heading6">Offerings</ThemedText>
         </View>
-
-        
 
         <View style={styles.offerings}>
           {isOfferingsPending ? (

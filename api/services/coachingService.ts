@@ -24,7 +24,7 @@ function toNumberOrNull(value: unknown): number | null {
 export async function getCoachingTeachers(): Promise<CoachingTeacher[]> {
   const response = await apiClient.get<
     GetCoachingTeachersResponse | CoachingTeacher[]
-  >("/api/coaching/teachers");
+  >("/coaching/teachers");
 
   const payload = response.data;
   if (Array.isArray(payload)) return payload;
@@ -96,7 +96,7 @@ export async function getTeacherOfferings(
 ): Promise<TeacherOffering[]> {
   const response = await apiClient.get<
     GetTeacherOfferingsResponse | GetTeacherOfferingsAltResponse | TeacherOffering[]
-  >(`/api/coaching/teachers/${teacherId}/offerings`);
+  >(`/coaching/teachers/${teacherId}/offerings`);
 
   const payload = response.data;
   if (Array.isArray(payload)) return payload.map(normalizeOffering);
