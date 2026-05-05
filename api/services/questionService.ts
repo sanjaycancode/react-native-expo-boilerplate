@@ -1,6 +1,7 @@
 import { apiClient } from "@/api/client";
 
 import type {
+  GetQuestionDetailResponse,
   GetQuestionsParams,
   GetQuestionsResponse,
   GetQuestionTypesResponse,
@@ -15,7 +16,7 @@ export async function getQuestionTypes(
   params: GetQuestionTypesParams = {},
 ): Promise<GetQuestionTypesResponse> {
   const response = await apiClient.get<GetQuestionTypesResponse>(
-    "/api/practice/question_types",
+    "/practice/question_types",
     {
       params,
     },
@@ -32,7 +33,7 @@ export async function getQuestions(
       : undefined;
 
   const response = await apiClient.get<GetQuestionsResponse>(
-    "/api/practice/questions/",
+    "/practice/questions/",
     {
       params: {
         question_type: params.questionType,
@@ -46,6 +47,15 @@ export async function getQuestions(
         limit: params.limit,
       },
     },
+  );
+  return response.data;
+}
+
+export async function getQuestionDetail(
+  questionId: number | string,
+): Promise<GetQuestionDetailResponse> {
+  const response = await apiClient.get<GetQuestionDetailResponse>(
+    `/practice/questions/${questionId}`,
   );
   return response.data;
 }
