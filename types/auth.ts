@@ -30,12 +30,7 @@ export interface ApiAuthResponse {
 
 export interface AuthResponse {
   user: AuthenticatedUser;
-  accessToken?: string;
-}
-
-export interface AuthSession {
-  user: AuthenticatedUser;
-  accessToken?: string;
+  token?: string;
 }
 
 export interface LogoutResponse {

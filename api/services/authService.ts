@@ -1,9 +1,17 @@
 import { apiClient } from "@/api/client";
 
-import type { ApiAuthResponse, AuthResponse, LoginPayload, LogoutResponse } from "@/types";
+import type {
+  ApiAuthResponse,
+  AuthResponse,
+  LoginPayload,
+  LogoutResponse,
+} from "@/types";
 
 export async function login(payload: LoginPayload): Promise<AuthResponse> {
-  const response = await apiClient.post<ApiAuthResponse>("/auth/login", payload);
+  const response = await apiClient.post<ApiAuthResponse>(
+    "/auth/login",
+    payload,
+  );
 
   const transformedResponse: AuthResponse = {
     user: {
@@ -13,7 +21,7 @@ export async function login(payload: LoginPayload): Promise<AuthResponse> {
       firstName: response.data.data.user.first_name,
       lastName: response.data.data.user.last_name,
     },
-    accessToken: response.data.data.token,
+    token: response.data.data.token,
   };
 
   return transformedResponse;

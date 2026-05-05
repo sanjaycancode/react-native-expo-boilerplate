@@ -6,7 +6,7 @@ import { getAsyncStorageItem } from "@/utils/asyncStorage";
 
 import { env } from "@/lib/config/env";
 
-export const ACCESS_TOKEN_KEY = "accessToken";
+export const ACCESS_TOKEN_KEY = "token";
 
 export interface ApiError {
   message: string;

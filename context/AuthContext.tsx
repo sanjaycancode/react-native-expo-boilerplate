@@ -14,13 +14,12 @@ import { getAsyncStorageItem, setAsyncStorageItem } from "@/utils/asyncStorage";
 import type {
   AuthenticatedUser,
   AuthResponse,
-  AuthSession,
   LoginPayload,
   LogoutResponse,
 } from "@/types";
 
 interface AuthContextValue {
-  session: AuthSession | null;
+  session: AuthResponse | null;
   loggedInUser: AuthenticatedUser | null;
   isAuthenticated: boolean;
   isInitializing: boolean;
@@ -34,11 +33,11 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 const AUTH_SESSION_STORAGE_KEY = "auth_session";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<AuthSession | null>(null);
+  const [session, setSession] = useState<AuthResponse | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
   const refreshSession = useCallback(async () => {
-    const savedSession = await getAsyncStorageItem<AuthSession>(
+    const savedSession = await getAsyncStorageItem<AuthResponse>(
       AUTH_SESSION_STORAGE_KEY,
     );
 
@@ -77,13 +76,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = useCallback(async (payload: LoginPayload) => {
     const response = await login(payload);
 
-    const nextSession: AuthSession = {
+    const nextSession: AuthResponse = {
       user: response.user,
-      accessToken: response.accessToken,
+      token: response.token,
     };
 
     await setAsyncStorageItem(AUTH_SESSION_STORAGE_KEY, nextSession);
-    await setAsyncStorageItem(ACCESS_TOKEN_KEY, response.accessToken ?? null);
+    await setAsyncStorageItem(ACCESS_TOKEN_KEY, response.token ?? null);
 
     setSession(nextSession);
     return response;
