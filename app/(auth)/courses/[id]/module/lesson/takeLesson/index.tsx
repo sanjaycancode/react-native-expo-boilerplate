@@ -216,7 +216,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>["theme"]) =>
       flex: 1,
     },
     content: {
-      padding: theme.spacing.lg,
+      padding: theme.spacing.md,
       gap: theme.spacing.md,
     },
     topRow: {
