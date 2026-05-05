@@ -25,7 +25,7 @@ export {
 } from "expo-router";
 
 export const unstable_settings = {
-  // Default to the public entry route until real session restoration is wired in.
+  // Start from the public login route; restored session state redirects after init.
   initialRouteName: "login",
 };
 
@@ -88,7 +88,7 @@ function AuthGuard() {
     const inAuthenticatedGroup = segments[0] === "(auth)";
 
     if (isAuthenticated && !inAuthenticatedGroup) {
-      router.replace("/(auth)/(tabs)");
+      router.replace("/(auth)/(tabs)/dashboard");
       return;
     }
 

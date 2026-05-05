@@ -3,7 +3,9 @@ import { Pressable, StyleSheet, View } from "react-native";
 
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { BorderRadius } from "@/constants/Themes";
+
 import { useTheme } from "@/context/ThemeContext";
 
 interface AboutCardProps {

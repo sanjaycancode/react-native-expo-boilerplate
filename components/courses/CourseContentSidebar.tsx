@@ -4,7 +4,9 @@ import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
+
 import type { Module } from "@/types/courseDetail";
 
 interface CourseContentSidebarProps {

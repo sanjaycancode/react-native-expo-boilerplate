@@ -9,6 +9,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Spacing } from "@/constants/Themes";
 
 import { useThemeColors } from "@/context/ThemeContext";
+
 import { Lesson } from "@/types/lessons";
 
 interface CourseSectionCardProps {

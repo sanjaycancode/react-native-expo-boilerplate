@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme, useThemeColors } from "@/context/ThemeContext";
 
 interface LessonTextContentProps {

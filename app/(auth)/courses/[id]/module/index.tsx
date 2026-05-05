@@ -6,7 +6,9 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ModuleCard } from "@/components/courses/ModuleCard";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme } from "@/context/ThemeContext";
+
 import { useCourseQuery } from "@/hooks/useCourseApi";
 
 export default function CourseModulesScreen() {
