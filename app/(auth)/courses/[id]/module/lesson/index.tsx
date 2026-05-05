@@ -3,11 +3,12 @@ import { FlatList, StyleSheet, View } from "react-native";
 
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
-
 import { LessonCard } from "@/components/courses/LessonCard";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme } from "@/context/ThemeContext";
+
 import { useCourseQuery } from "@/hooks/useCourseApi";
 
 export default function LessonListScreen() {

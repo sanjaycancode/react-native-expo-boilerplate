@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 import { getCourseById, getCourses } from "@/api/services/courseService";
+
 import type { Course } from "@/types/course";
 import type { CourseDetail } from "@/types/courseDetail";
 

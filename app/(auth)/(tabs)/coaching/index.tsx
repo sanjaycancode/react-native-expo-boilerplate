@@ -1,18 +1,17 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { Stack } from "expo-router";
+import { Link, Stack } from "expo-router";
 
-import { ActionCard } from "@/components/ActionCard";
+import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
 
-import { useTheme, useThemeColors } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 
 type AppTheme = ReturnType<typeof useTheme>["theme"];
 
 export default function CoachingScreen() {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  const colors = useThemeColors();
 
   return (
     <View style={styles.container}>
@@ -25,23 +24,27 @@ export default function CoachingScreen() {
         </ThemedText>
       </View>
 
-      <ActionCard
-        href="../book_coach"
-        iconName="search"
-        iconBackgroundColor={colors.primaryLight}
-        iconColor={colors.primary}
-        title="Book Coach"
-        description="Browse & book sessions with available coaches."
-      />
+      <Link href="../book_coach" asChild>
+        <Pressable>
+          <ThemedCard variant="outlined">
+            <ThemedText variant="heading5">Book Coach</ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              Browse & book sessions with available coaches.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+      </Link>
 
-      <ActionCard
-        href="../my_bookings"
-        iconName="calendar-check"
-        iconBackgroundColor={colors.primaryLight}
-        iconColor={colors.primary}
-        title="My Bookings"
-        description="View & manage your coaching sessions."
-      />
+      <Link href="../my_bookings" asChild>
+        <Pressable>
+          <ThemedCard variant="outlined">
+            <ThemedText variant="heading5">My Bookings</ThemedText>
+            <ThemedText variant="bodySmall" semantic="muted">
+              View & manage your coaching sessions.
+            </ThemedText>
+          </ThemedCard>
+        </Pressable>
+      </Link>
     </View>
   );
 }

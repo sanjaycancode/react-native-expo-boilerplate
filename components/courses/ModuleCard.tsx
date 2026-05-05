@@ -1,10 +1,14 @@
+import React from "react";
+import { StyleSheet, View } from "react-native";
+
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+
 import { ThemedButton } from "@/components/ThemedButton";
 import { ThemedCard } from "@/components/ThemedCard";
 import { ThemedText } from "@/components/ThemedText";
+
 import { useTheme } from "@/context/ThemeContext";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+
 import { ProgressTrack } from "../ProgressTrack";
 
 interface ModuleCardProps {
