@@ -60,10 +60,11 @@ export default function CoursesScreen() {
               value={searchText}
               onChangeText={setSearchText}
               placeholder="Search courses..."
+              disabled= {true}
+              
             />
             <ThemedText variant="body" semantic="muted">
-              Curate your learning journey and prepare for IELTS and PTE
-              with structured lessons, guided practice, and clear progress every step of the way.
+              Prepare for IELTS & PTE with structured lessons, guided practice, and step-by-step progress.
             </ThemedText>
           </View>
         }

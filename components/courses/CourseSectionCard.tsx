@@ -9,7 +9,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { BorderRadius, Spacing } from "@/constants/Themes";
 
 import { useThemeColors } from "@/context/ThemeContext";
-import { Lesson } from "@/types/lessons";
+import type { Lesson } from "@/types/courseDetail";
 
 interface CourseSectionCardProps {
   title: string;
@@ -30,7 +30,7 @@ export function CourseSectionCard({
 }: CourseSectionCardProps) {
   const colors = useThemeColors();
 
-  const sectionCompleted = lessons.every((l) => l.completed);
+  const sectionCompleted = lessons.every((l) => l.is_completed);
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -121,13 +121,13 @@ export function CourseSectionCard({
                 <View style={styles.iconWrapper}>
                   <FontAwesome
                     name={
-                      lesson.completed
+                      lesson.is_completed
                         ? "check-circle"
                         : "circle"
                     }
                     size={16}
                     color={
-                      lesson.completed
+                      lesson.is_completed
                         ? colors.success
                         : colors.textTertiary
                     }
@@ -135,7 +135,7 @@ export function CourseSectionCard({
                 </View>
                 <ThemedText
                   variant="bodySmall"
-                  semantic={lesson.completed ? "muted" : "default"}
+                  semantic={lesson.is_completed ? "muted" : "default"}
                   numberOfLines={1}
                 >
                   {lesson.title}
@@ -148,7 +148,7 @@ export function CourseSectionCard({
                   color={getTypeColor(lesson.type)}
                 />
                 <ThemedText variant="caption" semantic="muted">
-                  ~{lesson.duration} minutes
+                  ~{lesson.duration_minutes} minutes
                 </ThemedText>
               </View>
             </View>
